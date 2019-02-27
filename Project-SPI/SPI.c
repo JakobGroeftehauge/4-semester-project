@@ -1,0 +1,146 @@
+/*****************************************************************************
+* University of Southern Denmark
+* Embedded Programming (EMP)
+*
+* MODULENAME.: emp.c
+*
+* PROJECT....: EMP
+*
+* DESCRIPTION: See module specification file (.h-file).
+*
+* Change Log:
+ ****************************************************************************
+ Date    Id    Change
+* YYMMDD
+* --------------------
+* 050128  KA    Module created.
+*
+*****************************************************************************/
+
+/***************************** Include files *******************************/
+#include "SPI.h"
+#include "EMP_type.h"
+#include <stdint.h>
+#include "tm4c123gh6pm.h"
+/*****************************    Defines    *******************************/
+
+/*****************************   Constants   *******************************/
+
+/*****************************   Variables   *******************************/
+
+/*****************************   Functions   *******************************/
+
+void SPI_init(void)
+/*****************************************************************************
+*   Input    :
+*   Output   :
+*   Function :Set up the SPI on the microcontroller.
+*   Page     : 965
+******************************************************************************/
+{
+    //To enable and initialize the SSI, the following steps are necessary:
+
+    //Enable the SSI module using theRCGCSSIregister (see page 346)
+    SYSCTL_RCGCSSI_R |= (1<<0);        //selecting SSI0 module
+
+
+    //Enable the clock to the appropriate GPIO module via theRCGCGPIOregister
+    //(see page 340).To find out which GPIO port to enable, refer to Table 23-5 on page 1351.
+    SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOA; //Maybe the right register
+
+
+    //SYSCTL_RCGCGPIO_R |= (1<<0); // dont know if this is needed.
+
+
+
+    //Set the GPIOAFSELbits for the appropriate pins (see page 671).
+    //To determine which GPIOs to configure, see Table 23-4 on page 1344
+
+    GPIO_PORTA_AFSEL_R |= (1<<2)|(1<<3)|(1<<4)|(1<<5);
+
+    // Configure thePMCnfields in theGPIOPCTLregister to assign the SSI
+    // signals to the appropriate pins. See page 688 and Table 23-5 on page 135
+
+    //GPIO_PORTA_AHB_PCTL_R = 0x00222200; // dont know if this line or the next is best.
+
+    GPIO_PORTA_PCTL_R = 0x00222200;
+
+
+    //Program theGPIODENregister to enable the pin's digital function.
+    // In addition, the drive strength,drain select and pull-up/pull-down functions must be configured.
+    //Refer to “General-PurposeInput/Outputs (GPIOs)” on page 649 for more information.
+
+    GPIO_PORTA_DEN_R |=(1<<2)|(1<<3)|(1<<4)|(1<<5); //enabling digital mode for PORTB 2,3,4,5
+
+    GPIO_PORTA_PUR_R |=(1<<2)|(1<<3)|(1<<4)|(1<<5); //selecting pull ups for 2,3,4,5
+
+
+    //Ensure that the SSE bit in the SSICR1 register is clear before making any configuration changes.
+
+    SSI0_CR1_R = 0 ;
+
+    // Select whether the SSI is a master or slave
+    // For master operations, set the SSICR1 register to 0x0000.0000.
+
+    SSI0_CR1_R = 0 ;
+
+    //Configure the SSI clock source by writing to the SSICC register.
+
+    SSI0_CC_R = 0; //using main system clock
+
+    // Configure the clock prescale divisor by writing the SSICPSR register.
+
+    SSI0_CPSR_R = 64; //selecting divisor 64 for SSI clock
+                      // SSInClk = SysClk / (CPSDVSR * (1 + SCR)
+
+    //Write theSSICR0register with the following configuration
+    SSI0_CR0_R |= 0x7; //freescale mode, 8 bit data, steady clock low   // IF THIS DOES NOT WORK CHECK SETUP COMPARED WITH THE FPGA!!!
+
+    // Enable the SSI by setting theSSEbit in theSSICR1register.
+    SSI0_CR1_R |= (1<<1);
+
+}
+
+void send_byte(int data)
+/*****************************************************************************
+*   Input    :byte that is being sent by SPI
+*   Output   :
+*   Function :Sends the byte.
+******************************************************************************/
+{
+    SSI0_DR_R = data;               //putting the byte to send from SSI
+    while (SSI0_SR_R &(1<<0) == 0)  //waiting for transmission to be done
+    {
+        ;
+    }
+}
+
+/****************************** End Of Module *******************************/
+
+
+/*
+ *
+ * void spi_master_ini(void){
+    SYSCTL->RCGCSSI|=(1<<2); //selecting SSI2 module
+    SYSCTL->RCGC2|=(1<<1);   //providing clock to PORTB
+    GPIOB->AFSEL|=(1<<4)|(1<<5)|(1<<6)|(1<<7);//selecting alternative fuctions
+    GPIOB->PCTL=0x22220000;//selecting SSI as alternative function
+    GPIOB->DEN|=(1<<4)|(1<<5)|(1<<6)|(1<<7);//enabling digital mode for PORTB 4,5,6,7
+    GPIOB->PUR|=(1<<4)|(1<<5)|(1<<6)|(1<<7);//selecting pull ups for 4,5,6,7
+    SSI2->CR1=0;          //disabling SSI module for settings
+    SSI2->CC=0;           //using main system clock
+    SSI2->CPSR=64;        //selecting divisor 64 for SSI clock
+    SSI2->CR0=0x7;        //freescale mode, 8 bit data, steady clock low
+    SSI2->CR1|=(1<<1);    //enabling SSI
+    */
+
+
+
+
+
+
+
+
+
+
+

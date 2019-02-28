@@ -36,6 +36,14 @@ void SPI_init(void)
 *   Output   :
 *   Function :Set up the SPI on the microcontroller.
 *   Page     : 965
+*   *   - Setups the microcontroller as Master.
+*   - Uses Port A 5 as MOSI
+*   - uses Port A 4 as MISO
+*   - Uses Port A 3 as SS (slave select)
+*   - Uses Port A 2 as SCK
+*   - Uses SSIO0
+*
+*   Sends 8 bit data - with 250kHz
 ******************************************************************************/
 {
     //To enable and initialize the SSI, the following steps are necessary:
@@ -43,15 +51,9 @@ void SPI_init(void)
     //Enable the SSI module using theRCGCSSIregister (see page 346)
     SYSCTL_RCGCSSI_R |= (1<<0);        //selecting SSI0 module
 
-
     //Enable the clock to the appropriate GPIO module via theRCGCGPIOregister
     //(see page 340).To find out which GPIO port to enable, refer to Table 23-5 on page 1351.
     SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOA; //Maybe the right register
-
-
-    //SYSCTL_RCGCGPIO_R |= (1<<0); // dont know if this is needed.
-
-
 
     //Set the GPIOAFSELbits for the appropriate pins (see page 671).
     //To determine which GPIOs to configure, see Table 23-4 on page 1344
@@ -61,10 +63,7 @@ void SPI_init(void)
     // Configure thePMCnfields in theGPIOPCTLregister to assign the SSI
     // signals to the appropriate pins. See page 688 and Table 23-5 on page 135
 
-    //GPIO_PORTA_AHB_PCTL_R = 0x00222200; // dont know if this line or the next is best.
-
     GPIO_PORTA_PCTL_R = 0x00222200;
-
 
     //Program theGPIODENregister to enable the pin's digital function.
     // In addition, the drive strength,drain select and pull-up/pull-down functions must be configured.
@@ -91,21 +90,21 @@ void SPI_init(void)
     // Configure the clock prescale divisor by writing the SSICPSR register.
 
     SSI0_CPSR_R = 64; //selecting divisor 64 for SSI clock
-                      // SSInClk = SysClk / (CPSDVSR * (1 + SCR)
+                      // SSInClk = SysClk / (CPSDVSR * (1 + SCR) SCR = 0;
 
     //Write theSSICR0register with the following configuration
-    SSI0_CR0_R |= 0x7; //freescale mode, 8 bit data, steady clock low   // IF THIS DOES NOT WORK CHECK SETUP COMPARED WITH THE FPGA!!!
+    SSI0_CR0_R |= 0x7|(0<<6)|(0<<7); //freescale mode, 8 bit data, steady clock low   // IF THIS DOES NOT WORK CHECK SETUP COMPARED WITH THE FPGA!!!
 
     // Enable the SSI by setting theSSEbit in theSSICR1register.
     SSI0_CR1_R |= (1<<1);
-
 }
 
 void send_byte(int data)
 /*****************************************************************************
 *   Input    :byte that is being sent by SPI
 *   Output   :
-*   Function :Sends the byte.
+*   Function :Sends the data given and waits until the transmission is complete.
+*
 ******************************************************************************/
 {
     SSI0_DR_R = data;               //putting the byte to send from SSI
@@ -113,6 +112,7 @@ void send_byte(int data)
     {
         ;
     }
+    data = 0;
 }
 
 /****************************** End Of Module *******************************/

@@ -34,15 +34,28 @@ int main(void)
     led_init();
 
     SPI_init();
+int i = 1;
     while (1)
 
     {
-        delay();
-        GPIO_PORTF_DATA_R = 2;
-        send_byte(0xCC);
 
         delay();
+        GPIO_PORTF_DATA_R = 2;
+        send_byte(i);
+        i++;
+        if (i == 255)
+        {
+            i =1;
+        }
+        delay();
         GPIO_PORTF_DATA_R = 4;
+        send_byte(i);
+        i++;
+        if (i == 255)
+        {
+            i =1;
+        }
+
     }
     return 0;
 }
@@ -50,9 +63,13 @@ int main(void)
 void delay()
 {
     int i;
-    for(i = 0; i<0xFFFF; i++)
+    int j;
+    for(i = 0; i<0xFF; i++)
     {
-        ;
+        for(j = 0; j<0xFF; j++)
+            {
+                ;
+            }
     }
 }
 

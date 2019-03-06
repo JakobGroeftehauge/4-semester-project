@@ -54,7 +54,7 @@ uint8_t read_data;
 
            read_data = SSI0_DR_R;
 
-           GPIO_PORTF_DATA_R = SSI0_DR_R;
+           GPIO_PORTF_DATA_R = read_data;
 
           // send_byte(read_data);
 //

@@ -119,6 +119,7 @@ int receive_byte()
 *   Input    :
 *   Output   : The function return the received data.
 *   Function : receiving data with SPI
+*   // test
 *
 ******************************************************************************/
 {

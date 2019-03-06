@@ -93,7 +93,7 @@ void SPI_init(void)
                       // SSInClk = SysClk / (CPSDVSR * (1 + SCR) SCR = 0;
 
     //Write theSSICR0register with the following configuration
-    SSI0_CR0_R |= 0x7|(0<<6)|(0<<7); //freescale mode, 8 bit data, steady clock low   // IF THIS DOES NOT WORK CHECK SETUP COMPARED WITH THE FPGA!!!
+    SSI0_CR0_R |= 0x7; //freescale mode, 8 bit data, steady clock low
 
     // Enable the SSI by setting theSSEbit in theSSICR1register.
     SSI0_CR1_R |= (1<<1);
@@ -112,27 +112,30 @@ void send_byte(int data)
     {
         ;
     }
-    data = 0;
 }
 
-/****************************** End Of Module *******************************/
+int receive_byte()
+/*****************************************************************************
+*   Input    :
+*   Output   : The function return the received data.
+*   Function : receiving data with SPI
+*
+******************************************************************************/
+{
+    int data=0;
+    int j;
+    send_byte(0xFF);
+    for(j = 0; j<0xFF; j++)
+    {
+        ;
+    }
 
+    data = SSI0_DR_R;
+    GPIO_PORTF_DATA_R = data;
+    return data;
+}
 
-/*
- *
- * void spi_master_ini(void){
-    SYSCTL->RCGCSSI|=(1<<2); //selecting SSI2 module
-    SYSCTL->RCGC2|=(1<<1);   //providing clock to PORTB
-    GPIOB->AFSEL|=(1<<4)|(1<<5)|(1<<6)|(1<<7);//selecting alternative fuctions
-    GPIOB->PCTL=0x22220000;//selecting SSI as alternative function
-    GPIOB->DEN|=(1<<4)|(1<<5)|(1<<6)|(1<<7);//enabling digital mode for PORTB 4,5,6,7
-    GPIOB->PUR|=(1<<4)|(1<<5)|(1<<6)|(1<<7);//selecting pull ups for 4,5,6,7
-    SSI2->CR1=0;          //disabling SSI module for settings
-    SSI2->CC=0;           //using main system clock
-    SSI2->CPSR=64;        //selecting divisor 64 for SSI clock
-    SSI2->CR0=0x7;        //freescale mode, 8 bit data, steady clock low
-    SSI2->CR1|=(1<<1);    //enabling SSI
-    */
+/****************************** End Of Module *******************************
 
 
 

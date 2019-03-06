@@ -39,21 +39,16 @@ int i = 1;
 
     {
 
-        delay();
-        GPIO_PORTF_DATA_R = 2;
-        send_byte(i);
-        i++;
-        if (i == 255)
+        if(!(GPIO_PORTF_DATA_R&0x10))
         {
-            i =1;
-        }
-        delay();
-        GPIO_PORTF_DATA_R = 4;
-        send_byte(i);
-        i++;
-        if (i == 255)
-        {
-            i =1;
+            GPIO_PORTF_DATA_R = 0x2;
+           send_byte(receive_byte());
+
+            while (1)
+            {
+                ;
+            }
+
         }
 
     }

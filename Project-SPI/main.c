@@ -35,14 +35,32 @@ int main(void)
 
     SPI_init();
 int i = 1;
+uint8_t send_data;
+uint8_t read_data;
     while (1)
 
     {
 
         if(!(GPIO_PORTF_DATA_R&0x10))
         {
-            GPIO_PORTF_DATA_R = 0x2;
-           send_byte(receive_byte());
+
+           GPIO_PORTF_DATA_R = 0x2;
+
+           send_data = 0x02;
+
+           send_byte(send_data);
+
+           delay();
+
+           read_data = SSI0_DR_R;
+
+           GPIO_PORTF_DATA_R = SSI0_DR_R;
+
+          // send_byte(read_data);
+//
+//           send_data = 0x0D;
+//
+//           send_byte(send_data);
 
             while (1)
             {

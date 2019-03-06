@@ -93,7 +93,7 @@ void SPI_init(void)
                       // SSInClk = SysClk / (CPSDVSR * (1 + SCR) SCR = 0;
 
     //Write theSSICR0register with the following configuration
-    SSI0_CR0_R |= 0x7; //freescale mode, 8 bit data, steady clock low
+    SSI0_CR0_R |= 0x7 | (1 << 7); //freescale mode, 8 bit data, steady clock low
 
     // Enable the SSI by setting theSSEbit in theSSICR1register.
     SSI0_CR1_R |= (1<<1);
@@ -136,7 +136,6 @@ int receive_byte()
     return data;
 }
 
-/****************************** End Of Module *******************************
 
 
 

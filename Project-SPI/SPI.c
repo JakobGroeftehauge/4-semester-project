@@ -93,7 +93,7 @@ void SPI_init(void)
                       // SSInClk = SysClk / (CPSDVSR * (1 + SCR) SCR = 0;
 
     //Write theSSICR0register with the following configuration
-    SSI0_CR0_R |= 0x7 | (1 << 7); //freescale mode, 8 bit data, steady clock low
+    SSI0_CR0_R |= 0xF | (1 << 7); //freescale mode, 16 bit data, steady clock low, Data is captured on the second clock edge transition
 
     // Enable the SSI by setting theSSEbit in theSSICR1register.
     SSI0_CR1_R |= (1<<1);
@@ -124,15 +124,7 @@ int receive_byte()
 ******************************************************************************/
 {
     int data=0;
-    int j;
-    send_byte(0xFF);
-    for(j = 0; j<0xFF; j++)
-    {
-        ;
-    }
-
     data = SSI0_DR_R;
-    GPIO_PORTF_DATA_R = data;
     return data;
 }
 

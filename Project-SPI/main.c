@@ -35,8 +35,8 @@ int main(void)
 
     SPI_init();
 int i = 1;
-uint8_t send_data;
-uint8_t read_data;
+uint16_t send_data;
+uint16_t read_data;
     while (1)
 
     {
@@ -44,9 +44,12 @@ uint8_t read_data;
         if(!(GPIO_PORTF_DATA_R&0x10))
         {
 
-           GPIO_PORTF_DATA_R = 0x2;
+           while (!(GPIO_PORTF_DATA_R&0x10))
+           {
+               ;
+           }
 
-           send_data = 0x02;
+           send_data = 0x1111;
 
            send_byte(send_data);
 
@@ -54,19 +57,26 @@ uint8_t read_data;
 
            read_data = SSI0_DR_R;
 
-           GPIO_PORTF_DATA_R = read_data;
+           send_byte(send_data);
+
+           delay();
+           //GPIO_PORTF_DATA_R = 0x2;
+           while (1)
+           {
+
+           read_data = SSI0_DR_R;
+
+           send_byte(read_data);
+
+           delay();
+
+           }
 
           // send_byte(read_data);
 //
 //           send_data = 0x0D;
 //
 //           send_byte(send_data);
-
-            while (1)
-            {
-                ;
-            }
-
         }
 
     }
@@ -77,12 +87,12 @@ void delay()
 {
     int i;
     int j;
-    for(i = 0; i<0xFF; i++)
+    for(i = 0; i<0xF0; i++)
     {
-        for(j = 0; j<0xFF; j++)
-            {
-                ;
-            }
+//        for(j = 0; j<0xFF; j++)
+//            {
+//                ;
+//            }
     }
 }
 

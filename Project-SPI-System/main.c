@@ -3,12 +3,12 @@
 #include "emp_type.h"
 #include "gpio.h"
 #include "systick.h"
-#include "swtimers.h"
+//#include "swtimers.h"
 #include "tmodel.h"
 #include "systick.h"
 
 
-INT16S alive_timer = MILLISEC(500);
+//INT16S alive_timer = MILLISEC(500);
 
 int main(void)
 /*****************************************************************************
@@ -35,11 +35,11 @@ int main(void)
 	// The following will be executed every 5mS
 	ticks--;
 
-	if( ! --alive_timer )
-	{
-      alive_timer =	MILLISEC( 500 );
-	  GPIO_PORTD_DATA_R ^= 0x40;
-	}
+//	if( ! --alive_timer )
+//	{
+//      alive_timer =	MILLISEC( 500 );
+//	  GPIO_PORTD_DATA_R ^= 0x40;
+//	}
 
     // Protected operating system mode
     swt_ctrl();

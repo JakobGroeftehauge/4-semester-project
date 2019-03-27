@@ -98,10 +98,16 @@ void SPI_init(void)
     SSI0_CR1_R |= (1<<1);
 }
 
-void send_data(int data)
+void data_transmit(int data)
+/*****************************************************************************
+*   Input    :Byte that
+*   Output   :
+*   Function :Sends the data given and waits until the transmission is complete.
+*
+******************************************************************************/
 {
     SSI0_DR_R = data;               //putting the byte to send from SSI
-    while (SSI0_SR_R &(1<<0) == 0)  //waiting for transmission to be done
+    while ((SSI0_SR_R & (1<<0)) == 0)  //waiting for transmission to be done
     { ; }
 
 }
@@ -109,8 +115,9 @@ void send_data(int data)
 void send_byte(int data, int slave_no)
 /*****************************************************************************
 *   Input    :byte that is being sent by SPI
+*             slave select
 *   Output   :
-*   Function :Sends the data given and waits until the transmission is complete.
+*   Function :Sets up slave select for desired slave, and then sends data given.
 *
 ******************************************************************************/
 {
@@ -118,39 +125,39 @@ void send_byte(int data, int slave_no)
     {
     case 0:
         GPIO_PORTC_DATA_R &= (0<<7)|(0<<6)|(0<<5)|(0<<4);
-        send_data(data);
+        data_transmit(data);
         break;
     case 1:
         GPIO_PORTC_DATA_R &= (0<<7)|(0<<6)|(0<<5)|(1<<4);
-        send_data(data);
+        data_transmit(data);
         break;
     case 2:
         GPIO_PORTC_DATA_R &= (0<<7)|(0<<6)|(1<<5)|(0<<4);
-        send_data(data);
+        data_transmit(data);
         break;
     case 3:
         GPIO_PORTC_DATA_R &= (0<<7)|(0<<6)|(1<<5)|(1<<4);
-        send_data(data);
+        data_transmit(data);
         break;
     case 4:
         GPIO_PORTC_DATA_R &= (0<<7)|(1<<6)|(0<<5)|(0<<4);
-        send_data(data);
+        data_transmit(data);
         break;
     case 5:
         GPIO_PORTC_DATA_R &= (0<<7)|(1<<6)|(0<<5)|(1<<4);
-        send_data(data);
+        data_transmit(data);
         break;
     case 6:
         GPIO_PORTC_DATA_R &= (0<<7)|(1<<6)|(1<<5)|(0<<4);
-        send_data(data);
+        data_transmit(data);
         break;
     case 7:
         GPIO_PORTC_DATA_R &= (0<<7)|(1<<6)|(1<<5)|(1<<4);
-        send_data(data);
+        data_transmit(data);
         break;
     case 8:
         GPIO_PORTC_DATA_R &= (1<<7)|(0<<6)|(0<<5)|(0<<4);
-        send_data(data);
+        data_transmit(data);
         break;
 
     }
@@ -167,7 +174,7 @@ int receive_byte()
 {
     int data=0;
     int j;
-    send_byte(0xFF);
+    send_byte(0xFF,1);
     for(j = 0; j<0xFF; j++)
     {
         ;

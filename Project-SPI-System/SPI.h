@@ -36,7 +36,13 @@ extern void SPI_init(void);
 *   Output   : -
 *   Function : SPI initation
 ******************************************************************************/
-extern void send_data(int data)
+
+extern void data_transmit(int data);
+/*****************************************************************************
+*   Input    :Byte that needs to be send
+*   Output   :
+*   Function :Sends the data given and waits until the transmission is complete.
+******************************************************************************/
 
 extern void send_byte(int, int);
 /*****************************************************************************

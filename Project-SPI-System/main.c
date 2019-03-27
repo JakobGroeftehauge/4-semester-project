@@ -25,10 +25,6 @@ int main(void)
   init_gpio();
   enable_global_int();
 
-  signal( MUTEX_SYSTEM_RTC );
-  signal( MUTEX_LCD_DISPLAY );
-  signal( SEM_RTC_UPDATED );
-
   // Loop forever.
   while(1)
   {
@@ -48,12 +44,7 @@ int main(void)
     // Protected operating system mode
     swt_ctrl();
 
-    // Application mode
-    button_task( TASK_BUTTON );
-    rtc_task( TASK_RTC );
-    display_rtc_task( TASK_RTC_DISPLAY );
-    ajust_rtc_task( TASK_RTC_ADJUST );
-    lcd_task( TASK_LCD );
+
 
   }
   return( 0 );

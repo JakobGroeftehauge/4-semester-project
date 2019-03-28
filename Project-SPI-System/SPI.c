@@ -22,6 +22,9 @@
 #include "EMP_type.h"
 #include <stdint.h>
 #include "tm4c123gh6pm.h"
+#include "tmodel.h"
+#include "rtcs.h"
+#include "events.h"
 /*****************************    Defines    *******************************/
 
 /*****************************   Constants   *******************************/
@@ -98,27 +101,50 @@ void SPI_init(void)
     SSI0_CR1_R |= (1<<1);
 }
 
-void data_transmit(int data)
+extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
+/*****************************************************************************
+*   Input    : -
+*   Output   : -
+*   Function : -
+******************************************************************************/
+{
+    INT8U slave_no;
+
+    switch( my_state )
+    {
+    case 1:
+        if( get_queue( Q_SPI_REQUEST, &slave_no, WAIT_FOREVER ))
+        {
+            send_byte( 0xFF, slave_no);  //Slave er sat, byte er sendt - skal nu vente på at modtage data, evt. med st_timeout
+            set_state ( 2 );
+        }
+        break;
+    case 2:
+
+        break;
+    }
+
+
+}
+
+void data_transmit(INT8U data)
 /*****************************************************************************
 *   Input    :Byte that
 *   Output   :
 *   Function :Sends the data given and waits until the transmission is complete.
-*
 ******************************************************************************/
 {
     SSI0_DR_R = data;               //putting the byte to send from SSI
     while ((SSI0_SR_R & (1<<0)) == 0)  //waiting for transmission to be done
     { ; }
-
 }
 
-void send_byte(int data, int slave_no)
+void send_byte(INT8U data, INT8U slave_no)
 /*****************************************************************************
 *   Input    :byte that is being sent by SPI
 *             slave select
 *   Output   :
 *   Function :Sets up slave select for desired slave, and then sends data given.
-*
 ******************************************************************************/
 {
     switch( slave_no )
@@ -159,28 +185,25 @@ void send_byte(int data, int slave_no)
         GPIO_PORTC_DATA_R &= (1<<7)|(0<<6)|(0<<5)|(0<<4);
         data_transmit(data);
         break;
-
     }
 }
 
-int receive_byte()
-/*****************************************************************************
-*   Input    :
-*   Output   : The function return the received data.
-*   Function : receiving data with SPI
-*   // test
-*
-******************************************************************************/
-{
-    int data=0;
-    int j;
-    send_byte(0xFF,1);
-    for(j = 0; j<0xFF; j++)
-    {
-        ;
-    }
-
-    data = SSI0_DR_R;
-    GPIO_PORTF_DATA_R = data;
-    return data;
-}
+//int receive_byte()
+///*****************************************************************************
+//*   Input    :
+//*   Output   : The function return the received data.
+//*   Function : receiving data with SPI
+//******************************************************************************/
+//{
+//    int data=0;
+//    int j;
+//    send_byte(0xFF,1);
+//    for(j = 0; j<0xFF; j++)
+//    {
+//        ;
+//    }
+//
+//    data = SSI0_DR_R;
+//    GPIO_PORTF_DATA_R = data;
+//    return data;
+//}

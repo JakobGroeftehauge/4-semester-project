@@ -21,6 +21,7 @@
 #define SPI_H_
 /***************************** Include files *******************************/
 #include "tm4c123gh6pm.h"
+#include "EMP_type.h"
 
 /*****************************    Defines    *******************************/
 
@@ -37,29 +38,22 @@ extern void SPI_init(void);
 *   Function : SPI initation
 ******************************************************************************/
 
-extern void data_transmit(int data);
+extern void SPI_task(INT8U, INT8U, INT8U, INT8U);
+
+
+extern void data_transmit(INT8U data);
 /*****************************************************************************
 *   Input    :Byte that needs to be send
 *   Output   :
 *   Function :Sends the data given and waits until the transmission is complete.
 ******************************************************************************/
 
-extern void send_byte(int, int);
+extern void send_byte_task(INT8U, INT8U);
 /*****************************************************************************
 *   Input    : -
 *   Output   : -
 *   Function : SPI initation
 ******************************************************************************/
 
-extern int receive_byte(
-        );
-/*****************************************************************************
-*   Input    : -
-*   Output   : -
-*   Function : SPI initation
-******************************************************************************/
-
-
-/****************************** End Of Module *******************************/
 
 #endif /* SPI_H_ */

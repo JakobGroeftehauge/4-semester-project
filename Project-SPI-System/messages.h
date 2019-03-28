@@ -1,10 +1,10 @@
 /*****************************************************************************
 * University of Southern Denmark
-* Embedded Programming (EMP)
+* Embedded C Programming (ECP)
 *
-* MODULENAME.: emp.h
+* MODULENAME.: messages.h
 *
-* PROJECT....: EMP
+* PROJECT....: ECP
 *
 * DESCRIPTION: Test.
 *
@@ -17,29 +17,42 @@
 *
 *****************************************************************************/
 
-#ifndef _EMP_H
-  #define _EMP_H
+#ifndef _ECP_H
+  #define _ECP_H
 
 /***************************** Include files *******************************/
-
+#include "emp_type.h"
 /*****************************    Defines    *******************************/
-extern volatile INT16S ticks;
 
 /*****************************   Constants   *******************************/
 
-
 /*****************************   Functions   *******************************/
-void enable_global_int();
-void disable_global_int();
-void init_systick();
-void systick_handler();
-extern void test2(void);
+INT8U get_msg_event( INT8U );
 /*****************************************************************************
 *   Input    : -
 *   Output   : -
 *   Function : Test function
 ******************************************************************************/
 
+void put_msg_event( INT8U, INT8U );
+/*****************************************************************************
+*   Input    : -
+*   Output   : -
+*   Function : Test function
+******************************************************************************/
+INT8U get_msg_state( INT8U );
+/*****************************************************************************
+*   Input    : -
+*   Output   : -
+*   Function : Test function
+******************************************************************************/
+
+void put_msg_state( INT8U, INT8U );
+/*****************************************************************************
+*   Input    : -
+*   Output   : -
+*   Function : Test function
+******************************************************************************/
 
 /****************************** End Of Module *******************************/
 #endif

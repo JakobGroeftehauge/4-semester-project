@@ -1,10 +1,10 @@
 /*****************************************************************************
 * University of Southern Denmark
-* Embedded Programming (EMP)
+* Embedded C Programming (ECP)
 *
-* MODULENAME.: emp.h
+* MODULENAME.: ecp.h
 *
-* PROJECT....: EMP
+* PROJECT....: ECP
 *
 * DESCRIPTION: Test.
 *
@@ -17,48 +17,48 @@
 *
 *****************************************************************************/
 
-#ifndef SPI_H_
-#define SPI_H_
+#ifndef _SWTIMERS_H
+  #define _SWTIMERS_H
+
 /***************************** Include files *******************************/
-#include "tm4c123gh6pm.h"
-#include "EMP_type.h"
 
 /*****************************    Defines    *******************************/
+#define TICK_TIME	5		// tick time in milli seconds.
 
-/********************** External declaration of Variables ******************/
+#define MILLISEC(time_in_msec)  time_in_msec / TICK_TIME
+
 
 /*****************************   Constants   *******************************/
 
-/*************************  Function interfaces ****************************/
-
-extern void SPI_init(void);
+/*****************************   Functions   *******************************/
+INT16U swtimer( INT8U );
 /*****************************************************************************
 *   Input    : -
 *   Output   : -
-*   Function : SPI initation
+*   Function : Test function
 ******************************************************************************/
 
-extern void SPI_task(INT8U, INT8U, INT8U, INT8U);
+void start_swtimer( INT8U, INT8U, INT16U );
 /*****************************************************************************
 *   Input    : -
 *   Output   : -
-*   Function : -
+*   Function : Test function
 ******************************************************************************/
 
-
-extern void data_transmit(INT8U data);
-/*****************************************************************************
-*   Input    :Byte that needs to be send
-*   Output   :
-*   Function :Sends the data given and waits until the transmission is complete.
-******************************************************************************/
-
-extern void send_byte(INT8U, INT8U);
+void swt_ctrl(void);
 /*****************************************************************************
 *   Input    : -
 *   Output   : -
-*   Function : SPI initation
+*   Function : Test function
 ******************************************************************************/
 
+void init_swtimers(void);
+/*****************************************************************************
+*   Input    : -
+*   Output   : -
+*   Function : Test function
+******************************************************************************/
 
-#endif /* SPI_H_ */
+/****************************** End Of Module *******************************/
+#endif
+

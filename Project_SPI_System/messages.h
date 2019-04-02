@@ -1,10 +1,10 @@
 /*****************************************************************************
 * University of Southern Denmark
-* Embedded Programming (EMP)
+* Embedded C Programming (ECP)
 *
-* MODULENAME.: emp.h
+* MODULENAME.: messages.h
 *
-* PROJECT....: EMP
+* PROJECT....: ECP
 *
 * DESCRIPTION: Test.
 *
@@ -17,48 +17,43 @@
 *
 *****************************************************************************/
 
-#ifndef SPI_H_
-#define SPI_H_
+#ifndef _ECP_H
+  #define _ECP_H
+
 /***************************** Include files *******************************/
-#include "tm4c123gh6pm.h"
-#include "EMP_type.h"
-
+#include "emp_type.h"
 /*****************************    Defines    *******************************/
-
-/********************** External declaration of Variables ******************/
 
 /*****************************   Constants   *******************************/
 
-/*************************  Function interfaces ****************************/
-
-extern void SPI_init(void);
+/*****************************   Functions   *******************************/
+INT8U get_msg_event( INT8U );
 /*****************************************************************************
 *   Input    : -
 *   Output   : -
-*   Function : SPI initation
+*   Function : Test function
 ******************************************************************************/
 
-extern void SPI_task(INT8U, INT8U, INT8U, INT8U);
+void put_msg_event( INT8U, INT8U );
 /*****************************************************************************
 *   Input    : -
 *   Output   : -
-*   Function : -
+*   Function : Test function
 ******************************************************************************/
-
-
-extern void data_transmit(INT8U data);
-/*****************************************************************************
-*   Input    :Byte that needs to be send
-*   Output   :
-*   Function :Sends the data given and waits until the transmission is complete.
-******************************************************************************/
-
-extern void send_byte(INT8U, INT8U);
+INT8U get_msg_state( INT8U );
 /*****************************************************************************
 *   Input    : -
 *   Output   : -
-*   Function : SPI initation
+*   Function : Test function
 ******************************************************************************/
 
+void put_msg_state( INT8U, INT8U );
+/*****************************************************************************
+*   Input    : -
+*   Output   : -
+*   Function : Test function
+******************************************************************************/
 
-#endif /* SPI_H_ */
+/****************************** End Of Module *******************************/
+#endif
+

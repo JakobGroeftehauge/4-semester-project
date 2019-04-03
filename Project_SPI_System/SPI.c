@@ -60,54 +60,54 @@ void SPI_init(void)
     //To enable and initialize the SSI, the following steps are necessary:
 
     //Enable the SSI module using theRCGCSSIregister (see page 346)
-    SYSCTL_RCGCSSI_R |= (1<<0);        //selecting SSI0 module
+    SYSCTL_RCGCSSI_R |= (1<<1);        //selecting SSI1 module
 
     //Enable the clock to the appropriate GPIO module via theRCGCGPIOregister
     //(see page 340).To find out which GPIO port to enable, refer to Table 23-5 on page 1351.
-    SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOA; //Maybe the right register
+    SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOD; //Maybe the right register
 
     //Set the GPIOAFSELbits for the appropriate pins (see page 671).
     //To determine which GPIOs to configure, see Table 23-4 on page 1344
 
-    GPIO_PORTA_AFSEL_R |= (1<<2)|(1<<3)|(1<<4)|(1<<5);
+    GPIO_PORTD_AFSEL_R |= (1<<0)|(1<<1)|(1<<2)|(1<<3);
 
     // Configure thePMCnfields in theGPIOPCTLregister to assign the SSI
     // signals to the appropriate pins. See page 688 and Table 23-5 on page 135
 
-    GPIO_PORTA_PCTL_R = 0x00222200;
+    GPIO_PORTD_PCTL_R |= (2<<0)|(2<<4)|(2<<8)|(2<12);
 
     //Program theGPIODENregister to enable the pin's digital function.
     // In addition, the drive strength,drain select and pull-up/pull-down functions must be configured.
     //Refer to “General-PurposeInput/Outputs (GPIOs)” on page 649 for more information.
 
-    GPIO_PORTA_DEN_R |=(1<<2)|(1<<3)|(1<<4)|(1<<5); //enabling digital mode for PORTA 2,3,4,5
+    GPIO_PORTD_DEN_R |=(1<<0)|(1<<1)|(1<<2)|(1<<3); //enabling digital mode for PORTA 2,3,4,5
 
-    GPIO_PORTA_PUR_R |=(1<<2)|(1<<3)|(1<<4)|(1<<5); //selecting pull ups for 2,3,4,5
+    GPIO_PORTD_PUR_R |=(1<<0)|(1<<1)|(1<<2)|(1<<3); //selecting pull ups for 2,3,4,5
 
 
     //Ensure that the SSE bit in the SSICR1 register is clear before making any configuration changes.
 
-    SSI0_CR1_R = 0 ;
+    SSI1_CR1_R = 0 ;
 
     // Select whether the SSI is a master or slave
     // For master operations, set the SSICR1 register to 0x0000.0000.
 
-    SSI0_CR1_R = 0 ;
+    SSI1_CR1_R = 0 ;
 
     //Configure the SSI clock source by writing to the SSICC register.
 
-    SSI0_CC_R = 0; //using main system clock
+    SSI1_CC_R = 0; //using main system clock
 
     // Configure the clock prescale divisor by writing the SSICPSR register.
 
-    SSI0_CPSR_R = 64; //selecting divisor 64 for SSI clock
+    SSI1_CPSR_R = 64; //selecting divisor 64 for SSI clock
                       // SSInClk = SysClk / (CPSDVSR * (1 + SCR) SCR = 0;
 
     //Write theSSICR0register with the following configuration
-    SSI0_CR0_R |= 0x7; //freescale mode, 8 bit data, steady clock low
+    SSI1_CR0_R |= 0x7; //freescale mode, 8 bit data, steady clock low
 
     // Enable the SSI by setting theSSEbit in theSSICR1register.
-    SSI0_CR1_R |= (1<<1);
+    SSI1_CR1_R |= (1<<1);
 }
 
 extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
@@ -119,19 +119,29 @@ extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 {
     INT8U slave_no;
 
-    switch( my_state )
-    {
-    case SEND_DATA:
-        if( get_queue( Q_SPI_REQUEST, &slave_no, WAIT_FOREVER ))
-        {
-            send_byte( 0xFF, slave_no);  //Slave er sat, byte er sendt - skal nu vente på at modtage data, evt. med st_timeout
-            set_state ( 2 );
-        }
-        break;
-    case RECEIVE_DATA:
+    INT8U static counter = 0;
 
-        break;
+    counter++;
+    if( counter > 10 )
+    {
+        send_byte( 0xCC,1 );
+        counter = 0;
     }
+
+
+//    switch( my_state )
+//    {
+//    case SEND_DATA:
+//        if( get_queue( Q_SPI_REQUEST, &slave_no, WAIT_FOREVER ))
+//        {
+//            send_byte( 0xFF, slave_no);  //Slave er sat, byte er sendt - skal nu vente på at modtage data, evt. med st_timeout
+//            set_state ( 2 );
+//        }
+//        break;
+//    case RECEIVE_DATA:
+//
+//        break;
+//    }
 
 }
 
@@ -144,10 +154,10 @@ void data_transmit(INT8U data)
 {
     int dummy;
 
-    SSI0_DR_R = data;               //putting the byte to send from SSI
+    SSI1_DR_R = data;               //putting the byte to send from SSI
     for(int i=0; i<10; i++){};
 
-    while ( (GPIO_PORTA_DATA_R & 0b1000) == 0  )
+    while ( (GPIO_PORTD_DATA_R & 0b0000010) == 0  )
     {
         ;
     }

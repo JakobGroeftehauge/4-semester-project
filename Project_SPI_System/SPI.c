@@ -25,11 +25,20 @@
 #include "tmodel.h"
 #include "rtcs.h"
 #include "events.h"
+#include "uart.h"
 /*****************************    Defines    *******************************/
+
+enum SPI_states
+{
+  SEND_DATA,
+  RECEIVE_DATA,
+};
 
 /*****************************   Constants   *******************************/
 
 /*****************************   Variables   *******************************/
+
+enum SPI_states SPI_state = SEND_DATA;
 
 /*****************************   Functions   *******************************/
 void SPI_init(void)
@@ -112,18 +121,17 @@ extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 
     switch( my_state )
     {
-    case 1:
+    case SEND_DATA:
         if( get_queue( Q_SPI_REQUEST, &slave_no, WAIT_FOREVER ))
         {
             send_byte( 0xFF, slave_no);  //Slave er sat, byte er sendt - skal nu vente på at modtage data, evt. med st_timeout
             set_state ( 2 );
         }
         break;
-    case 2:
+    case RECEIVE_DATA:
 
         break;
     }
-
 
 }
 
@@ -134,9 +142,15 @@ void data_transmit(INT8U data)
 *   Function :Sends the data given and waits until the transmission is complete.
 ******************************************************************************/
 {
+    int dummy;
+
     SSI0_DR_R = data;               //putting the byte to send from SSI
-    while ((SSI0_SR_R & (1<<0)) == 0)  //waiting for transmission to be done
-    { ; }
+    for(int i=0; i<10; i++){};
+
+    while ( (GPIO_PORTA_DATA_R & 0b1000) == 0  )
+    {
+        ;
+    }
 }
 
 void send_byte(INT8U data, INT8U slave_no)
@@ -150,40 +164,52 @@ void send_byte(INT8U data, INT8U slave_no)
     switch( slave_no )
     {
     case 0:
-        GPIO_PORTC_DATA_R &= (0<<7)|(0<<6)|(0<<5)|(0<<4);
-        data_transmit(data);
+        GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4);
         break;
     case 1:
-        GPIO_PORTC_DATA_R &= (0<<7)|(0<<6)|(0<<5)|(1<<4);
+        GPIO_PORTC_DATA_R &= (1<<7)|(1<<6)|(1<<5)|(0<<4);
         data_transmit(data);
+        GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4);
         break;
     case 2:
-        GPIO_PORTC_DATA_R &= (0<<7)|(0<<6)|(1<<5)|(0<<4);
+        GPIO_PORTC_DATA_R &= (1<<7)|(1<<6)|(0<<5)|(1<<4);
         data_transmit(data);
+        GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4);
         break;
     case 3:
-        GPIO_PORTC_DATA_R &= (0<<7)|(0<<6)|(1<<5)|(1<<4);
+        GPIO_PORTC_DATA_R &= (1<<7)|(1<<6)|(0<<5)|(0<<4);
         data_transmit(data);
+        GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4);
         break;
     case 4:
-        GPIO_PORTC_DATA_R &= (0<<7)|(1<<6)|(0<<5)|(0<<4);
+        GPIO_PORTC_DATA_R &= (1<<7)|(0<<6)|(1<<5)|(1<<4);
         data_transmit(data);
+        GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4);
         break;
     case 5:
-        GPIO_PORTC_DATA_R &= (0<<7)|(1<<6)|(0<<5)|(1<<4);
+        GPIO_PORTC_DATA_R &= (1<<7)|(0<<6)|(1<<5)|(0<<4);
         data_transmit(data);
+        GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4);
         break;
     case 6:
-        GPIO_PORTC_DATA_R &= (0<<7)|(1<<6)|(1<<5)|(0<<4);
+        GPIO_PORTC_DATA_R &= (1<<7)|(0<<6)|(0<<5)|(1<<4);
         data_transmit(data);
+        GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4);
         break;
     case 7:
-        GPIO_PORTC_DATA_R &= (0<<7)|(1<<6)|(1<<5)|(1<<4);
-        data_transmit(data);
-        break;
-    case 8:
         GPIO_PORTC_DATA_R &= (1<<7)|(0<<6)|(0<<5)|(0<<4);
         data_transmit(data);
+        GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4);
+        break;
+    case 8:
+        GPIO_PORTC_DATA_R &= (0<<7)|(1<<6)|(1<<5)|(1<<4);
+        data_transmit(data);
+        GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4);
+        break;
+    case 9:
+        GPIO_PORTC_DATA_R &= (0<<7)|(1<<6)|(1<<5)|(0<<4);
+        data_transmit(data);
+        GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4);
         break;
     }
 }

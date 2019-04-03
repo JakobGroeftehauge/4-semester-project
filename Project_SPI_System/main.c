@@ -29,9 +29,11 @@ int main(void)
   enable_global_int();
 
   SPI_init();
-  uart0_init( 9600, 8, 1, 'n' );
+  GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4); //Make sure all SS are high
+  //uart0_init( 9600, 8, 1, 0 ); //virker ikke med SPI opsat på porta
 
   start_task(TASK_SPI, SPI_task);
+
 
   schedule();
 

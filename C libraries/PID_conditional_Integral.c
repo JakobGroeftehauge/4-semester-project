@@ -12,7 +12,7 @@
 * 190409  PC	 Revised.
 *
 *****************************************************************************/
-#include "PID.h"
+#include "PID_conditional_Integral.h"
 #include "filter.h"
 
 

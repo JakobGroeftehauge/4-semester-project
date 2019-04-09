@@ -22,16 +22,16 @@
 #include <stdint.h>
 #include "circular_buffer.h"
 /*****************************    Defines    *******************************/
-#define MAX_NUMBER_OF_TABS 10
+#define MAX_NUMBER_OF_TABS 10	
 
-#define FILTER_1        BUFFER_FILTER_1
-#define FILTER_2        BUFFER_FILTER_2
+#define FILTER_1        BUFFER_FILTER_1	//Buffer_Filters are defined in circular_buffer.h
+#define FILTER_2        BUFFER_FILTER_2	
 #define FILTER_3        BUFFER_FILTER_3
 
 
 typedef struct
 {
-    uint8_t buffer_id;
+    uint8_t buffer_id;	//must be the same as the id of the filter. One of the IDs' could be removed
     uint8_t id;
     float coefList[10];
     uint8_t tabs;

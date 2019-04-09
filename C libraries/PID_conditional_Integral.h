@@ -19,6 +19,16 @@
 #ifndef PID_H_
 #define PID_H_
 
+
+/***************************** Include files *******************************/
+#include <stdint.h>
+#include "filter.h"
+
+/*****************************    Defines    *******************************/
+#define CC_CONTROLLER_ID    FILTER_1
+#define VC_CONTROLLER_ID    FILTER_2
+#define PC_CONTROLLER_ID    FILTER_3
+
 typedef struct
 {
   float Td;
@@ -29,17 +39,24 @@ typedef struct
   float dt;         //stepsize for integral
   float upper_sat;
   float lower_sat;
- 
+  uint8_t filter_id;
 } PID_controller;
 
-//extern void init_PID_filter(PID_controller);
 
-extern float run_PID(float feedback, float setpoint, PID_controller* PID);
+/*************************  Function interfaces ****************************/
+
+extern void init_PIDs();
 /*****************************************************************************
-*   Input    : Sampled data, setpoint, specific controller
+*   Function : Initialize all the PID controllers
+******************************************************************************/
+
+
+extern float run_PID(float feedback, float setpoint, uint8_t id);
+/*****************************************************************************
+*   Input    : Sampled data, setpoint, controller id
 *   Output   : Regulated signal
 *   Function : PID controller
 ******************************************************************************/
 
-
+/****************************** End Of Module *******************************/
 #endif /* PID_H_ */

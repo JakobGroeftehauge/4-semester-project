@@ -39,7 +39,6 @@ typedef struct
   float dt;         //stepsize for integral
   float upper_sat;
   float lower_sat;
-  float integral;
   float pastError;
   float Ud;
   uint8_t filter_id;

@@ -41,7 +41,6 @@ extern void init_PIDs()
     PID_pool[CC_CONTROLLER_ID].upper_sat = 10;
     PID_pool[CC_CONTROLLER_ID].lower_sat = -10;
     PID_pool[CC_CONTROLLER_ID].filter_id = CC_CONTROLLER_ID;
-	PID_pool[CC_CONTROLLER_ID].integral = 0;
 	PID_pool[CC_CONTROLLER_ID].pastError = 0;
 	PID_pool[CC_CONTROLLER_ID].Ud = 0;
     float CC_Filter_Coef[MAX_NUMBER_OF_TABS] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};

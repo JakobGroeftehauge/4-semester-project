@@ -82,8 +82,9 @@ extern float run_PID(float feedback, float setpoint, uint8_t id) // CHANGE TO PI
 
    error = run_filter(PID_pool[id].filter_id, error);
 
-   TempIntegral = PID_pool[id].integral + (error + PID_pool[id].pastError)*((PID_pool[id].Ti/PID_pool[id].Kp*PID_pool[id].dt)/2);
-
+   
+   TempIntegral = PID_pool[id].integral + (error + PID_pool[id].pastError)*(((PID_pool[id].Kp/PID_pool[id].Ti)*PID_pool[id].dt)/2);
+   
    output = PID_pool[id].Kp * error + TempIntegral + (PID_pool[id].Kp*PID_pool[id].Td*2)/PID_pool[id].dt * (PID_pool[id].pastError-error) - PID_pool[id].Ud;
 												   
 

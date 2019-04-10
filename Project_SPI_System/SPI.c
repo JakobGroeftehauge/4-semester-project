@@ -65,25 +65,31 @@ void SPI_init(void)
     //Enable the clock to the appropriate GPIO module via theRCGCGPIOregister
     //(see page 340).To find out which GPIO port to enable, refer to Table 23-5 on page 1351.
     SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOD; //Maybe the right register
+    SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOF; //Maybe the right register
 
     //Set the GPIOAFSELbits for the appropriate pins (see page 671).
     //To determine which GPIOs to configure, see Table 23-4 on page 1344
 
     GPIO_PORTD_AFSEL_R |= (1<<0)|(1<<1)|(1<<2)|(1<<3);
+    GPIO_PORTF_AFSEL_R |= (1<<0)|(1<<1)|(1<<2)|(1<<3);
 
     // Configure thePMCnfields in theGPIOPCTLregister to assign the SSI
     // signals to the appropriate pins. See page 688 and Table 23-5 on page 135
 
     GPIO_PORTD_PCTL_R |= (2<<0)|(2<<4)|(2<<8)|(2<12);
+    GPIO_PORTF_PCTL_R |= (2<<0)|(2<<4)|(2<<8)|(2<12);
 
     //Program theGPIODENregister to enable the pin's digital function.
     // In addition, the drive strength,drain select and pull-up/pull-down functions must be configured.
     //Refer to “General-PurposeInput/Outputs (GPIOs)” on page 649 for more information.
 
-    GPIO_PORTD_DEN_R |=(1<<0)|(1<<1)|(1<<2)|(1<<3); //enabling digital mode for PORTA 2,3,4,5
+    GPIO_PORTD_DEN_R |=(1<<1); //enabling digital mode for PORTD 0,1,2,3
 
-    GPIO_PORTD_PUR_R |=(1<<0)|(1<<1)|(1<<2)|(1<<3); //selecting pull ups for 2,3,4,5
+    GPIO_PORTD_PUR_R |=(1<<1); //selecting pull ups for 0,1,2,3
 
+    GPIO_PORTF_DEN_R |=(1<<0)|(1<<1)|(1<<2); //enabling digital mode for PORTD 0,1,2,3
+
+    GPIO_PORTF_PUR_R |=(1<<0)|(1<<1)|(1<<2); //selecting pull ups for 0,1,2,3
 
     //Ensure that the SSE bit in the SSICR1 register is clear before making any configuration changes.
 
@@ -104,7 +110,7 @@ void SPI_init(void)
                       // SSInClk = SysClk / (CPSDVSR * (1 + SCR) SCR = 0;
 
     //Write theSSICR0register with the following configuration
-    SSI1_CR0_R |= 0x7; //freescale mode, 8 bit data, steady clock low
+    SSI1_CR0_R |= 0xF; //freescale mode, 16 bit data, steady clock low
 
     // Enable the SSI by setting theSSEbit in theSSICR1register.
     SSI1_CR1_R |= (1<<1);
@@ -122,9 +128,10 @@ extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
     INT8U static counter = 0;
 
     counter++;
-    if( counter > 10 )
+    if( counter > 50 )
     {
-        send_byte( 0xCC,1 );
+        send_byte( 0xCCAA,7 );
+        //receive_byte();
         counter = 0;
     }
 
@@ -145,7 +152,7 @@ extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 
 }
 
-void data_transmit(INT8U data)
+void data_transmit(INT16U data)
 /*****************************************************************************
 *   Input    :Byte that
 *   Output   :
@@ -155,7 +162,7 @@ void data_transmit(INT8U data)
     int dummy;
 
     SSI1_DR_R = data;               //putting the byte to send from SSI
-    for(int i=0; i<10; i++){};
+    for(int i=0; i<20; i++){};
 
     while ( (GPIO_PORTD_DATA_R & 0b0000010) == 0  )
     {
@@ -163,7 +170,7 @@ void data_transmit(INT8U data)
     }
 }
 
-void send_byte(INT8U data, INT8U slave_no)
+void send_byte(INT16U data, INT8U slave_no)
 /*****************************************************************************
 *   Input    :byte that is being sent by SPI
 *             slave select
@@ -224,24 +231,29 @@ void send_byte(INT8U data, INT8U slave_no)
     }
 }
 
-//int receive_byte()
-///*****************************************************************************
-//*   Input    :
-//*   Output   : The function return the received data.
-//*   Function : receiving data with SPI
-//******************************************************************************/
-//{
-//    int data=0;
-//    int j;
-//    send_byte(0xFF,1);
-//    for(j = 0; j<0xFF; j++)
-//    {
-//        ;
-//    }
-//
-//    data = SSI0_DR_R;
-//    GPIO_PORTF_DATA_R = data;
-//    return data;
-//}
+void receive_byte()
+/*****************************************************************************
+*   Input    :
+*   Output   : The function return the received data.
+*   Function : receiving data with SPI
+******************************************************************************/
+{
+    INT8U data;
+    for(int i; i < 0xFF; i++)
+    {
+        int b = i;
+        for(int k; k < 0xFF; k++)
+        {
+
+        }
+    }
+    data = SSI1_DR_R;
+
+    uart0_putc(data);
+
+
+
+
+}
 
 /****************************** End Of Module *******************************/

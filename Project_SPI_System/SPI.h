@@ -46,14 +46,14 @@ extern void SPI_task(INT8U, INT8U, INT8U, INT8U);
 ******************************************************************************/
 
 
-extern void data_transmit(INT8U data);
+extern void data_transmit(INT16U data);
 /*****************************************************************************
 *   Input    :Byte that needs to be send
 *   Output   :
 *   Function :Sends the data given and waits until the transmission is complete.
 ******************************************************************************/
 
-extern void send_byte(INT8U, INT8U);
+extern void send_byte(INT16U, INT8U);
 /*****************************************************************************
 *   Input    : -
 *   Output   : -

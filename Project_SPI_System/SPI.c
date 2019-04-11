@@ -83,9 +83,9 @@ void SPI_init(void)
     // In addition, the drive strength,drain select and pull-up/pull-down functions must be configured.
     //Refer to “General-PurposeInput/Outputs (GPIOs)” on page 649 for more information.
 
-    GPIO_PORTD_DEN_R |=(1<<1); //enabling digital mode for PORTD 0,1,2,3
+    GPIO_PORTD_DEN_R |=(1<<1)|(1<<2); //enabling digital mode for PORTD 0,1,2,3
 
-    GPIO_PORTD_PUR_R |=(1<<1); //selecting pull ups for 0,1,2,3
+    GPIO_PORTD_PUR_R |=(1<<1)|(1<<2); //selecting pull ups for 0,1,2,3
 
     GPIO_PORTF_DEN_R |=(1<<0)|(1<<1)|(1<<2); //enabling digital mode for PORTD 0,1,2,3
 
@@ -110,7 +110,7 @@ void SPI_init(void)
                       // SSInClk = SysClk / (CPSDVSR * (1 + SCR) SCR = 0;
 
     //Write theSSICR0register with the following configuration
-    SSI1_CR0_R |= 0xF; //freescale mode, 16 bit data, steady clock low
+    SSI1_CR0_R |= 0xF|(1<<7); //freescale mode, 16 bit data, steady clock low
 
     // Enable the SSI by setting theSSEbit in theSSICR1register.
     SSI1_CR1_R |= (1<<1);
@@ -126,12 +126,14 @@ extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
     INT8U slave_no;
 
     INT8U static counter = 0;
-
     counter++;
     if( counter > 50 )
     {
-        send_byte( 0xCCAA,7 );
-        //receive_byte();
+        send_byte( 0xCCAA, 2 );
+        while( !uart0_tx_rdy() )
+        {}
+        uart0_putc('k');
+        receive_byte();
         counter = 0;
     }
 
@@ -168,6 +170,7 @@ void data_transmit(INT16U data)
     {
         ;
     }
+
 }
 
 void send_byte(INT16U data, INT8U slave_no)
@@ -178,9 +181,12 @@ void send_byte(INT16U data, INT8U slave_no)
 *   Function :Sets up slave select for desired slave, and then sends data given.
 ******************************************************************************/
 {
+
     switch( slave_no )
     {
     case 0:
+        GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4);
+        data_transmit(data);
         GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4);
         break;
     case 1:
@@ -238,17 +244,15 @@ void receive_byte()
 *   Function : receiving data with SPI
 ******************************************************************************/
 {
-    INT8U data;
+    INT8U data = 'a';
     for(int i; i < 0xFF; i++)
     {
-        int b = i;
-        for(int k; k < 0xFF; k++)
-        {
-
-        }
+        ;
     }
     data = SSI1_DR_R;
 
+    while( !uart0_tx_rdy() )
+      {}
     uart0_putc(data);
 
 

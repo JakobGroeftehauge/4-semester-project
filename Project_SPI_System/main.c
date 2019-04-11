@@ -28,9 +28,10 @@ int main(void)
   init_gpio();
   enable_global_int();
 
+  uart0_init( 9600, 8, 1, 0 );
   SPI_init();
   GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4); //Make sure all SS are high
-  //uart0_init( 9600, 8, 1, 0 );
+  uart0_putc('s');
 
   start_task(TASK_SPI, SPI_task);
 

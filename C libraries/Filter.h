@@ -1,39 +1,59 @@
-/*
- * Filter.h
+/*****************************************************************************
+ * MODULENAME.: filter.c
  *
- *  Created on: 21. mar. 2019
- *      Author: Peter
- */
+ * PROJECT....: 4. semester project
+ *
+ * DESCRIPTION: implementation of circular buffer
+ *
+ * Change Log:
+*****************************************************************************
+* Date    Id    Change
+* YYMMDD
+* --------------------
+* 190408  JGR    Module created.
+*
+*****************************************************************************/
 
 #ifndef FILTER_H_
 #define FILTER_H_
+
+/***************************** Include files *******************************/
+
 #include <stdint.h>
+#include "circular_buffer.h"
+/*****************************    Defines    *******************************/
+#define MAX_NUMBER_OF_TABS 10	
 
-#define BufferSize 10
-#define FilterSize 10
-#define FILTER_INIT_SIZE 0
-
-static float input_buffer[BufferSize]={0};
-static float filter_coeff[]={
-0,
--0.000000000000000000785328944467812029521,
--0.021344384465231652781014304309792350978,
-0.000000000000000009955784571983863898562,
-0.270851356685877842078724597740801982582,
-0.500986055558707676915730644395807757974,
-0.270851356685877842078724597740801982582,
-0.000000000000000009955784571983863898562,
--0.021344384465231652781014304309792350978,
--0.000000000000000000785328944467812029521,
-0};
-static uint8_t data_updated = 0;
-static uint8_t buffer_Size = 0;
-
-float raw_input_buffer(float in);
-
-//extern uint8_t size_of_buf();
-
-float calculate_filter(float in);
+#define FILTER_1        BUFFER_FILTER_1	//Buffer_Filters are defined in circular_buffer.h
+#define FILTER_2        BUFFER_FILTER_2	
+#define FILTER_3        BUFFER_FILTER_3
 
 
+typedef struct
+{
+    uint8_t buffer_id;	//must be the same as the id of the filter. One of the IDs' could be removed
+    uint8_t id;
+    float coefList[10];
+    uint8_t tabs;
+} filter_descriptor;
+
+
+/*************************  Function interfaces ****************************/
+
+extern void init_filter(uint8_t id, float coefArray[MAX_NUMBER_OF_TABS], uint8_t numTabs);
+/*****************************************************************************
+*   Input    : filter id, Array with filter coefficient, number of tabs in the filter.
+*   Output   :
+*   Function : Initialize filter
+******************************************************************************/
+
+extern float run_filter(uint8_t id, float data);
+/*****************************************************************************
+*   Input    : filter id, sampled data
+*   Output   : filtered data
+*   Function : filter data
+******************************************************************************/
+
+
+/****************************** End Of Module *******************************/
 #endif /* FILTER_H_ */

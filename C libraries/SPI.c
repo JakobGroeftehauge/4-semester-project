@@ -34,6 +34,8 @@ enum SPI_states
   RECEIVE_DATA,
 };
 
+#define POSITION_SLAVE      2
+#define PWM_SLAVE           8
 /*****************************   Constants   *******************************/
 
 /*****************************   Variables   *******************************/
@@ -125,33 +127,31 @@ extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 {
     INT8U slave_no;
 
-    INT8U static counter = 0;
-    counter++;
+    INT8U static TIMER_PWM = 0;
+    TIMER_PWM++;
+
+    //Receive data
+    send_byte( 0xFFFF, 2 );
+    receive_byte();
+
+    if( TIMER_PWM >= 15 )
+    {
+        //Check Semaphore if PWM data is ready
+            TIMER_PWM = 0;
+            //Get from queue
+            //Send to desired slave
+            //send_byte( **data**, PWM_SLAVE );
+     }
+
     if( counter > 50 )
     {
-        send_byte( 0xCCAA, 2 );
+        send_byte( 0xFFFF, POSITION_SLAVE );
         while( !uart0_tx_rdy() )
         {}
         uart0_putc('k');
         receive_byte();
         counter = 0;
     }
-
-
-//    switch( my_state )
-//    {
-//    case SEND_DATA:
-//        if( get_queue( Q_SPI_REQUEST, &slave_no, WAIT_FOREVER ))
-//        {
-//            send_byte( 0xFF, slave_no);  //Slave er sat, byte er sendt - skal nu vente på at modtage data, evt. med st_timeout
-//            set_state ( 2 );
-//        }
-//        break;
-//    case RECEIVE_DATA:
-//
-//        break;
-//    }
-
 }
 
 void data_transmit(INT16U data)
@@ -244,17 +244,15 @@ void receive_byte()
 *   Function : receiving data with SPI
 ******************************************************************************/
 {
-    INT8U data = 'a';
+    INT16U data;
     for(int i; i < 0xFF; i++)
     {
         ;
     }
     data = SSI1_DR_R;
 
-    while( !uart0_tx_rdy() )
-      {}
-    uart0_putc(data);
-
+    if ( put_queue( Q_SPI_POS, data, WAIT_FOREVER ) )
+        signal( SEM_POS_UPDATE );
 
 
 

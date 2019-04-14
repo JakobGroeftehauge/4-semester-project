@@ -42,6 +42,7 @@ typedef struct
   float pastError;
   float Ud;
   uint8_t filter_id;
+  uint8_t sat_flag;
 } PID_controller;
 
 

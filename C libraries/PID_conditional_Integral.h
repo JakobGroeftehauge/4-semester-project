@@ -1,13 +1,33 @@
-/*
- * PID.h
+/*****************************************************************************
+ * MODULENAME.: PID_controller_Integral.h
  *
- *  Created on: Mar 21, 2019
- *      Author: Jakob
- */
+ * PROJECT....: 4. semester project
+ *
+ * DESCRIPTION: implementation of PID controller
+ *
+ * Change Log:
+*****************************************************************************
+* Date    Id    Change
+* YYMMDD
+* --------------------
+* 190408  JGR    Module created.
+* 190409  PC	 Revised, comments added
+*
+*****************************************************************************/
 
 
 #ifndef PID_H_
 #define PID_H_
+
+
+/***************************** Include files *******************************/
+#include <stdint.h>
+#include "filter.h"
+
+/*****************************    Defines    *******************************/
+#define CC_CONTROLLER_ID    FILTER_1
+#define VC_CONTROLLER_ID    FILTER_2
+#define PC_CONTROLLER_ID    FILTER_3
 
 typedef struct
 {
@@ -19,14 +39,26 @@ typedef struct
   float dt;         //stepsize for integral
   float upper_sat;
   float lower_sat;
-  //filter
+  float pastError;
+  float Ud;
+  uint8_t filter_id;
 } PID_controller;
 
-//extern void init_PID_filter(PID_controller);
 
-extern float run_PID(float feedback, float setpoint, PID_controller* PID);
+/*************************  Function interfaces ****************************/
 
-extern float run_PLANT(float setpoint, PID_controller* PID);
+extern void init_PIDs();
+/*****************************************************************************
+*   Function : Initialize all the PID controllers
+******************************************************************************/
 
 
+extern float run_PID(float feedback, float setpoint, uint8_t id);
+/*****************************************************************************
+*   Input    : Sampled data, setpoint, controller id
+*   Output   : Regulated signal
+*   Function : PID controller
+******************************************************************************/
+
+/****************************** End Of Module *******************************/
 #endif /* PID_H_ */

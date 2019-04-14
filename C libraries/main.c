@@ -9,7 +9,7 @@
 #include "rtcs.h"
 #include "SPI.h"
 #include "uart.h"
-
+#include "test.h"
 
 
 
@@ -32,10 +32,14 @@ int main(void)
   SPI_init();
   GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4); //Make sure all SS are high
 
+  while( !uart0_tx_rdy() ){}
+  uart0_putc('k');
+
   open_queue(Q_SPI_POS);
+  open_queue(Q_SPI_PWM);
 
   start_task(TASK_SPI, SPI_task);
-
+  start_task(TASK_TEST, test_task);
 
   schedule();
 

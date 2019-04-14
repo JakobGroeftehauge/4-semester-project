@@ -187,7 +187,7 @@ INT8U id;
 
 BOOLEAN put_queue( id, ch, timeout )
 INT8U  id;
-INT16U ch;
+INT8U  ch;
 INT16U timeout;
 /*****************************************************************************
 *   Function : See module specification (.h-file).
@@ -210,7 +210,7 @@ INT16U timeout;
 
 BOOLEAN get_queue( id, pch, timeout )
 INT8U  id;
-INT16U *pch;
+INT8U *pch;
 INT16U timeout;
 /*****************************************************************************
 *   Function : See module specification (.h-file).
@@ -311,6 +311,7 @@ void schedule()
   }
 }
 /****************************** End Of Module *******************************/
+
 
 
 

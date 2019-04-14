@@ -52,6 +52,7 @@
 #define Q_SPI_REQUEST     USER_QUEUE
 #define Q_SPI_OUT         USER_QUEUE+1
 #define Q_SPI_POS         USER_QUEUE+2
+#define Q_SPI_PWM         USER_QUEUE+3
 
 // Traffic Light Modes.
 // --------------------

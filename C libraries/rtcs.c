@@ -187,7 +187,7 @@ INT8U id;
 
 BOOLEAN put_queue( id, ch, timeout )
 INT8U  id;
-INT16U  ch;
+INT16U ch;
 INT16U timeout;
 /*****************************************************************************
 *   Function : See module specification (.h-file).

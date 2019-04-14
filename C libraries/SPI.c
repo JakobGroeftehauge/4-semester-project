@@ -28,19 +28,11 @@
 #include "uart.h"
 /*****************************    Defines    *******************************/
 
-enum SPI_states
-{
-  SEND_DATA,
-  RECEIVE_DATA,
-};
-
 #define POSITION_SLAVE      2
 #define PWM_SLAVE           8
 /*****************************   Constants   *******************************/
 
 /*****************************   Variables   *******************************/
-
-enum SPI_states SPI_state = SEND_DATA;
 
 /*****************************   Functions   *******************************/
 void SPI_init(void)
@@ -125,10 +117,8 @@ extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 *   Function : -
 ******************************************************************************/
 {
-
-    INT16U data;
+    INT16U PWM_data;
     INT8U static TIMER_PWM = 0;
-    TIMER_PWM++;
 
     //Receive data
     send_byte( 0xFFFF, 2 );
@@ -139,27 +129,29 @@ extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
     {
         if( wait_sem(SEM_PWM_UPDATE,WAIT_FOREVER) )//Check Semaphore if PWM data is ready
         {
-            if( get_queue( Q_SPI_PWM, *data, WAIT_FOREVER) )//Get from queue
+            if( get_queue( Q_SPI_PWM, &PWM_data, WAIT_FOREVER) )//Get from queue
             {
                 TIMER_PWM = 0;
-                send_byte( data,PWM_SLAVE );//Send to desired slave
+                send_byte( PWM_data,POSITION_SLAVE );//Send to desired slave
             }
         }
      }
+    TIMER_PWM++;
 
 
 
 //For test
 //------------------------------------
-//    if( counter > 50 )
+//INT8U static counter = 0;
+//    counter++;
+//
+//    if( counter > 0 ) //Adjust timer here
 //    {
-//        send_byte( 0xFFFF, POSITION_SLAVE );
-//        while( !uart0_tx_rdy() )
-//        {}
-//        uart0_putc('k');
+//        send_byte( 0xFFFF, 2);
 //        receive_byte();
 //        counter = 0;
 //    }
+
 }
 
 void data_transmit(INT16U data)
@@ -169,15 +161,11 @@ void data_transmit(INT16U data)
 *   Function :Sends the data given and waits until the transmission is complete.
 ******************************************************************************/
 {
-    int dummy;
+    SSI1_DR_R = data;          //putting the byte to send from SSI
 
-    SSI1_DR_R = data;               //putting the byte to send from SSI
-    for(int i=0; i<20; i++){};
-
-    while ( (GPIO_PORTD_DATA_R & 0b0000010) == 0  )
-    {
-        ;
-    }
+    for(int i=0; i<20; i++){}; //Burn few cycles to make sure SS is LOW
+    while ( !(GPIO_PORTD_DATA_R & 0b0000010) ) //While SS HIGH make sure slave is also HIGH
+    {       ;      }
 
 }
 
@@ -253,10 +241,9 @@ void receive_byte()
 ******************************************************************************/
 {
     INT16U data;
-    for(int i; i < 0xFF; i++)
-    {
-        ;
-    }
+
+    while( SSI1_SR_R & (0<<2) ) //Check if receive FIFO emtpy
+    {}
     data = SSI1_DR_R;
 
     if ( put_queue( Q_SPI_POS, data, WAIT_FOREVER ) )
@@ -264,6 +251,16 @@ void receive_byte()
 
 
 
+//For test with uart
+//-------------------------
+//    INT16U data;
+//    while( SSI1_SR_R & (0<<2) ) //Check if receive FIFO emtpy
+//    {}
+//    data = SSI1_DR_R;
+//
+//    while( !uart0_tx_rdy() )
+//    {}
+//    uart0_putc(data);
 }
 
 /****************************** End Of Module *******************************/

@@ -119,24 +119,27 @@ extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 {
     INT16U PWM_data;
     INT8U static TIMER_PWM = 0;
+    INT8U static TIMER_SLAVE = 0;
 
     //Receive data
-    send_byte( 0xFFFF, 2 );
-    receive_byte();
+        send_byte( 0xFFFF, 3 ); //CHANGE WHICH SLAVE HERE
+        receive_byte();
+
 
     //Send data
     if( TIMER_PWM >= 15 )
     {
-        if( wait_sem(SEM_PWM_UPDATE,WAIT_FOREVER) )//Check Semaphore if PWM data is ready
+        if( wait_sem( SEM_PWM_UPDATE,1 ) )//Check Semaphore if PWM data is ready
         {
-            if( get_queue( Q_SPI_PWM, &PWM_data, WAIT_FOREVER) )//Get from queue
+            if( get_queue( Q_SPI_PWM, &PWM_data,1 ) )//Get from queue
             {
                 TIMER_PWM = 0;
-                send_byte( PWM_data,POSITION_SLAVE );//Send to desired slave
+                send_byte( PWM_data,PWM_SLAVE );
             }
         }
      }
     TIMER_PWM++;
+
 
 
 
@@ -177,7 +180,6 @@ void send_byte(INT16U data, INT8U slave_no)
 *   Function :Sets up slave select for desired slave, and then sends data given.
 ******************************************************************************/
 {
-
     switch( slave_no )
     {
     case 0:
@@ -251,7 +253,7 @@ void receive_byte()
 
 
 
-//For test with uart
+//For test
 //-------------------------
 //    INT16U data;
 //    while( SSI1_SR_R & (0<<2) ) //Check if receive FIFO emtpy

@@ -26,18 +26,11 @@
 
 
 /*************************  Function interfaces ****************************/
+extern int16_t voltage_to_duty_cycle(float voltage);
 /*****************************************************************************
-*   Input    : filter id, Array with filter coefficient, number of tabs in the filter.
+*   Input    : The voltage which is the output from the PID
 *   Output   :
-*   Function : Initialize filter
+*   Function : Convert the floating point voltage to an integer duty cycle
 ******************************************************************************/
-
-/*****************************************************************************
-*   Input    : filter id, sampled data
-*   Output   : filtered data
-*   Function : filter data
-******************************************************************************/
-
-
 /****************************** End Of Module *******************************/
 #endif /* FILTER_H_ */

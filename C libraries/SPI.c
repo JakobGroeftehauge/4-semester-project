@@ -145,7 +145,7 @@ extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 //INT8U static counter = 0;
 //    counter++;
 //
-//    if( counter > 0 ) //Adjust timer here
+//    if( counter > 10 ) //Adjust timer here
 //    {
 //        send_byte( 0xFFFF, 2);
 //        receive_byte();
@@ -258,9 +258,15 @@ void receive_byte()
 //    {}
 //    data = SSI1_DR_R;
 //
+//    INT8U data_LOW = data & 0xFF;
+//    INT8U data_HIGH = (data >> 8);
+//
 //    while( !uart0_tx_rdy() )
 //    {}
-//    uart0_putc(data);
+//    uart0_putc(data_LOW);
+//    while( !uart0_tx_rdy() )
+//    {}
+//    uart0_putc(data_HIGH);
 }
 
 /****************************** End Of Module *******************************/

@@ -25,6 +25,7 @@
 #define TASK_SW_TIMERS   USER_TASK
 #define TASK_MAIN        USER_TASK+1
 #define TASK_SPI         USER_TASK+2
+#define TASK_TEST        USER_TASK+3
 
 
 // Interrupt Service Routines.
@@ -38,29 +39,22 @@
 
 // Shared Event Buffers.
 // ---------------------
-#define SEB_POS      41
+//#define SEB_POS      41
 
 
 // Semaphores
 // ----------
 #define SEM_OUTPINS       USER_SEM
 #define SEM_POS_UPDATE    USER_SEM+1
-
+#define SEM_PWM_UPDATE    USER_SEM+2
 
 // QUEUEs.
 // -------
 #define Q_SPI_REQUEST     USER_QUEUE
 #define Q_SPI_OUT         USER_QUEUE+1
 #define Q_SPI_POS         USER_QUEUE+2
+#define Q_SPI_PWM         USER_QUEUE+3
 
-// Traffic Light Modes.
-// --------------------
-//#define MM_TLIGHT   1
-
-
-// Software Timers.
-// ----------------
-//#define ST_BUTTON   1
 
 
 #endif /* _TMODEL_H_ */

@@ -33,25 +33,25 @@
 
 // Shared State Memory.
 // --------------------
-
-
-//#define SSM_RTC_SEC            31
+//#define SSM_POS      31
 
 
 // Shared Event Buffers.
 // ---------------------
-//#define SEB_BUTTON_EVENT 41
+#define SEB_POS      41
 
 
 // Semaphores
 // ----------
 #define SEM_OUTPINS       USER_SEM
+#define SEM_POS_UPDATE    USER_SEM+1
 
 
 // QUEUEs.
 // -------
 #define Q_SPI_REQUEST     USER_QUEUE
 #define Q_SPI_OUT         USER_QUEUE+1
+#define Q_SPI_POS         USER_QUEUE+2
 
 // Traffic Light Modes.
 // --------------------

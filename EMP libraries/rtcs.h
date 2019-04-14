@@ -98,7 +98,7 @@ INT8S open_queue( INT8U );
 *   Function : Open queue
 ******************************************************************************/
 
-BOOLEAN put_queue( INT8U, INT8U, INT16U );
+BOOLEAN put_queue( INT8U, INT16U, INT16U );
 /*****************************************************************************
 *   Input    : Semaphore
 *   		   Timeout
@@ -107,7 +107,7 @@ BOOLEAN put_queue( INT8U, INT8U, INT16U );
 *   Function : produce data to queue
 ******************************************************************************/
 
-BOOLEAN get_queue( INT8U, INT8U*, INT16U );
+BOOLEAN get_queue( INT8U, INT16U*, INT16U );
 /*****************************************************************************
 *   Input    : handle to queue
 *   		   Pointer to databuffer
@@ -123,4 +123,3 @@ void schedule();
 
 /****************************** End Of Module *******************************/
 #endif
-

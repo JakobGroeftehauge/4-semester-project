@@ -1,78 +1,65 @@
-/*
- * Filter.c
+/*****************************************************************************
+ * MODULENAME.: filter.c
  *
- *  Created on: 21. mar. 2019
- *      Author: Peter
- */
-#include "Filter.h"
+ * PROJECT....: 4. semester project
+ *
+ * Change Log:
+*****************************************************************************
+* Date    Id    Change
+* YYMMDD
+* --------------------
+* 190408  JGR    Module created.
+*
+*****************************************************************************/
 
-float raw_input_buffer(float in)
+/***************************** Include files *******************************/
+#include "filter.h"
+#include "circular_buffer.h"
+#include <stdint.h>
+/*****************************    Defines    *******************************/
+#define NOF_FILTERS     3
+
+/*****************************   Variables   *******************************/
+filter_descriptor filter_pool[NOF_FILTERS]; //Pool of filters
+
+/*****************************   Functions   *******************************/
+
+extern void init_filter(uint8_t id, float coefArray[MAX_NUMBER_OF_TABS], uint8_t tabs)
+/*****************************************************************************
+*   Input    : filter id, Array with filter coefficient, number of tabs in the filter.
+*   Output   :
+*   Function : Initialize filter
+******************************************************************************/
 {
+    filter_pool[id].id = id; // Filter must have same ID, as the used circular_buffer.
+    filter_pool[id].tabs = tabs;
 
-    static uint8_t i=0;
-
-    input_buffer[i]=in;
-
-
-    data_updated = 1;
-
-    if(i==BufferSize)
+    for(uint8_t i = 0; i < MAX_NUMBER_OF_TABS; i++)
     {
-        i=0;
-    }
-    if(buffer_Size<BufferSize)
-    {
-        buffer_Size++;
+        filter_pool[id].coefList[i] = coefArray[i];
     }
 
-    i++;
-
-    return input_buffer[i-1];
-
+    initialize_buffer(id); //initializes buffer to filter with same ID as filter
 }
 
-/*extern uint8_t size_of_buf()
+float run_filter(uint8_t id, float data)
+/*****************************************************************************
+*   Input    : filter id, sampled data
+*   Output   : filtered data
+*   Function : filter data
+******************************************************************************/
 {
-    uint8_t i;
-    uint8_t size=0;
-
-    for(i=0;i<BufferSize;i++)
-    {
-        if(input_buffer[i]!=0)
-        {
-            size++;
-        }
-    }
-    return size;
-}*/
-
-float calculate_filter(float in)
-{
-    uint8_t j;
-
-
-    float input = in;
     float result = 0;
-    float filter_buffer[FilterSize]={0};
-    uint8_t buffer_len = buffer_Size;
+    float immediateResult; //Used as intermediate step in calculations
+    update_buffer(id, data); //Puts data into buffer
 
-    if(data_updated > 0)
-        {
-            if(buffer_len > FILTER_INIT_SIZE)
-                {
-                    for(j=0;j<buffer_len;j++)
-                        {
-                             result = result + (input*filter_coeff[j]);
-                        }
-                }
-                else
-                {
-                    result = 0;
-                }
-            data_updated=0;
-        }
+    for(uint8_t i = 0; i < filter_pool[id].tabs; i++)
+    {
+        immediateResult = filter_pool[id].coefList[i] * peek_buffer(id, i);//Calculates the n'th step of the FIR filter
+        result = result + immediateResult;
+    }
 
     return result;
-
 }
 
+/****************************** End Of Module *******************************/

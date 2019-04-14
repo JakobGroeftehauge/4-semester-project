@@ -45,7 +45,7 @@
 // ----------
 #define SEM_OUTPINS       USER_SEM
 #define SEM_POS_UPDATE    USER_SEM+1
-
+#define SEM_PWM_UPDATE    USER_SEM+2
 
 // QUEUEs.
 // -------

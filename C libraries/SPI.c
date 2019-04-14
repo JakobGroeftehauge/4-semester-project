@@ -125,8 +125,8 @@ extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 *   Function : -
 ******************************************************************************/
 {
-    INT8U slave_no;
 
+    INT16U data;
     INT8U static TIMER_PWM = 0;
     TIMER_PWM++;
 
@@ -134,24 +134,32 @@ extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
     send_byte( 0xFFFF, 2 );
     receive_byte();
 
+    //Send data
     if( TIMER_PWM >= 15 )
     {
-        //Check Semaphore if PWM data is ready
-            TIMER_PWM = 0;
-            //Get from queue
-            //Send to desired slave
-            //send_byte( **data**, PWM_SLAVE );
+        if( wait_sem(SEM_PWM_UPDATE,WAIT_FOREVER) )//Check Semaphore if PWM data is ready
+        {
+            if( get_queue( Q_SPI_PWM, *data, WAIT_FOREVER) )//Get from queue
+            {
+                TIMER_PWM = 0;
+                send_byte( data,PWM_SLAVE );//Send to desired slave
+            }
+        }
      }
 
-    if( counter > 50 )
-    {
-        send_byte( 0xFFFF, POSITION_SLAVE );
-        while( !uart0_tx_rdy() )
-        {}
-        uart0_putc('k');
-        receive_byte();
-        counter = 0;
-    }
+
+
+//For test
+//------------------------------------
+//    if( counter > 50 )
+//    {
+//        send_byte( 0xFFFF, POSITION_SLAVE );
+//        while( !uart0_tx_rdy() )
+//        {}
+//        uart0_putc('k');
+//        receive_byte();
+//        counter = 0;
+//    }
 }
 
 void data_transmit(INT16U data)

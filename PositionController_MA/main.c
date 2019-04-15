@@ -11,6 +11,7 @@
 #include "uart.h"
 #include "test.h"
 #include "PID_MA.h"
+#include "sem_task.h"
 
 
 int main(void)
@@ -27,26 +28,22 @@ int main(void)
   disable_global_int();
 
   init_systick();
-  //init_rtcs();
   init_gpio();
   init_PIDs();
   uart0_init( 9600, 8, 1, 0 );
   SPI_init();
 
+
   enable_global_int();
 
-
-  while( !uart0_tx_rdy() ){}
-  uart0_putc('k');
-
+  init_rtcs();
 
   open_queue(Q_SPI_POS);
-  open_queue(Q_SPI_PWM);
+
+  start_task(TASK_SIGNAL, signaling_task);
+  start_task(TASK_WAIT, waiting_task);
 
 
-  start_task(TASK_SPI, SPI_task);
-  start_task(TASK_TEST, test_task);
-  start_task(TASK_PID_PC, PID_task);
 
   schedule();
 

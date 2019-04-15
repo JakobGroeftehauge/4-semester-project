@@ -27,6 +27,8 @@
 #define TASK_SPI         USER_TASK+2
 #define TASK_TEST        USER_TASK+3
 #define TASK_PID_PC      USER_TASK+4
+#define TASK_SIGNAL      USER_TASK+5
+#define TASK_WAIT        USER_TASK+6
 
 
 // Interrupt Service Routines.
@@ -48,6 +50,7 @@
 #define SEM_OUTPINS       USER_SEM
 #define SEM_POS_UPDATE    USER_SEM+1
 #define SEM_PWM_UPDATE    USER_SEM+2
+#define SEM_MAK           USER_SEM+3
 
 // QUEUEs.
 // -------

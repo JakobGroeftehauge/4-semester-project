@@ -15,6 +15,8 @@
 #include "PID_MA.h"
 #include "filter.h"
 #include "rtcs.h"
+#include "tmodel.h"
+#include "FPGA_comp.h"
 
 
 
@@ -31,11 +33,23 @@ extern void PID_task(uint8_t id, uint8_t state, uint8_t event, uint8_t data)
 *   Function : PID controller task
 ******************************************************************************/
 {
-   float feedback = 0;// get data from queue
-   float referencePoint = 0;// get data from input;
-   float result = run_PID(feedback, referencePoint, CC_CONTROLLER_ID);
-   put_queue(1, result, WAIT_FOREVER);// put result to queue.
-   wait(5);
+   float referencePoint = 10;
+   float feedback;
+   uint16_t POS_data;
+   uint16_t result_to_send;
+
+
+   if( wait_sem( SEM_POS_UPDATE, WAIT_FOREVER ) )
+   {
+       if(get_queue( Q_SPI_POS, &POS_data, WAIT_FOREVER ) )
+       {
+           feedback = POS_data*1;
+           float result_PID = run_PID(feedback, referencePoint, CC_CONTROLLER_ID);
+           result_to_send = voltage_to_duty_cycle(result_PID);
+           put_queue(Q_SPI_PWM, result_to_send, WAIT_FOREVER);// put result to queue.s
+       }
+
+   }
 }
 
 

@@ -12,8 +12,10 @@
 * 190409  PC	 Revised.
 *
 *****************************************************************************/
-#include "PID_conditional_Integral.h"
+#include "PID_MA.h"
 #include "filter.h"
+#include "rtcs.h"
+
 
 
 /*****************************    Defines    *******************************/
@@ -22,6 +24,19 @@
 
 /*****************************   Variables   *******************************/
 PID_controller PID_pool[NOF_PIDS];
+
+
+extern HANDLE PID_task(uint8_t id, uint8_t state, uint8_t event, uint8_t data)
+/*****************************************************************************
+*   Function : PID controller task
+******************************************************************************/
+{
+   float feedback = 0;// get data from queue
+   float referencePoint = 0;// get data from input;
+   float result = run_PID(feedback, referencePoint, CC_CONTROLLER_ID);
+   // put result to queue.
+   wait(5);
+}
 
 
 extern void init_PIDs()
@@ -66,14 +81,10 @@ extern float run_PID(float feedback, float setpoint, uint8_t id) // CHANGE TO PI
 
    float error;
    float output;
-   float TempIntegral = 0;
    float Ki = PID_pool[id].Kp/PID_pool[id].Ti;
    float Kd = PID_pool[id].Kp*PID_pool[id].Td;
    float T = PID_pool[id].dt;
    float integral_term;
-   /*static float integral = 0;
-   static float pastError = 0;
-   static float Ud = 0;*/
 	
 	error = setpoint - feedback;
 

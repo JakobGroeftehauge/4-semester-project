@@ -51,14 +51,9 @@
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/PID_MA.c</locationURI>
 		</link>
 		<link>
-			<name>PID_conditional_Integral.c</name>
+			<name>PID_MA.h</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/PID_conditional_Integral.c</locationURI>
-		</link>
-		<link>
-			<name>PID_conditional_Integral.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/PID_conditional_Integral.h</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/PID_MA.h</locationURI>
 		</link>
 		<link>
 			<name>SPI.c</name>
@@ -81,9 +76,29 @@
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/circular_buffer.h</locationURI>
 		</link>
 		<link>
+			<name>emp_type.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/EMP%20libraries/emp_type.h</locationURI>
+		</link>
+		<link>
 			<name>rtcs.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/rtcs.c</locationURI>
+		</link>
+		<link>
+			<name>rtcs.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/EMP%20libraries/rtcs.h</locationURI>
+		</link>
+		<link>
+			<name>systick.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/EMP%20libraries/systick.c</locationURI>
+		</link>
+		<link>
+			<name>systick.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/EMP%20libraries/systick.h</locationURI>
 		</link>
 		<link>
 			<name>tmodel.h</name>

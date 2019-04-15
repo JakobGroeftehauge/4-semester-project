@@ -35,6 +35,7 @@ int main(void)
   while( !uart0_tx_rdy() ){}
   uart0_putc('k');
 
+
   open_queue(Q_SPI_POS);
   open_queue(Q_SPI_PWM);
 

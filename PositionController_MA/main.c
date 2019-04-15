@@ -27,7 +27,7 @@ int main(void)
   disable_global_int();
 
   init_systick();
-  //init_rtcs();
+  init_rtcs();
   init_gpio();
   init_PIDs();
   uart0_init( 9600, 8, 1, 0 );
@@ -44,8 +44,10 @@ int main(void)
   open_queue(Q_SPI_PWM);
 
 
-  start_task(TASK_SPI, SPI_task);
-  start_task(TASK_TEST, test_task);
+  start_task(TASK_SPI_POS, SPI_POS_task);
+  start_task(TASK_SPI_PWM, SPI_PWM_task);
+
+  //start_task(TASK_TEST, test_task);
   start_task(TASK_PID_PC, PID_task);
 
   schedule();

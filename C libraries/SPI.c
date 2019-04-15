@@ -28,8 +28,8 @@
 #include "uart.h"
 /*****************************    Defines    *******************************/
 
+#define POSITION_SLAVE      0
 #define PWM_SLAVE           1
-#define POSITION_SLAVE      2
 
 /*****************************   Constants   *******************************/
 
@@ -113,20 +113,35 @@ void SPI_init(void)
     GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4); //Make sure all SS are high
 }
 
-extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
+extern void SPI_POS_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 /*****************************************************************************
 *   Input    : -
 *   Output   : -
 *   Function : -
 ******************************************************************************/
 {
-    INT16S PWM_data = 720;
-    INT8U static TIMER_PWM = 0;
-    INT8U static TIMER_SLAVE = 0;
-
     //Receive data
-        send_byte( PWM_data, 1 ); //CHANGE WHICH SLAVE HERE
-        receive_byte();
+    send_byte( 0xFFFF, POSITION_SLAVE ); //CHANGE WHICH SLAVE HERE
+    receive_byte();
+    wait(1);
+}
+
+extern void SPI_PWM_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
+/*****************************************************************************
+*   Input    : -
+*   Output   : -
+*   Function : -
+******************************************************************************/
+{
+    wait(1);
+    INT16U PWM_data;
+
+
+    if( get_queue( Q_SPI_PWM, &PWM_data, WAIT_FOREVER ) )
+    {
+        send_byte( PWM_data, PWM_SLAVE );
+    }
+
 }
 
 void data_transmit(INT16U data)

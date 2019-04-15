@@ -24,9 +24,10 @@
 // ------
 #define TASK_SW_TIMERS   USER_TASK
 #define TASK_MAIN        USER_TASK+1
-#define TASK_SPI         USER_TASK+2
+#define TASK_SPI_POS     USER_TASK+2
 #define TASK_TEST        USER_TASK+3
 #define TASK_PID_PC      USER_TASK+4
+#define TASK_SPI_PWM     USER_TASK+5
 
 
 // Interrupt Service Routines.

@@ -31,7 +31,7 @@ extern int16_t voltage_to_duty_cycle(float voltage)
 ******************************************************************************/
 {
     float result_f = (voltage/MAX_PID_OUT*PWM_RES)+0.5;
-    return (int16_t) result_f;
+    return ((int16_t) result_f);
 
 }
 

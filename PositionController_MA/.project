@@ -31,11 +31,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/FPGA_comp.c</locationURI>
 		</link>
 		<link>
-			<name>FPGA_comp.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/FPGA_comp.h</locationURI>
-		</link>
-		<link>
 			<name>Filter.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/Filter.c</locationURI>
@@ -89,6 +84,11 @@
 			<name>rtcs.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/rtcs.c</locationURI>
+		</link>
+		<link>
+			<name>rtcs.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/EMP%20libraries/rtcs.h</locationURI>
 		</link>
 		<link>
 			<name>systick.c</name>

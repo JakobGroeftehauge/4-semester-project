@@ -200,7 +200,7 @@ INT16U timeout;
 	if( wait_sem( poq[id].q_not_full, timeout ))
     {
       poq[id].buf[poq[id].head++] = ch;
-      poq[id].head &= 0x7F;
+      poq[id].head = poq[id].head % QUEUE_SIZE;
       signal( poq[id].q_not_empty );
       result = TRUE;
     }
@@ -223,7 +223,7 @@ INT16U timeout;
 	if( wait_sem( poq[id].q_not_empty, timeout ))
     {
       *pch = poq[id].buf[poq[id].tail++];
-      poq[id].tail &= 0x7F;
+      poq[id].tail = poq[id].tail % QUEUE_SIZE;
       signal( poq[id].q_not_full );
       result = TRUE;
     }

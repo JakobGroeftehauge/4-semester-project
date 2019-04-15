@@ -4,7 +4,7 @@
 int main(void)
 {
     init_rtcs();
-
+    init_PIDs();
     start_task(1, PID_task);
 
     schedule();

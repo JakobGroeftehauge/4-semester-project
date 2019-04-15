@@ -36,9 +36,6 @@ int main(void)
   enable_global_int();
 
 
-
-
-
   while( !uart0_tx_rdy() ){}
   uart0_putc('k');
 

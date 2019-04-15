@@ -111,6 +111,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/test.h</locationURI>
 		</link>
 		<link>
+			<name>tm4c123gh6pm_startup_ccs_gcc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/EMP%20libraries/tm4c123gh6pm_startup_ccs_gcc.c</locationURI>
+		</link>
+		<link>
 			<name>tmodel.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/tmodel.h</locationURI>

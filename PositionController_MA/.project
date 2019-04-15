@@ -46,21 +46,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/Filter.h</locationURI>
 		</link>
 		<link>
-			<name>PID_MA.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/PID_MA.c</locationURI>
-		</link>
-		<link>
-			<name>PID_conditional_Integral.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/PID_conditional_Integral.c</locationURI>
-		</link>
-		<link>
-			<name>PID_conditional_Integral.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/PID_conditional_Integral.h</locationURI>
-		</link>
-		<link>
 			<name>SPI.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/SPI.c</locationURI>
@@ -81,9 +66,39 @@
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/circular_buffer.h</locationURI>
 		</link>
 		<link>
+			<name>gpio.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/EMP%20libraries/gpio.c</locationURI>
+		</link>
+		<link>
+			<name>messages.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Project_SPI_System/messages.c</locationURI>
+		</link>
+		<link>
+			<name>messages.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Project_SPI_System/messages.h</locationURI>
+		</link>
+		<link>
 			<name>rtcs.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/rtcs.c</locationURI>
+		</link>
+		<link>
+			<name>swtimers.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/EMP%20libraries/swtimers.c</locationURI>
+		</link>
+		<link>
+			<name>systick.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Project_SPI_System/systick.c</locationURI>
+		</link>
+		<link>
+			<name>test.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Project_SPI_System/test.c</locationURI>
 		</link>
 		<link>
 			<name>tmodel.h</name>

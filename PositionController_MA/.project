@@ -46,16 +46,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/Filter.h</locationURI>
 		</link>
 		<link>
-			<name>PID_MA.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/PID_MA.c</locationURI>
-		</link>
-		<link>
-			<name>PID_MA.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/PID_MA.h</locationURI>
-		</link>
-		<link>
 			<name>SPI.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/SPI.c</locationURI>
@@ -76,9 +66,7 @@
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/circular_buffer.h</locationURI>
 		</link>
 		<link>
-			<name>emp_type.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/EMP%20libraries/emp_type.h</locationURI>
+
 		</link>
 		<link>
 			<name>rtcs.c</name>
@@ -86,9 +74,7 @@
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/rtcs.c</locationURI>
 		</link>
 		<link>
-			<name>rtcs.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/EMP%20libraries/rtcs.h</locationURI>
+
 		</link>
 		<link>
 			<name>systick.c</name>

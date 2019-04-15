@@ -51,7 +51,7 @@ typedef struct
 	INT8U	tail;
 	SEM     q_not_full;
 	SEM     q_not_empty;
-	INT8U buf[QUEUE_SIZE];
+	INT32U buf[QUEUE_SIZE];
 }qcb;
 
 /*****************************   Constants   *******************************/

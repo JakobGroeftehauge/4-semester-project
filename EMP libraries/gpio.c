@@ -2,30 +2,26 @@
 * University of Southern Denmark
 * Embedded Programming (EMP)
 *
-* MODULENAME.: emp.c
+* MODULENAME.: gpio.c
 *
 * PROJECT....: EMP
 *
 * DESCRIPTION: See module specification file (.h-file).
 *
 * Change Log:
- ****************************************************************************
- Date    Id    Change
+*****************************************************************************
+* Date    Id    Change
 * YYMMDD
 * --------------------
-* 050128  KA    Module created.
+* 150215  MoH   Module created.
 *
 *****************************************************************************/
 
 /***************************** Include files *******************************/
-#include "test.h"
-#include "EMP_type.h"
 #include <stdint.h>
 #include "tm4c123gh6pm.h"
-#include "tmodel.h"
-#include "rtcs.h"
-#include "events.h"
-#include "SPI.h"
+#include "emp_type.h"
+#include "gpio.h"
 /*****************************    Defines    *******************************/
 
 /*****************************   Constants   *******************************/
@@ -34,34 +30,33 @@
 
 /*****************************   Functions   *******************************/
 
-void test_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
+void init_gpio(void)
 /*****************************************************************************
-*   Input    : -
-*   Output   : -
-*   Function : -
+*   Input    :
+*   Output   :
+*   Function : The super loop.
 ******************************************************************************/
 {
-    INT16U POS_data;
-    INT8U static TIMER_PWM = 0;
+  int dummy;
 
-    if( wait_sem( SEM_POS_UPDATE, WAIT_FOREVER ) )
-    {
-        if( get_queue( Q_SPI_POS, &POS_data, WAIT_FOREVER ) )
-        {
-            INT8U data_LOW = POS_data & 0xFF;
-            INT8U data_HIGH = POS_data >> 8;
+  // Enable the GPIO port that is used for the on-board LED.
+  SYSCTL_RCGC2_R = SYSCTL_RCGC2_GPIOF | SYSCTL_RCGC2_GPIOD | SYSCTL_RCGC2_GPIOC;
 
-            while( !uart0_tx_rdy() )
-            {}
-            uart0_putc(data_LOW);
-            while( !uart0_tx_rdy() )
-            {}
-            uart0_putc(data_HIGH);
-        }
-    }
+  // Do a dummy read to insert a few cycles after enabling the peripheral.
+  dummy = SYSCTL_RCGC2_R;
 
+  // Set the direction as output (PF1, PF2 and PF3).
+  GPIO_PORTC_DIR_R = 0xF0;
+  GPIO_PORTD_DIR_R = 0x4C;
+  GPIO_PORTF_DIR_R = 0x0E;
 
+  // Enable the GPIO pins for digital function (PF0, PF1, PF2, PF3, PF4).
+  GPIO_PORTC_DEN_R = 0xF0;
+  GPIO_PORTD_DEN_R = 0x4C;
+  GPIO_PORTF_DEN_R = 0x1F;
+
+  // Enable internal pull-up (PF0 and PF4).
+  GPIO_PORTF_PUR_R = 0x11;
 }
-
 
 /****************************** End Of Module *******************************/

@@ -31,9 +31,9 @@
 
 typedef struct
 {
-  float Td;
   float Kp;
-  float Ti;
+  float Ki;
+  float Kd;
   float integral;
   float previous_error;
   float dt;         //stepsize for integral
@@ -48,7 +48,7 @@ typedef struct
 
 /*************************  Function interfaces ****************************/
 
-extern HANDLE PID_task(uint8_t id, uint8_t state, uint8_t event, uint8_t data);
+extern void PID_task(uint8_t id, uint8_t state, uint8_t event, uint8_t data);
 /*****************************************************************************
 *   Function : Task for the PID controller
 ******************************************************************************/

@@ -26,7 +26,7 @@
 PID_controller PID_pool[NOF_PIDS];
 
 
-extern HANDLE PID_task(uint8_t id, uint8_t state, uint8_t event, uint8_t data)
+extern void PID_task(uint8_t id, uint8_t state, uint8_t event, uint8_t data)
 /*****************************************************************************
 *   Function : PID controller task
 ******************************************************************************/
@@ -34,7 +34,7 @@ extern HANDLE PID_task(uint8_t id, uint8_t state, uint8_t event, uint8_t data)
    float feedback = 0;// get data from queue
    float referencePoint = 0;// get data from input;
    float result = run_PID(feedback, referencePoint, CC_CONTROLLER_ID);
-   // put result to queue.
+   put_queue(1, result, WAIT_FOREVER);// put result to queue.
    wait(5);
 }
 
@@ -46,8 +46,8 @@ extern void init_PIDs()
 {
     //Setup of the Current Controller
     PID_pool[CC_CONTROLLER_ID].Kp = 1;
-    PID_pool[CC_CONTROLLER_ID].Td = 1;
-    PID_pool[CC_CONTROLLER_ID].Ti = 1;
+    PID_pool[CC_CONTROLLER_ID].Kd = 1;
+    PID_pool[CC_CONTROLLER_ID].Ki = 1;
     PID_pool[CC_CONTROLLER_ID].dt = 0.1;
     PID_pool[CC_CONTROLLER_ID].integral = 0;
     PID_pool[CC_CONTROLLER_ID].previous_error = 0;
@@ -81,8 +81,6 @@ extern float run_PID(float feedback, float setpoint, uint8_t id) // CHANGE TO PI
 
    float error;
    float output;
-   float Ki = PID_pool[id].Kp/PID_pool[id].Ti;
-   float Kd = PID_pool[id].Kp*PID_pool[id].Td;
    float T = PID_pool[id].dt;
    float integral_term;
 	
@@ -90,7 +88,7 @@ extern float run_PID(float feedback, float setpoint, uint8_t id) // CHANGE TO PI
 
 	// calculate the proportional and derivative terms
 	float proportional_term  = PID_pool[id].Kp*error;
-	float derivative_term = Kd*2/T*(error - PID_pool[id].previous_error)-PID_pool[id].Ud;
+	float derivative_term = PID_pool[id].Kd*2/T*(error - PID_pool[id].previous_error)-PID_pool[id].Ud;
 	
 	// integral is only given a value if the controller is not in saturation
 	if (PID_pool[id].sat_flag)
@@ -99,7 +97,7 @@ extern float run_PID(float feedback, float setpoint, uint8_t id) // CHANGE TO PI
 	}
 	else
 	{
-		integral_term = PID_pool[id].integral + Ki*T/2*(error + PID_pool[id].previous_error);
+		integral_term = PID_pool[id].integral + PID_pool[id].Ki*T/2*(error + PID_pool[id].previous_error);
 	}
 	
 	output = proportional_term + integral_term + derivative_term;

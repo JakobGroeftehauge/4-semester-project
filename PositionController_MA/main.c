@@ -23,16 +23,21 @@ int main(void)
 
   //INT8U event;
   //INT8U counter_value;
-  //init_rtcs();
+
   disable_global_int();
+
   init_systick();
+  //init_rtcs();
   init_gpio();
-  enable_global_int();
   init_PIDs();
-  
   uart0_init( 9600, 8, 1, 0 );
   SPI_init();
-  GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4); //Make sure all SS are high
+
+  enable_global_int();
+
+
+
+
 
   while( !uart0_tx_rdy() ){}
   uart0_putc('k');
@@ -41,10 +46,11 @@ int main(void)
   open_queue(Q_SPI_POS);
   open_queue(Q_SPI_PWM);
 
+
   start_task(TASK_SPI, SPI_task);
   start_task(TASK_TEST, test_task);
+  start_task(TASK_PID_PC, PID_task);
 
-  start_task(1, PID_task);
   schedule();
 
 

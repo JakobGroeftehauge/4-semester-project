@@ -109,6 +109,8 @@ void SPI_init(void)
 
     // Enable the SSI by setting theSSEbit in theSSICR1register.
     SSI1_CR1_R |= (1<<1);
+
+    GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4); //Make sure all SS are high
 }
 
 extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)

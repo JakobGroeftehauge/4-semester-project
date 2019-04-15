@@ -6,7 +6,6 @@
 #include "systick.h"
 #include "swtimers.h"
 #include "tmodel.h"
-#include "systick.h"
 #include "rtcs.h"
 #include "SPI.h"
 #include "uart.h"
@@ -22,8 +21,8 @@ int main(void)
 ******************************************************************************/
 {
 
-  INT8U event;
-  INT8U counter_value;
+  //INT8U event;
+  //INT8U counter_value;
   //init_rtcs();
   disable_global_int();
   init_systick();

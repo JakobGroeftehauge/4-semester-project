@@ -29,13 +29,16 @@ extern volatile INT16S ticks;
 
 /*****************************   Functions   *******************************/
 
-void init_systick();
+extern void init_systick();
 /*****************************************************************************
 *   Input    : -
 *   Output   : -
 *   Function : Test function
 ******************************************************************************/
 
+extern void disable_global_int();
+
+extern void enable_global_int();
 
 /****************************** End Of Module *******************************/
 #endif

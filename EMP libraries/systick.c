@@ -24,13 +24,13 @@ void systick_handler(void)
 }
 
 
-void enable_global_int()
+extern void enable_global_int()
 {
   // enable interrupts.
   __asm("cpsie i");
 }
 
-void disable_global_int()
+extern void disable_global_int()
 {
   // disable interrupts.
   __asm("cpsid i");

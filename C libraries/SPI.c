@@ -125,8 +125,7 @@ extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
         send_byte( 0xFFFF, 3 ); //CHANGE WHICH SLAVE HERE
         receive_byte();
 
-
-    //Send data
+        //Send data
     if( TIMER_PWM >= 15 )
     {
         if( wait_sem( SEM_PWM_UPDATE,1 ) )//Check Semaphore if PWM data is ready

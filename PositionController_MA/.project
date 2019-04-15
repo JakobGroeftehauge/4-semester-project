@@ -73,12 +73,7 @@
 		<link>
 			<name>messages.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Project_SPI_System/messages.c</locationURI>
-		</link>
-		<link>
-			<name>messages.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Project_SPI_System/messages.h</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/EMP%20libraries/messages.c</locationURI>
 		</link>
 		<link>
 			<name>rtcs.c</name>
@@ -99,6 +94,11 @@
 			<name>test.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Project_SPI_System/test.c</locationURI>
+		</link>
+		<link>
+			<name>tm4c123gh6pm_startup_ccs_gcc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/EMP%20libraries/tm4c123gh6pm_startup_ccs_gcc.c</locationURI>
 		</link>
 		<link>
 			<name>tmodel.h</name>

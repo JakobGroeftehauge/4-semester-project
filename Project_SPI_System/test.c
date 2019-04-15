@@ -42,13 +42,14 @@ void test_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 ******************************************************************************/
 {
     INT16U POS_data;
+    INT8U static TIMER_PWM = 0;
 
     if( wait_sem( SEM_POS_UPDATE, WAIT_FOREVER ) )
     {
         if( get_queue( Q_SPI_POS, &POS_data, WAIT_FOREVER ) )
         {
             INT8U data_LOW = POS_data & 0xFF;
-            INT8U data_HIGH = (POS_data >> 8);
+            INT8U data_HIGH = POS_data >> 8;
 
             while( !uart0_tx_rdy() )
             {}

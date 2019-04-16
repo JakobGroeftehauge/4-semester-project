@@ -38,12 +38,18 @@ extern void PID_task(uint8_t id, uint8_t state, uint8_t event, uint8_t data)
 {
    float referencePoint = 10;
    float feedback;
+<<<<<<< HEAD
    INT16U POS_data;
    int16_t result_to_send = 0;
+=======
+   uint16_t POS_data;
+   int16_t result_to_send;
+>>>>>>> 7d38a106456e5c3f5836993ebb04c101f0cd7af1
 
    wait_sem( SEM_POS_UPDATE, WAIT_FOREVER );
    if( event != EVENT_RESET )
    {
+<<<<<<< HEAD
         feedback = pos_var;
         feedback = 9.9;
         float result_PID = run_PID(feedback, referencePoint, CC_CONTROLLER_ID);
@@ -57,6 +63,15 @@ extern void PID_task(uint8_t id, uint8_t state, uint8_t event, uint8_t data)
 //       {}
 //       uart0_putc(data_LOW);
 
+=======
+       if(get_queue( Q_SPI_POS, &POS_data, WAIT_FOREVER ) )
+       {
+           feedback = POS_data*1;
+           float result_PID = run_PID(feedback, referencePoint, CC_CONTROLLER_ID);
+           result_to_send = voltage_to_duty_cycle(result_PID);
+           put_queue(Q_SPI_PWM, result_to_send, WAIT_FOREVER);// put result to queue
+       }
+>>>>>>> 7d38a106456e5c3f5836993ebb04c101f0cd7af1
 
         pwm_var = result_PID;
 

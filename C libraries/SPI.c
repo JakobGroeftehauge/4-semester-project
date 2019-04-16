@@ -34,7 +34,8 @@
 /*****************************   Constants   *******************************/
 
 /*****************************   Variables   *******************************/
-
+extern volatile INT16S pos_var;
+extern volatile INT16S pwm_var;
 /*****************************   Functions   *******************************/
 void SPI_init(void)
 /*****************************************************************************
@@ -121,9 +122,15 @@ extern void SPI_POS_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 ******************************************************************************/
 {
     //Receive data
-    send_byte( 0xFFFF, POSITION_SLAVE ); //CHANGE WHICH SLAVE HERE
-    receive_byte();
-    wait(1);
+    send_byte( 0x00CC, 8);
+    send_byte( 0x0700, 3 );
+    send_byte( 0x0700, 7 );
+    wait(0);
+
+    //wait(100);
+    send_byte( 0xFFFF, POSITION_SLAVE );
+    pos_var  = receive_byte();
+    signal( SEM_POS_UPDATE );
 }
 
 extern void SPI_PWM_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
@@ -133,13 +140,17 @@ extern void SPI_PWM_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 *   Function : -
 ******************************************************************************/
 {
-    wait(1);
-    INT16U PWM_data;
-
-
-    if( get_queue( Q_SPI_PWM, &PWM_data, WAIT_FOREVER ) )
+    wait_sem( SEM_PWM_UPDATE, WAIT_FOREVER );
+    if( event != EVENT_RESET )
     {
-        send_byte( PWM_data, PWM_SLAVE );
+        INT8U data_HIGH = pwm_var & 0xFF;
+        INT8U data_LOW = (pwm_var >> 8);
+        while( !uart0_tx_rdy() )
+        {}
+        uart0_putc(data_LOW);
+        while( !uart0_tx_rdy() )
+        {}
+        uart0_putc(data_HIGH);
     }
 
 }
@@ -222,7 +233,7 @@ void send_byte(INT16U data, INT8U slave_no)
     }
 }
 
-void receive_byte()
+INT16U receive_byte()
 /*****************************************************************************
 *   Input    :
 *   Output   : The function return the received data.
@@ -233,14 +244,8 @@ void receive_byte()
 
     while( !(SSI1_SR_R & (0b00000010)) ) //Check if receive FIFO emtpy
     {}
-
     data = SSI1_DR_R;
-
-    if ( put_queue( Q_SPI_POS, data, WAIT_FOREVER ) )
-        signal( SEM_POS_UPDATE );
-
-
-
+    return data;
 }
 
 /****************************** End Of Module *******************************/

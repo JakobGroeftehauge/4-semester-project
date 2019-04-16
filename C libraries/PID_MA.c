@@ -17,6 +17,7 @@
 #include "rtcs.h"
 #include "tmodel.h"
 #include "FPGA_comp.h"
+#include "SPI.h"
 
 
 
@@ -26,6 +27,8 @@
 
 /*****************************   Variables   *******************************/
 PID_controller PID_pool[NOF_PIDS];
+volatile INT16S pwm_var;
+volatile INT16S pos_var;
 
 
 extern void PID_task(uint8_t id, uint8_t state, uint8_t event, uint8_t data)
@@ -37,27 +40,30 @@ extern void PID_task(uint8_t id, uint8_t state, uint8_t event, uint8_t data)
    float feedback;
    INT16U POS_data;
    int16_t result_to_send = 0;
-   wait(1);
 
-   if( wait_sem( SEM_POS_UPDATE, WAIT_FOREVER ) )
+   wait_sem( SEM_POS_UPDATE, WAIT_FOREVER );
+   if( event != EVENT_RESET )
    {
-       if(get_queue( Q_SPI_POS, &POS_data, WAIT_FOREVER ) )
-       {
-           feedback = POS_data*1;
-           float result_PID = run_PID(feedback, referencePoint, CC_CONTROLLER_ID);
-           result_to_send = (int16_t) result_PID;//voltage_to_duty_cycle(result_PID);
-           result_to_send *= 85;
+        feedback = pos_var;
+        feedback = 9.9;
+        float result_PID = run_PID(feedback, referencePoint, CC_CONTROLLER_ID);
+        result_PID *= 100;
+        result_to_send = (int16_t) voltage_to_duty_cycle(result_PID);
+        //result_to_send *= 85;
 
-           INT8U data_LOW = POS_data & 0xFF;
-           INT8U data_HIGH = (POS_data >> 8);
-           while( !uart0_tx_rdy() )
-           {}
-           uart0_putc(data_LOW);
+//       INT8U data_LOW = pos_var & 0xFF;
+//       INT8U data_HIGH = (pos_var >> 8);
+//       while( !uart0_tx_rdy() )
+//       {}
+//       uart0_putc(data_LOW);
 
-           put_queue(Q_SPI_PWM, 100-feedback, WAIT_FOREVER);// put result to queue.s
-       }
 
+        pwm_var = result_PID;
+
+
+        signal( SEM_PWM_UPDATE );
    }
+
 }
 
 

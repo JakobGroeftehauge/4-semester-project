@@ -291,7 +291,7 @@ void schedule()
     	    pot[current_task].condition = TASK_READY;
     	  }
       }
-      if( pot[current_task].condition & TASK_WAIT_FOR_TIMEOUT )
+      if( pot[current_task].condition & TASK_WAIT_FOR_TIMEOUT ) // this maybe shold have been else if?
       {
     	  if( pot[current_task].timer )
     	  {

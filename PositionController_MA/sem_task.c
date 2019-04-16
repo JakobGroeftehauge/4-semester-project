@@ -24,12 +24,12 @@ extern void signaling_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
     wait(100);
 
     //GPIO_PORTF_DATA_R ^=0x02;
-    if (event == EVENT_TIMEOUT)
-    {
-    //put_queue( Q_SPI_POS, send_data, WAIT_FOREVER );
-    signal(SEM_MAK);
-    send_data ++;
-    }
+    //if ((put_queue( Q_SPI_POS, send_data, WAIT_FOREVER )))     // this still call this task way too often. It seems that the queue call also results in
+                                    // EVENT_TIMEOUT, probably because of a missing else if statement in rtcs
+    //{
+        signal(SEM_MAK);
+        send_data ++;
+    //}
     return;
 }
 

@@ -122,14 +122,24 @@ extern void SPI_POS_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 ******************************************************************************/
 {
     //Receive data
-    send_byte( 0x00CC, 8);
-    send_byte( 0x0700, 3 );
-    send_byte( 0x0700, 7 );
-    wait(0);
+//    send_byte( 0x00CC, 8);
+//    send_byte( 0x0700, 3 );
+//    send_byte( 0x0700, 7 );
+//    wait(1000);
 
-    //wait(100);
+    wait(5);
     send_byte( 0xFFFF, POSITION_SLAVE );
-    pos_var  = receive_byte();
+            pos_var  = receive_byte();
+
+            INT8U data_HIGH = pos_var & 0xFF;
+            INT8U data_LOW = (pos_var >> 8);
+            while( !uart0_tx_rdy() )
+            {}
+            uart0_putc(data_LOW);
+            while( !uart0_tx_rdy() )
+            {}
+            uart0_putc(data_HIGH);
+
     signal( SEM_POS_UPDATE );
 }
 
@@ -143,14 +153,19 @@ extern void SPI_PWM_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
     wait_sem( SEM_PWM_UPDATE, WAIT_FOREVER );
     if( event != EVENT_RESET )
     {
-        INT8U data_HIGH = pwm_var & 0xFF;
-        INT8U data_LOW = (pwm_var >> 8);
-        while( !uart0_tx_rdy() )
-        {}
-        uart0_putc(data_LOW);
-        while( !uart0_tx_rdy() )
-        {}
-        uart0_putc(data_HIGH);
+        INT16U data;
+        send_byte( pwm_var, PWM_SLAVE );
+        data = receive_byte();
+
+
+//        INT8U data_HIGH = pwm_var & 0xFF;
+//        INT8U data_LOW = (pwm_var >> 8);
+//        while( !uart0_tx_rdy() )
+//        {}
+//        uart0_putc(data_LOW);
+//        while( !uart0_tx_rdy() )
+//        {}
+//        uart0_putc(data_HIGH);
     }
 
 }
@@ -233,18 +248,28 @@ void send_byte(INT16U data, INT8U slave_no)
     }
 }
 
-INT16U receive_byte()
+INT16S receive_byte()
 /*****************************************************************************
 *   Input    :
 *   Output   : The function return the received data.
 *   Function : receiving data with SPI
 ******************************************************************************/
 {
-    INT16U data;
+    INT16S data;
 
     while( !(SSI1_SR_R & (0b00000010)) ) //Check if receive FIFO emtpy
     {}
     data = SSI1_DR_R;
+
+//            INT8U data_HIGH = data & 0xFF;
+//            INT8U data_LOW = (data >> 8);
+//            while( !uart0_tx_rdy() )
+//            {}
+//            uart0_putc(data_LOW);
+//            while( !uart0_tx_rdy() )
+//            {}
+//            uart0_putc(data_HIGH);
+
     return data;
 }
 

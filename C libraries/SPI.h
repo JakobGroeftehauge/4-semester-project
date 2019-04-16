@@ -66,7 +66,7 @@ extern void send_byte(INT16U, INT8U);
 *   Function : SPI initation
 ******************************************************************************/
 
-extern INT16U receive_byte();
+extern INT16S receive_byte();
 
 
 #endif /* SPI_H_ */

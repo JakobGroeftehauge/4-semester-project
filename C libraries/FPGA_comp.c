@@ -16,7 +16,7 @@
 #include <stdint.h>
 #include "FPGA_comp.h"
 /*****************************    Defines    *******************************/
-#define MAX_PID_OUT 12
+#define MAX_PID_OUT 10
 #define PWM_RES     1023
 
 /*****************************   Variables   *******************************/
@@ -30,8 +30,8 @@ extern int16_t voltage_to_duty_cycle(float voltage)
 *   Function : Convert the floating point voltage to an integer duty cycle
 ******************************************************************************/
 {
-    float result_f = (voltage/MAX_PID_OUT*PWM_RES)+0.5;
-    return ((int16_t) result_f);
+    float result_f = ( (voltage/MAX_PID_OUT) * PWM_RES) + 0.5;
+    return (result_f);
 
 }
 

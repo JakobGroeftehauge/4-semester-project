@@ -127,18 +127,18 @@ extern void SPI_POS_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 //    send_byte( 0x0700, 7 );
 //    wait(1000);
 
-    wait(5);
+    wait(1);
     send_byte( 0xFFFF, POSITION_SLAVE );
             pos_var  = receive_byte();
 
-            INT8U data_HIGH = pos_var & 0xFF;
-            INT8U data_LOW = (pos_var >> 8);
-            while( !uart0_tx_rdy() )
-            {}
-            uart0_putc(data_LOW);
-            while( !uart0_tx_rdy() )
-            {}
-            uart0_putc(data_HIGH);
+//            INT8U data_HIGH = pos_var & 0xFF;
+//            INT8U data_LOW = (pos_var >> 8);
+//            while( !uart0_tx_rdy() )
+//            {}
+//            uart0_putc(data_LOW);
+//            while( !uart0_tx_rdy() )
+//            {}
+//            uart0_putc(data_HIGH);
 
     signal( SEM_POS_UPDATE );
 }

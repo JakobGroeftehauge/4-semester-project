@@ -58,7 +58,6 @@ extern void PID_task(uint8_t id, uint8_t state, uint8_t event, uint8_t data)
 
 
         signal( SEM_PWM_UPDATE );
-   }
 
 }
 

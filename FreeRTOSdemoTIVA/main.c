@@ -43,8 +43,8 @@
 
 void ledTaskFlash( void *pvParameters)
 {
-    //TickType_t xLastWakeTime;
-    uint32_t xLastWakeTime;
+    TickType_t xLastWakeTime;
+    //uint32_t xLastWakeTime;
     //parameter = (uint8_t *) pvParameters;
     xLastWakeTime = xTaskGetTickCount();
     //uint16_t *parameter = (uint16_t * ) pvParameters;
@@ -55,20 +55,22 @@ void ledTaskFlash( void *pvParameters)
         if (pvParameters == GREEN_LED_TASK)
         {
             GPIO_PORTF_DATA_R ^= 0x04;
-            time = 300;
+            time = 2000;
 
         }
         if (pvParameters == YELLOW_LED_TASK)
         {
             GPIO_PORTF_DATA_R ^= 0x02;
-            time = 450;
+            time = 3000;
         }
 
 
-        //vTaskDelayUntil (&xLastWakeTime, time );
-            vTaskDelay(time);
+        vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS( time ) );
+        //vTaskDelay(time);
     }
 }
+
+void semTask
 
 int main(void)
 {
@@ -76,11 +78,17 @@ int main(void)
     //init_systick();
     init_gpio();
 
+    //Create semaphores
+    SemaphoreHandle_t taskSignalSem;
+    taskSignalSem = xSemaphoreCreateCounting( UBaseType_t 10,
+                                                UBaseType_t 0);
 
+    xSemaphoreTake();
     // Start the tasks.
     // ----------------
     xTaskCreate(ledTaskFlash, "Yellow LED task", 100, 2, 1, NULL );
     xTaskCreate(ledTaskFlash, "Green LED task", 100, 3, 1, NULL );
+    xTaskCreate(semTask, "semTask", 100, 4, 1, Null);
 
     //GPIO_PORTF_DATA_R = 0x02;
 

@@ -114,14 +114,16 @@ extern float run_PID(float feedback, float setpoint, uint8_t id) // CHANGE TO PI
     float derivative_term = PID_pool[id].Kd*2/T*(error - PID_pool[id].previous_error)-PID_pool[id].Ud;
 
     // integral is only given a value if the controller is not in saturation
-    if (PID_pool[id].sat_flag)
-    {
-        integral_term = 0;
-    }
-    else
-    {
-        integral_term = PID_pool[id].integral + PID_pool[id].Ki*T/2*(error + PID_pool[id].previous_error);
-    }
+//    if (PID_pool[id].sat_flag)
+//    {
+//        integral_term = 0;
+//    }
+//    else
+//    {
+//        integral_term = PID_pool[id].integral + PID_pool[id].Ki*T/2*(error + PID_pool[id].previous_error);
+//    }
+
+    integral_term = PID_pool[id].integral + PID_pool[id].Ki*T/2*(error + PID_pool[id].previous_error);
 
     output = proportional_term + integral_term + derivative_term;
 

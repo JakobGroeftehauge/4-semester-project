@@ -91,16 +91,14 @@ void semTask( void * pvParameters)
 
 int main(void)
 {
-    //SystemCoreClock;
-    //init_systick();
     init_gpio();
 
     //Create semaphores
     taskSignalSem = xSemaphoreCreateCounting(10, 0);
 
-    //xSemaphoreTake();
+
     // Start the tasks.
-    // ----------------
+
     xTaskCreate(ledTaskFlash, "Yellow LED task", 100, 2, 1, NULL );
     xTaskCreate(ledTaskFlash, "Green LED task", 100, 3, 1, NULL );
     xTaskCreate(semTask, "semTask", 100, 4, 1, NULL);

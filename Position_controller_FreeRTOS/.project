@@ -24,4 +24,36 @@
 		<nature>org.eclipse.cdt.core.ccnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>FPGA_comp.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/FPGA_comp.c</locationURI>
+		</link>
+		<link>
+			<name>Filter.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/Filter.c</locationURI>
+		</link>
+		<link>
+			<name>Filter.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/Filter.h</locationURI>
+		</link>
+		<link>
+			<name>PID_MA.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/PID_MA.c</locationURI>
+		</link>
+		<link>
+			<name>PID_MA.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/PID_MA.h</locationURI>
+		</link>
+		<link>
+			<name>circular_buffer.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/circular_buffer.c</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

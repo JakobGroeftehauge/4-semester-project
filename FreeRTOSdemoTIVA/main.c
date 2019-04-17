@@ -36,6 +36,8 @@
 
 /*****************************   Constants   *******************************/
 SemaphoreHandle_t taskSignalSem;
+
+TaskHandle_t semTaskHandle = NULL;
 /*****************************   Variables   *******************************/
 
 //uint32_t SystemCoreClock;
@@ -65,7 +67,8 @@ void ledTaskFlash( void * pvParameters)
         {
             GPIO_PORTF_DATA_R ^= 0x02;
             time = 3000;
-            xSemaphoreGive( taskSignalSem );
+            //xSemaphoreGive( taskSignalSem );
+            xTaskNotifyGive( semTaskHandle );
         }
 
 
@@ -76,14 +79,24 @@ void ledTaskFlash( void * pvParameters)
 
 void semTask( void * pvParameters)
 {
+    static uint32_t thread_notification;
     for (;;)
     {
 
-    if (xSemaphoreTake( taskSignalSem, portMAX_DELAY ) == pdTRUE)
-    {
-        GPIO_PORTF_DATA_R ^= 0x08;
-    }
+        //ulTaskNotifyTake(pdTRUE, portMAX_DELAY)
+        if(ulTaskNotifyTake(pdTRUE, portMAX_DELAY) == pdTRUE)
+        {
 
+        GPIO_PORTF_DATA_R ^= 0x08;
+        //xTaskNotifyWait(0x00, 0, &notifyValue, portMAX_DELAY);
+
+        }
+       // xTaskNotifyWait( 0x00,      /* Don't clear any notification bits on entry. */
+//                         0xffffffff , /* Reset the notification value to 0 on exit. */
+//                          &thread_notification, /* Notified value pass out in
+//                                               ulNotifiedValue. */
+//                          portMAX_DELAY );  /* Block indefinitely. */
+        //vTaskDelay(portMAX_DELAY);
     }
 }
 
@@ -101,9 +114,10 @@ int main(void)
     //xSemaphoreTake();
     // Start the tasks.
     // ----------------
+    //TaskHandle_t semTaskHandle;
     xTaskCreate(ledTaskFlash, "Yellow LED task", 100, 2, 1, NULL );
     xTaskCreate(ledTaskFlash, "Green LED task", 100, 3, 1, NULL );
-    xTaskCreate(semTask, "semTask", 100, 4, 1, NULL);
+    xTaskCreate(semTask, "semTask", 100, 4, 1, &semTaskHandle);
 
     //GPIO_PORTF_DATA_R = 0x02;
 

@@ -1,0 +1,1 @@
+"./FPGA_comp.o" "./Filter.o" "./PID_MA.o" "./SPI.o" "./circular_buffer.o" "./gpio.o" "./main.o" "./rtcs.o" "./systick.o" "./test.o" "./uart.o" -Wl,-T"../tm4c123gh6pm.lds" -Wl,--start-group -lc -Wl,--end-group 

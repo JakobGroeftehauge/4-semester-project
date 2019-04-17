@@ -14,6 +14,7 @@
 /* Kernel includes. */
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
 
 /* Hardware includes. */
 //#include "hardware_tm4c123g.h" // Requires TivaWare library
@@ -34,14 +35,14 @@
 
 
 /*****************************   Constants   *******************************/
-
+SemaphoreHandle_t taskSignalSem;
 /*****************************   Variables   *******************************/
 
 //uint32_t SystemCoreClock;
 
 /*****************************   Functions   *******************************/
 
-void ledTaskFlash( void *pvParameters)
+void ledTaskFlash( void * pvParameters)
 {
     TickType_t xLastWakeTime;
     //uint32_t xLastWakeTime;
@@ -52,25 +53,41 @@ void ledTaskFlash( void *pvParameters)
     uint16_t time = 200;
     for (;;)
     {
+        uint8_t Parameter = *((uint8_t *) pvParameters);
+
         if (pvParameters == GREEN_LED_TASK)
         {
-            GPIO_PORTF_DATA_R ^= 0x04;
-            time = 2000;
+                GPIO_PORTF_DATA_R ^= 0x04;
+                time = 2000;
 
         }
         if (pvParameters == YELLOW_LED_TASK)
         {
             GPIO_PORTF_DATA_R ^= 0x02;
             time = 3000;
+            xSemaphoreGive( taskSignalSem );
         }
 
 
         vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS( time ) );
-        //vTaskDelay(time);
+
     }
 }
 
-void semTask
+void semTask( void * pvParameters)
+{
+    for (;;)
+    {
+
+    if (xSemaphoreTake( taskSignalSem, portMAX_DELAY ) == pdTRUE)
+    {
+        GPIO_PORTF_DATA_R ^= 0x08;
+    }
+
+    }
+}
+
+
 
 int main(void)
 {
@@ -79,16 +96,14 @@ int main(void)
     init_gpio();
 
     //Create semaphores
-    SemaphoreHandle_t taskSignalSem;
-    taskSignalSem = xSemaphoreCreateCounting( UBaseType_t 10,
-                                                UBaseType_t 0);
+    taskSignalSem = xSemaphoreCreateCounting(10, 0);
 
-    xSemaphoreTake();
+    //xSemaphoreTake();
     // Start the tasks.
     // ----------------
     xTaskCreate(ledTaskFlash, "Yellow LED task", 100, 2, 1, NULL );
     xTaskCreate(ledTaskFlash, "Green LED task", 100, 3, 1, NULL );
-    xTaskCreate(semTask, "semTask", 100, 4, 1, Null);
+    xTaskCreate(semTask, "semTask", 100, 4, 1, NULL);
 
     //GPIO_PORTF_DATA_R = 0x02;
 

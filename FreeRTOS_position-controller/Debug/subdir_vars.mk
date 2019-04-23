@@ -9,7 +9,7 @@ LDS_SRCS += \
 ../tm4c123gh6pm.lds 
 
 C_SRCS += \
-C:/Users/Mads/Documents/GitHub/4-semester-project/C\ libraries/SPI.c \
+C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/SPI.c \
 ../common.c \
 ../gpio.c \
 ../heap_2.c \
@@ -74,7 +74,7 @@ C_DEPS__QUOTED += \
 "tm4c123gh6pm_startup_ccs_gcc.d" 
 
 C_SRCS__QUOTED += \
-"C:/Users/Mads/Documents/GitHub/4-semester-project/C libraries/SPI.c" \
+"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/SPI.c" \
 "../common.c" \
 "../gpio.c" \
 "../heap_2.c" \

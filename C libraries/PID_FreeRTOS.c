@@ -28,8 +28,8 @@
 PID_controller PID_pool[NOF_PIDS];
 volatile INT16S pwm_var;
 volatile INT16S pos_var;
-volatile float controlSignal = 100;
-volatile float feedback;
+extern volatile float controlSignal = 100;
+extern volatile float feedback;
 int16_t output_PC;
 
 extern void PID_task( void * pvParameters)

@@ -46,9 +46,11 @@ TaskHandle_t PC_PID1_handle = NULL;
 /*****************************   Variables   *******************************/
 volatile INT16S pwm_var;
 volatile INT16S pos_var;
+
 volatile float controlSignal;
 volatile float feedback;
 volatile int16_t output_PC1;
+
 //uint32_t SystemCoreClock;
 
 /*****************************   Functions   *******************************/

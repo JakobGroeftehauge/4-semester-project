@@ -22,20 +22,10 @@
 #include "EMP_type.h"
 #include <stdint.h>
 #include "tm4c123gh6pm.h"
-#include "tmodel.h"
+#include "defines.h"
 #include "rtcs.h"
 #include "uart.h"
 /*****************************    Defines    *******************************/
-
-#define POS_1           0
-#define VEL_1           1
-#define CUR_1           2
-#define PWM_1           3
-#define POS_2           4
-#define VEL_2           5
-#define CUR_2           6
-#define PWM_2           7
-#define PROTOCOL_SLAVE  8
 
 /*****************************   Constants   *******************************/
 
@@ -123,7 +113,7 @@ void SPI_init(void)
 
 
 
-extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
+extern void SPI_task(void * pvParameters)
 /*****************************************************************************
 *   Input    : -
 *   Output   : -
@@ -132,13 +122,39 @@ extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 {
 
     //SEND DATA
+    INT16S data;
+    //BaseType_t xQueueReceive( SPI_queue, void * const &data, portMAX_DELAY);
 
-    send_data( pwm_var, PWM_1 );
+    send_data( 0xFFFF, data );
 
     //Do a dummy receive to empty SPI buffer
-    INT16S dummyData = receive_data();
+    INT16S position = receive_data();
 
+    INT8U data_HIGH = position & 0xFF;
+    INT8U data_LOW = (position >> 8);
+    while( !uart0_tx_rdy() )
+    {}
+    uart0_putc(data_LOW);
+    while( !uart0_tx_rdy() )
+    {}
+    uart0_putc(data_HIGH);
 
+}
+
+extern void update_values_task(void * pvParameters)
+/*****************************************************************************
+*   Input    : -
+*   Output   : -
+*   Function : -
+******************************************************************************/
+{
+
+    xQueueSend( SPI_queue,
+                POS_1,
+                0);
+
+//    Tjek op på enheden af tid her
+    vTaskDelay(100);
 
 }
 

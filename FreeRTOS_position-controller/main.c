@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stddef.h>
 #include "EMP_type.h"
+#include "defines.h"
 
 /* Kernel includes. */
 #include "FreeRTOS.h"
@@ -41,7 +42,11 @@
 
 
 /*****************************   Constants   *******************************/
+//Task handles
 TaskHandle_t PC_PID1_handle = NULL;
+TaskHandle_t SPI_handle = NULL;
+TaskHandle_t adjust_values_handle = NULL;
+
 
 /*****************************   Variables   *******************************/
 volatile INT16S pwm_var;
@@ -56,8 +61,18 @@ int main(void)
     //init_systick();
     init_gpio();
 
-    xTaskCreate(PID_task, "Position controller 1", 100, 4, 1, &PC_PID1_handle);
 
+    // Create queues
+    // -------------------
+    SPI_queue = xQueueCreate(100, //Number of elements in queue
+                             2); //Number of bytes for each element
+
+
+    // Create tasks
+    // -------------------
+    xTaskCreate(PID_task, "Position controller 1", 100, 4, 1, &PC_PID1_handle);
+    xTaskCreate(SPI_task, "SPI module", 100, 4, 1, &SPI_handle);
+    xTaskCreate(update_values_task, "Update values module", 100, 4, 1, &adjust_values_handle);
 
 
     // Start the scheduler.

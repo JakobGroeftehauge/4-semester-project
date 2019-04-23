@@ -36,7 +36,7 @@ extern void PID_task(uint8_t id, uint8_t state, uint8_t event, uint8_t data)
 *   Function : PID controller task
 ******************************************************************************/
 {
-   float referencePoint = 1080;
+   float referencePoint = 0;
    float feedback;
    INT8U static counter = 0;
 

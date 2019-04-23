@@ -39,6 +39,10 @@ int main(void)
   while( !uart0_tx_rdy() ){}
   uart0_putc('k');
 
+  send_byte( 0x00AA, 8 );
+  int data = receive_byte();
+  send_byte( 0x00CC, 8 );
+  data = receive_byte();
 
   open_queue(Q_SPI_POS);
   open_queue(Q_SPI_PWM);

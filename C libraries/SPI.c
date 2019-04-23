@@ -29,7 +29,8 @@
 /*****************************    Defines    *******************************/
 
 #define POSITION_SLAVE      0
-#define PWM_SLAVE           1
+#define PWM_SLAVE1          3
+#define PWM_SLAVE2          7
 
 /*****************************   Constants   *******************************/
 
@@ -129,7 +130,7 @@ extern void SPI_POS_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 
     wait(1);
     send_byte( 0xFFFF, POSITION_SLAVE );
-            pos_var  = receive_byte();
+    pos_var  = receive_byte();
 
 //            INT8U data_HIGH = pos_var & 0xFF;
 //            INT8U data_LOW = (pos_var >> 8);
@@ -154,8 +155,9 @@ extern void SPI_PWM_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
     if( event != EVENT_RESET )
     {
         INT16U data;
-        send_byte( pwm_var, PWM_SLAVE );
-        data = receive_byte();
+        send_byte( pwm_var, PWM_SLAVE1 );
+
+         data = receive_byte();
 
 
 //        INT8U data_HIGH = pwm_var & 0xFF;

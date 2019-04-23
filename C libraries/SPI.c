@@ -132,12 +132,12 @@ extern void SPI_task(void * pvParameters)
 
     INT8U data_HIGH = position & 0xFF;
     INT8U data_LOW = (position >> 8);
-    while( !uart0_tx_rdy() )
-    {}
-    uart0_putc(data_LOW);
-    while( !uart0_tx_rdy() )
-    {}
-    uart0_putc(data_HIGH);
+//    while( !uart0_tx_rdy() )
+//    {}
+//    uart0_putc(data_LOW);
+//    while( !uart0_tx_rdy() )
+//    {}
+//    uart0_putc(data_HIGH);
 
 }
 

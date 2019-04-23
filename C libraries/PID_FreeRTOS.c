@@ -17,6 +17,7 @@
 #include "FPGA_comp.h"
 #include "SPI.h"
 #include "FreeRTOS.h"
+#include "defines.h"
 
 
 
@@ -41,15 +42,15 @@ extern void PID_task( void * pvParameters)
 	{
 		float result_PID; 
 		float passedValue;
-		//uint8_t controller_id = *((uint8_t *) pvParameters);
+		PID_parameter controller_parameter = *((PID_parameter *) pvParameters);
 
 		xTaskNotifyWait(0x00, 0xffffffff, &passedValue, portMAX_DELAY);
 
 
 		//if(ulTaskNotifyTake(pdTRUE, portMAX_DELAY) == pdTRUE)
 		//{
-			result_PID = run_PID(passedValue, controlSignal, CC_CONTROLLER_ID);
-			output_PC1 = voltage_to_duty_cycle(result_PID);
+			result_PID = run_PID(passedValue, controlSignal, controller_parameter.id);
+			controller_parameter.place_to_store_output = voltage_to_duty_cycle(result_PID);
 		//}
 	}
 	

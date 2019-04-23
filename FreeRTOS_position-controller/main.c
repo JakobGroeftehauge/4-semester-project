@@ -27,6 +27,7 @@
 /* Task includes */
 #include "SPI.h"
 #include "PID_FreeRTOS.h"
+#include "defines.h"
 
 
 
@@ -56,6 +57,8 @@ volatile float controlSignal;
 volatile float feedback;
 volatile int16_t output_PC1;
 
+PID_parameter PID1_PC = {CC_CONTROLLER_ID, &output_PC1};
+
 //uint32_t SystemCoreClock;
 
 /*****************************   Functions   *******************************/
@@ -77,7 +80,7 @@ int main(void)
     // -------------------
     xTaskCreate(PID_task, "Position controller 1", 100, 4, 8, &PC_PID1_handle);
     xTaskCreate(SPI_task, "SPI module", 100, 4, 1, &SPI_handle);
-    xTaskCreate(update_values_task, "Update values module", 100, 4, 1, &adjust_values_handle);
+    xTaskCreate(update_values_task, "Update values module", 100, &PID1_PC, 1, &adjust_values_handle);
 
 
     // Start the scheduler.

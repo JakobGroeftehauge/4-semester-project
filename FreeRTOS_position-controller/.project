@@ -75,5 +75,10 @@
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/circular_buffer.h</locationURI>
 		</link>
+		<link>
+			<name>defines.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/defines.h</locationURI>
+		</link>
 	</linkedResources>
 </projectDescription>

@@ -51,6 +51,11 @@ TaskHandle_t adjust_values_handle = NULL;
 /*****************************   Variables   *******************************/
 volatile INT16S pwm_var;
 volatile INT16S pos_var;
+
+volatile float controlSignal;
+volatile float feedback;
+volatile int16_t output_PC1;
+
 //uint32_t SystemCoreClock;
 
 /*****************************   Functions   *******************************/
@@ -70,7 +75,7 @@ int main(void)
 
     // Create tasks
     // -------------------
-    xTaskCreate(PID_task, "Position controller 1", 100, 4, 1, &PC_PID1_handle);
+    xTaskCreate(PID_task, "Position controller 1", 100, 4, 8, &PC_PID1_handle);
     xTaskCreate(SPI_task, "SPI module", 100, 4, 1, &SPI_handle);
     xTaskCreate(update_values_task, "Update values module", 100, 4, 1, &adjust_values_handle);
 

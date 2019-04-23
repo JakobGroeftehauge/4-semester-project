@@ -10,6 +10,7 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
+"./SPI.o" \
 "./common.o" \
 "./gpio.o" \
 "./heap_2.o" \
@@ -22,6 +23,9 @@ ORDERED_OBJS += \
 "./tm4c123gh6pm_startup_ccs_gcc.o" \
 -Wl,-T"../tm4c123gh6pm.lds" \
 $(GEN_CMDS__FLAG) \
+-Wl,--start-group \
+-lc \
+-Wl,--end-group \
 
 -include ../makefile.init
 
@@ -162,8 +166,8 @@ FreeRTOS_position-controller.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "common.o" "gpio.o" "heap_2.o" "list.o" "main.o" "port.o" "queue.o" "tasks.o" "timers.o" "tm4c123gh6pm_startup_ccs_gcc.o" 
-	-$(RM) "common.d" "gpio.d" "heap_2.d" "list.d" "main.d" "port.d" "queue.d" "tasks.d" "timers.d" "tm4c123gh6pm_startup_ccs_gcc.d" 
+	-$(RM) "SPI.o" "common.o" "gpio.o" "heap_2.o" "list.o" "main.o" "port.o" "queue.o" "tasks.o" "timers.o" "tm4c123gh6pm_startup_ccs_gcc.o" 
+	-$(RM) "SPI.d" "common.d" "gpio.d" "heap_2.d" "list.d" "main.d" "port.d" "queue.d" "tasks.d" "timers.d" "tm4c123gh6pm_startup_ccs_gcc.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

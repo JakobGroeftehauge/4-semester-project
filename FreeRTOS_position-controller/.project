@@ -24,4 +24,16 @@
 		<nature>org.eclipse.cdt.core.ccnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>SPI.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/SPI.c</locationURI>
+		</link>
+		<link>
+			<name>SPI.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/SPI.h</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

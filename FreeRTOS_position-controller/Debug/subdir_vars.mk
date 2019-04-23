@@ -9,6 +9,7 @@ LDS_SRCS += \
 ../tm4c123gh6pm.lds 
 
 C_SRCS += \
+C:/Users/Mads/Documents/GitHub/4-semester-project/C\ libraries/SPI.c \
 ../common.c \
 ../gpio.c \
 ../heap_2.c \
@@ -21,6 +22,7 @@ C_SRCS += \
 ../tm4c123gh6pm_startup_ccs_gcc.c 
 
 C_DEPS += \
+./SPI.d \
 ./common.d \
 ./gpio.d \
 ./heap_2.d \
@@ -33,6 +35,7 @@ C_DEPS += \
 ./tm4c123gh6pm_startup_ccs_gcc.d 
 
 OBJS += \
+./SPI.o \
 ./common.o \
 ./gpio.o \
 ./heap_2.o \
@@ -45,6 +48,7 @@ OBJS += \
 ./tm4c123gh6pm_startup_ccs_gcc.o 
 
 OBJS__QUOTED += \
+"SPI.o" \
 "common.o" \
 "gpio.o" \
 "heap_2.o" \
@@ -57,6 +61,7 @@ OBJS__QUOTED += \
 "tm4c123gh6pm_startup_ccs_gcc.o" 
 
 C_DEPS__QUOTED += \
+"SPI.d" \
 "common.d" \
 "gpio.d" \
 "heap_2.d" \
@@ -69,6 +74,7 @@ C_DEPS__QUOTED += \
 "tm4c123gh6pm_startup_ccs_gcc.d" 
 
 C_SRCS__QUOTED += \
+"C:/Users/Mads/Documents/GitHub/4-semester-project/C libraries/SPI.c" \
 "../common.c" \
 "../gpio.c" \
 "../heap_2.c" \

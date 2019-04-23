@@ -30,7 +30,7 @@ volatile INT16S pwm_var;
 volatile INT16S pos_var;
 volatile float controlSignal = 100;
 volatile float feedback;
-volatile float output_PC; 
+int16_t output_PC;
 
 extern void PID_task( void * pvParameters)
 /*****************************************************************************
@@ -41,6 +41,8 @@ extern void PID_task( void * pvParameters)
 	{
 		float result_PID; 
 		
+		//uint8_t controller_id = *((uint8_t *) pvParameters);
+
 		if(ulTaskNotifyTake(pdTRUE, portMAX_DELAY) == pdTRUE)
 		{
 			result_PID = run_PID(feedback, controlSignal, CC_CONTROLLER_ID);

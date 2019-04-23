@@ -26,6 +26,26 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>FPGA_comp.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/FPGA_comp.c</locationURI>
+		</link>
+		<link>
+			<name>FPGA_comp.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/FPGA_comp.h</locationURI>
+		</link>
+		<link>
+			<name>Filter.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/Filter.c</locationURI>
+		</link>
+		<link>
+			<name>Filter.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/Filter.h</locationURI>
+		</link>
+		<link>
 			<name>PID_FreeRTOS.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/PID_FreeRTOS.c</locationURI>
@@ -44,6 +64,16 @@
 			<name>SPI.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/SPI.h</locationURI>
+		</link>
+		<link>
+			<name>circular_buffer.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/circular_buffer.c</locationURI>
+		</link>
+		<link>
+			<name>circular_buffer.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/circular_buffer.h</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

@@ -133,7 +133,7 @@ extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 
     //SEND DATA
 
-    send_data( pwm_var, PWM_SLAVE1 );
+    send_data( pwm_var, PWM_1 );
 
     //Do a dummy receive to empty SPI buffer
     INT16S dummyData = receive_data();

@@ -24,7 +24,7 @@
 #include "tm4c123gh6pm.h"
 #include "tmodel.h"
 #include "rtcs.h"
-#include "events.h"
+//#include "events.h"
 #include "uart.h"
 /*****************************    Defines    *******************************/
 

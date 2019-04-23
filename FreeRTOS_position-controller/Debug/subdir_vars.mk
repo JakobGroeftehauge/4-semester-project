@@ -8,8 +8,7 @@ SHELL = cmd.exe
 LDS_SRCS += \
 ../tm4c123gh6pm.lds 
 
-C_SRCS += \
-C:/Users/jmkaa/git/4-semester-project/C\ libraries/SPI.c \
+C_SRCS += C:/Users/jmkaa/git/4-semester-project/C\ libraries/SPI.c e125899bf0e26ff9b80449b7bc0b49c0954d3e0c
 ../common.c \
 ../gpio.c \
 ../heap_2.c \
@@ -73,8 +72,7 @@ C_DEPS__QUOTED += \
 "timers.d" \
 "tm4c123gh6pm_startup_ccs_gcc.d" 
 
-C_SRCS__QUOTED += \
-"C:/Users/jmkaa/git/4-semester-project/C libraries/SPI.c" \
+C_SRCS__QUOTED += "C:/Users/jmkaa/git/4-semester-project/C libraries/SPI.c" e125899bf0e26ff9b80449b7bc0b49c0954d3e0c
 "../common.c" \
 "../gpio.c" \
 "../heap_2.c" \

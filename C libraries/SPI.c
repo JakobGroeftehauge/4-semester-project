@@ -24,15 +24,24 @@
 #include "tm4c123gh6pm.h"
 #include "tmodel.h"
 #include "rtcs.h"
-//#include "events.h"
 #include "uart.h"
 /*****************************    Defines    *******************************/
 
-#define POSITION_SLAVE      2
-#define PWM_SLAVE           8
+#define POS_1           0
+#define VEL_1           1
+#define CUR_1           2
+#define PWM_1           3
+#define POS_2           4
+#define VEL_2           5
+#define CUR_2           6
+#define PWM_2           7
+#define PROTOCOL_SLAVE  8
+
 /*****************************   Constants   *******************************/
 
 /*****************************   Variables   *******************************/
+extern volatile INT16S pos_var;
+extern volatile INT16S pwm_var;
 
 /*****************************   Functions   *******************************/
 void SPI_init(void)
@@ -108,7 +117,11 @@ void SPI_init(void)
 
     // Enable the SSI by setting theSSEbit in theSSICR1register.
     SSI1_CR1_R |= (1<<1);
+
+    GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4); //Make sure all SS are high
 }
+
+
 
 extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 /*****************************************************************************
@@ -117,43 +130,15 @@ extern void SPI_task(INT8U my_id, INT8U my_state, INT8U event, INT8U data)
 *   Function : -
 ******************************************************************************/
 {
-    INT16U PWM_data;
-    INT8U static TIMER_PWM = 0;
-    INT8U static TIMER_SLAVE = 0;
 
-    //Receive data
-        send_byte( 0xFFFF, 3 ); //CHANGE WHICH SLAVE HERE
-        receive_byte();
+    //SEND DATA
 
+    send_data( pwm_var, PWM_SLAVE1 );
 
-    //Send data
-    if( TIMER_PWM >= 15 )
-    {
-        if( wait_sem( SEM_PWM_UPDATE,1 ) )//Check Semaphore if PWM data is ready
-        {
-            if( get_queue( Q_SPI_PWM, &PWM_data,1 ) )//Get from queue
-            {
-                TIMER_PWM = 0;
-                send_byte( PWM_data,PWM_SLAVE );
-            }
-        }
-     }
-    TIMER_PWM++;
+    //Do a dummy receive to empty SPI buffer
+    INT16S dummyData = receive_data();
 
 
-
-
-//For test
-//------------------------------------
-//INT8U static counter = 0;
-//    counter++;
-//
-//    if( counter > 10 ) //Adjust timer here
-//    {
-//        send_byte( 0xFFFF, 2);
-//        receive_byte();
-//        counter = 0;
-//    }
 
 }
 
@@ -172,7 +157,7 @@ void data_transmit(INT16U data)
 
 }
 
-void send_byte(INT16U data, INT8U slave_no)
+void send_data(INT16U data, INT8U slave_no)
 /*****************************************************************************
 *   Input    :byte that is being sent by SPI
 *             slave select
@@ -235,40 +220,31 @@ void send_byte(INT16U data, INT8U slave_no)
     }
 }
 
-void receive_byte()
+INT16S receive_data()
 /*****************************************************************************
 *   Input    :
 *   Output   : The function return the received data.
 *   Function : receiving data with SPI
 ******************************************************************************/
 {
-    INT16U data;
+    INT16S data;
 
-    while( SSI1_SR_R & (0<<2) ) //Check if receive FIFO emtpy
+    while( !(SSI1_SR_R & (0b00000010)) ) //Check if receive FIFO emtpy
     {}
     data = SSI1_DR_R;
 
-    if ( put_queue( Q_SPI_POS, data, WAIT_FOREVER ) )
-        signal( SEM_POS_UPDATE );
 
+    //Til uart test
+//            INT8U data_HIGH = data & 0xFF;
+//            INT8U data_LOW = (data >> 8);
+//            while( !uart0_tx_rdy() )
+//            {}
+//            uart0_putc(data_LOW);
+//            while( !uart0_tx_rdy() )
+//            {}
+//            uart0_putc(data_HIGH);
 
-
-//For test
-//-------------------------
-//    INT16U data;
-//    while( SSI1_SR_R & (0<<2) ) //Check if receive FIFO emtpy
-//    {}
-//    data = SSI1_DR_R;
-//
-//    INT8U data_LOW = data & 0xFF;
-//    INT8U data_HIGH = (data >> 8);
-//
-//    while( !uart0_tx_rdy() )
-//    {}
-//    uart0_putc(data_LOW);
-//    while( !uart0_tx_rdy() )
-//    {}
-//    uart0_putc(data_HIGH);
+    return data;
 }
 
 /****************************** End Of Module *******************************/

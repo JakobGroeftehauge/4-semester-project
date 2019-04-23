@@ -17,6 +17,11 @@
 #include "tmodel.h"
 #include "FPGA_comp.h"
 
+#include <stdint.h>
+#include <stdio.h>
+#include <stddef.h>
+
+#include "EMP_type.h"
 
 
 /*****************************    Defines    *******************************/

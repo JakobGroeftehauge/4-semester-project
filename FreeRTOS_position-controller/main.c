@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stddef.h>
+#include "EMP_type.h"
 
 /* Kernel includes. */
 #include "FreeRTOS.h"
@@ -21,6 +22,9 @@
 //#include "systick_frt.h"    // From Mortens Lessons
 #include "tm4c123gh6pm.h"
 #include "gpio.h"
+
+/* Task includes */
+#include "SPI.h"
 
 
 /*****************************    Defines    *******************************/
@@ -39,7 +43,8 @@ SemaphoreHandle_t taskSignalSem;
 
 TaskHandle_t semTaskHandle = NULL;
 /*****************************   Variables   *******************************/
-
+volatile INT16S pwm_var;
+volatile INT16S pos_var;
 //uint32_t SystemCoreClock;
 
 /*****************************   Functions   *******************************/

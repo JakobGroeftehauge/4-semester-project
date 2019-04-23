@@ -26,6 +26,16 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>PID_FreeRTOS.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/PID_FreeRTOS.c</locationURI>
+		</link>
+		<link>
+			<name>PID_FreeRTOS.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/PID_FreeRTOS.h</locationURI>
+		</link>
+		<link>
 			<name>SPI.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/C%20libraries/SPI.c</locationURI>

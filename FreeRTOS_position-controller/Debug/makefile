@@ -10,6 +10,7 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
+"./PID_FreeRTOS.o" \
 "./SPI.o" \
 "./common.o" \
 "./gpio.o" \
@@ -166,8 +167,8 @@ FreeRTOS_position-controller.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "SPI.o" "common.o" "gpio.o" "heap_2.o" "list.o" "main.o" "port.o" "queue.o" "tasks.o" "timers.o" "tm4c123gh6pm_startup_ccs_gcc.o" 
-	-$(RM) "SPI.d" "common.d" "gpio.d" "heap_2.d" "list.d" "main.d" "port.d" "queue.d" "tasks.d" "timers.d" "tm4c123gh6pm_startup_ccs_gcc.d" 
+	-$(RM) "PID_FreeRTOS.o" "SPI.o" "common.o" "gpio.o" "heap_2.o" "list.o" "main.o" "port.o" "queue.o" "tasks.o" "timers.o" "tm4c123gh6pm_startup_ccs_gcc.o" 
+	-$(RM) "PID_FreeRTOS.d" "SPI.d" "common.d" "gpio.d" "heap_2.d" "list.d" "main.d" "port.d" "queue.d" "tasks.d" "timers.d" "tm4c123gh6pm_startup_ccs_gcc.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

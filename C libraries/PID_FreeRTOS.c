@@ -16,6 +16,7 @@
 #include "tmodel.h"
 #include "FPGA_comp.h"
 #include "SPI.h"
+#include "FreeRTOS.h"
 
 
 
@@ -42,7 +43,7 @@ extern void PID_task( void * pvParameters)
 		
 		if(ulTaskNotifyTake(pdTRUE, portMAX_DELAY) == pdTRUE)
 		{
-			result_PID = run_PID(feedback, controlSignal, CC_CONTROLLER_ID)
+			result_PID = run_PID(feedback, controlSignal, CC_CONTROLLER_ID);
 			output_PC = voltage_to_duty_cycle(result_PID);
 		}	
 	}

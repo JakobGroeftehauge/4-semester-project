@@ -1,0 +1,83 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+SHELL = cmd.exe
+
+# Add inputs and outputs from these tool invocations to the build variables 
+LDS_SRCS += \
+../tm4c123gh6pm.lds 
+
+C_SRCS += \
+../common.c \
+../gpio.c \
+../heap_2.c \
+../list.c \
+../main.c \
+../port.c \
+../queue.c \
+../tasks.c \
+../timers.c \
+../tm4c123gh6pm_startup_ccs_gcc.c 
+
+C_DEPS += \
+./common.d \
+./gpio.d \
+./heap_2.d \
+./list.d \
+./main.d \
+./port.d \
+./queue.d \
+./tasks.d \
+./timers.d \
+./tm4c123gh6pm_startup_ccs_gcc.d 
+
+OBJS += \
+./common.o \
+./gpio.o \
+./heap_2.o \
+./list.o \
+./main.o \
+./port.o \
+./queue.o \
+./tasks.o \
+./timers.o \
+./tm4c123gh6pm_startup_ccs_gcc.o 
+
+OBJS__QUOTED += \
+"common.o" \
+"gpio.o" \
+"heap_2.o" \
+"list.o" \
+"main.o" \
+"port.o" \
+"queue.o" \
+"tasks.o" \
+"timers.o" \
+"tm4c123gh6pm_startup_ccs_gcc.o" 
+
+C_DEPS__QUOTED += \
+"common.d" \
+"gpio.d" \
+"heap_2.d" \
+"list.d" \
+"main.d" \
+"port.d" \
+"queue.d" \
+"tasks.d" \
+"timers.d" \
+"tm4c123gh6pm_startup_ccs_gcc.d" 
+
+C_SRCS__QUOTED += \
+"../common.c" \
+"../gpio.c" \
+"../heap_2.c" \
+"../list.c" \
+"../main.c" \
+"../port.c" \
+"../queue.c" \
+"../tasks.c" \
+"../timers.c" \
+"../tm4c123gh6pm_startup_ccs_gcc.c" 
+
+

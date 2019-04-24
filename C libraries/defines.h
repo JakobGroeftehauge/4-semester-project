@@ -12,8 +12,6 @@
 #include "semphr.h"
 #include "PID_FreeRTOS.h"
 
-
-
 // Slaves
 #define POS_1           0
 #define VEL_1           1
@@ -38,10 +36,16 @@ typedef volatile struct {
 //PID1_PC.id = CC_CONTROLLER_ID;
 //PID_PC1.place_to_store_output = &output_PC1;
 
+
 // Queues
 QueueHandle_t SPI_queue;
 
+//Task handles
+extern TaskHandle_t PC_PID1_handle;
+extern TaskHandle_t PC_PID2_handle;
 
+extern TaskHandle_t SPI_handle;
+extern TaskHandle_t adjust_values_handle;
 
 
 

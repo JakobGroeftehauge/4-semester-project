@@ -1,9 +1,3 @@
-
-
-/**
- * main.c
- */
-
 /***************************** Include files *******************************/
 
 /* Standard includes. */
@@ -27,7 +21,6 @@
 /* Task includes */
 #include "SPI.h"
 #include "PID_FreeRTOS.h"
-#include "defines.h"
 
 
 
@@ -43,12 +36,6 @@
 
 
 /*****************************   Constants   *******************************/
-//Task handles
-TaskHandle_t PC_PID1_handle = NULL;
-TaskHandle_t PC_PID2_handle = NULL;
-
-TaskHandle_t SPI_handle = NULL;
-TaskHandle_t adjust_values_handle = NULL;
 
 
 /*****************************   Variables   *******************************/

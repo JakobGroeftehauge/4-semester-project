@@ -16,6 +16,7 @@ ORDERED_OBJS += \
 "./SPI.o" \
 "./circular_buffer.o" \
 "./common.o" \
+"./defines.o" \
 "./gpio.o" \
 "./heap_2.o" \
 "./list.o" \
@@ -170,8 +171,8 @@ FreeRTOS_position-controller.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "FPGA_comp.o" "Filter.o" "PID_FreeRTOS.o" "SPI.o" "circular_buffer.o" "common.o" "gpio.o" "heap_2.o" "list.o" "main.o" "port.o" "queue.o" "tasks.o" "timers.o" "tm4c123gh6pm_startup_ccs_gcc.o" 
-	-$(RM) "FPGA_comp.d" "Filter.d" "PID_FreeRTOS.d" "SPI.d" "circular_buffer.d" "common.d" "gpio.d" "heap_2.d" "list.d" "main.d" "port.d" "queue.d" "tasks.d" "timers.d" "tm4c123gh6pm_startup_ccs_gcc.d" 
+	-$(RM) "FPGA_comp.o" "Filter.o" "PID_FreeRTOS.o" "SPI.o" "circular_buffer.o" "common.o" "defines.o" "gpio.o" "heap_2.o" "list.o" "main.o" "port.o" "queue.o" "tasks.o" "timers.o" "tm4c123gh6pm_startup_ccs_gcc.o" 
+	-$(RM) "FPGA_comp.d" "Filter.d" "PID_FreeRTOS.d" "SPI.d" "circular_buffer.d" "common.d" "defines.d" "gpio.d" "heap_2.d" "list.d" "main.d" "port.d" "queue.d" "tasks.d" "timers.d" "tm4c123gh6pm_startup_ccs_gcc.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

@@ -120,20 +120,29 @@ extern void SPI_task(void * pvParameters)
 *   Function : -
 ******************************************************************************/
 {
-
-
         INT16S receivedValue = 0;
+        INT16S PWM_value;
+        INT16U dummyReceive;
+        //SPI_queue_element receivedValue = 0;
         INT16S status;
         for( ;; )
         {
 
-            status = xQueueReceive( SPI_queue, &receivedValue, portMAX_DELAY);
+            if( (xQueueReceive( SPI_queue, &receivedValue, 0)) == pdPASS )
+            {
+                send_data( 0xFFFF, receivedValue );
+                INT32U position = receive_data();
+                xTaskNotify(PC_PID1_handle, position, eSetValueWithOverwrite );
+            }
 
-            send_data( 0xFFFF, receivedValue );
+            if ( (ulTaskNotifyTake(pdTRUE, 0 )) > 0 )
+            {
+                PWM_value = * PID1_PC.place_to_store_output;
+                send_data( PWM_value, PWM_1);
+                dummyReceive = receive_data();
+            }
 
-            INT32U position = receive_data();
 
-            xTaskNotify(PC_PID1_handle, position, eSetValueWithOverwrite );
 
     //        INT8U data_HIGH = position & 0xFF;
     //        INT8U data_LOW = (position >> 8);

@@ -32,7 +32,9 @@ typedef volatile struct {
 } PID_parameter;
 
 
-//PID_parameter PID1_PC;
+
+PID_parameter PID1_PC;
+PID_parameter PID2_PC;
 //PID1_PC.id = CC_CONTROLLER_ID;
 //PID_PC1.place_to_store_output = &output_PC1;
 

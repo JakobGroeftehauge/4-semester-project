@@ -245,10 +245,16 @@ INT16S receive_data()
 {
     INT16S data;
 
-    while( !(SSI1_SR_R & (0b00000010)) ) //Check if receive FIFO emtpy
+    // is this the right way to do it? It probably is fine if the code is preemptive.
+        // is it possible to somehow wait for a signal or semaphore or interrupt instead?
+        // using vTaskNotifyGiveFromISR() and an ISR, the above mentioned should be achievable
+        // it seems that it is only possible to interrupt on FIFO half full. Instead it might be enough to make sure
+        // that the last bit has been sent
+        // it seems that it might be possible to use the end of transmission (EOT) combined with the SSI Transmit FIFO Interrupt
+        // to achieve the desired behaviour
+    while( !(SSI1_SR_R & (0b00000010)) ) //Check if receive FIFO empty
     {}
     data = SSI1_DR_R;
-
 
     //Til uart test
 //            INT8U data_HIGH = data & 0xFF;

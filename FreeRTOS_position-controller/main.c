@@ -45,6 +45,8 @@
 /*****************************   Constants   *******************************/
 //Task handles
 TaskHandle_t PC_PID1_handle = NULL;
+TaskHandle_t PC_PID2_handle = NULL;
+
 TaskHandle_t SPI_handle = NULL;
 TaskHandle_t adjust_values_handle = NULL;
 
@@ -54,10 +56,14 @@ volatile INT16S pwm_var;
 volatile INT16S pos_var;
 
 volatile float control_signal_PC1;
+volatile float control_signal_PC2;
+
 volatile float feedback;
 volatile int16_t output_PC1;
+volatile int16_t output_PC2;
 
 PID_parameter PID1_PC = {CC_CONTROLLER_ID, &output_PC1, &control_signal_PC1};
+PID_parameter PID2_PC = {CC_CONTROLLER_ID, &output_PC2, &control_signal_PC2};
 
 //uint32_t SystemCoreClock;
 
@@ -78,7 +84,7 @@ int main(void)
 
     // Create tasks
     // -------------------
-    xTaskCreate(PID_task, "Position controller 1", 100, 4, 8, &PC_PID1_handle);
+    xTaskCreate(PID_task, "Position controller 1", 100, &PID1_PC, 8, &PC_PID1_handle);
     xTaskCreate(SPI_task, "SPI module", 100, 4, 1, &SPI_handle);
     xTaskCreate(update_values_task, "Update values module", 100, &PID1_PC, 1, &adjust_values_handle);
 

@@ -131,6 +131,7 @@ extern void SPI_task(void * pvParameters)
 
             send_data( 0xFFFF, receivedValue );
 
+            //Do a dummy receive to empty SPI buffer
             INT32U position = receive_data();
 
             xTaskNotify(PC_PID1_handle, position, eSetValueWithOverwrite );

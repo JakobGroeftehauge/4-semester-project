@@ -52,6 +52,7 @@ extern void PID_task( void * pvParameters)
 		//{
 			result_PID = run_PID(passedValue_float, *controller_parameter.control_signal, controller_parameter.id);
 			*controller_parameter.place_to_store_output = voltage_to_duty_cycle(result_PID);
+			xTaskNotifyGive( SPI_task );
 		//}
 	}
 	

@@ -53,11 +53,11 @@ TaskHandle_t adjust_values_handle = NULL;
 volatile INT16S pwm_var;
 volatile INT16S pos_var;
 
-volatile float controlSignal;
+volatile float control_signal_PC1;
 volatile float feedback;
 volatile int16_t output_PC1;
 
-PID_parameter PID1_PC = {CC_CONTROLLER_ID, &output_PC1};
+PID_parameter PID1_PC = {CC_CONTROLLER_ID, &output_PC1, &control_signal_PC1};
 
 //uint32_t SystemCoreClock;
 

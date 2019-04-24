@@ -29,7 +29,7 @@
 PID_controller PID_pool[NOF_PIDS];
 volatile INT16S pwm_var;
 volatile INT16S pos_var;
-extern volatile float controlSignal = 100;
+//extern volatile float controlSignal;
 extern volatile float feedback;
 extern volatile int16_t output_PC1;
 
@@ -41,7 +41,8 @@ extern void PID_task( void * pvParameters)
 	for(;;)
 	{
 		float result_PID; 
-		float passedValue;
+		uint32_t passedValue;
+		float    passedValue_float = *((float*) passedValue);
 		PID_parameter controller_parameter = *((PID_parameter *) pvParameters);
 
 		xTaskNotifyWait(0x00, 0xffffffff, &passedValue, portMAX_DELAY);
@@ -49,8 +50,8 @@ extern void PID_task( void * pvParameters)
 
 		//if(ulTaskNotifyTake(pdTRUE, portMAX_DELAY) == pdTRUE)
 		//{
-			result_PID = run_PID(passedValue, controlSignal, controller_parameter.id);
-			controller_parameter.place_to_store_output = voltage_to_duty_cycle(result_PID);
+			result_PID = run_PID(passedValue_float, *controller_parameter.control_signal, controller_parameter.id);
+			*controller_parameter.place_to_store_output = voltage_to_duty_cycle(result_PID);
 		//}
 	}
 	

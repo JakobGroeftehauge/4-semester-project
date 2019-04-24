@@ -9,11 +9,11 @@ LDS_SRCS += \
 ../tm4c123gh6pm.lds 
 
 C_SRCS += \
-C:/Users/Mads/Documents/GitHub/4-semester-project/C\ libraries/FPGA_comp.c \
-C:/Users/Mads/Documents/GitHub/4-semester-project/C\ libraries/Filter.c \
-C:/Users/Mads/Documents/GitHub/4-semester-project/C\ libraries/PID_FreeRTOS.c \
-C:/Users/Mads/Documents/GitHub/4-semester-project/C\ libraries/SPI.c \
-C:/Users/Mads/Documents/GitHub/4-semester-project/C\ libraries/circular_buffer.c \
+C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/FPGA_comp.c \
+C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/Filter.c \
+C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/PID_FreeRTOS.c \
+C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/SPI.c \
+C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/circular_buffer.c \
 ../common.c \
 ../gpio.c \
 ../heap_2.c \
@@ -94,11 +94,11 @@ C_DEPS__QUOTED += \
 "tm4c123gh6pm_startup_ccs_gcc.d" 
 
 C_SRCS__QUOTED += \
-"C:/Users/Mads/Documents/GitHub/4-semester-project/C libraries/FPGA_comp.c" \
-"C:/Users/Mads/Documents/GitHub/4-semester-project/C libraries/Filter.c" \
-"C:/Users/Mads/Documents/GitHub/4-semester-project/C libraries/PID_FreeRTOS.c" \
-"C:/Users/Mads/Documents/GitHub/4-semester-project/C libraries/SPI.c" \
-"C:/Users/Mads/Documents/GitHub/4-semester-project/C libraries/circular_buffer.c" \
+"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/FPGA_comp.c" \
+"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/Filter.c" \
+"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/PID_FreeRTOS.c" \
+"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/SPI.c" \
+"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/circular_buffer.c" \
 "../common.c" \
 "../gpio.c" \
 "../heap_2.c" \

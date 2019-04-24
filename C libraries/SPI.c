@@ -132,7 +132,9 @@ extern void SPI_task(void * pvParameters)
             send_data( 0xFFFF, receivedValue );
 
             //Do a dummy receive to empty SPI buffer
-            INT16S position = receive_data();
+            INT32U position = receive_data();
+
+            xTaskNotify(PC_PID1_handle, position, eSetValueWithOverwrite )
 
     //        INT8U data_HIGH = position & 0xFF;
     //        INT8U data_LOW = (position >> 8);
@@ -157,7 +159,7 @@ extern void update_values_task(void * pvParameters)
 
     for( ;; )
         {
-            INT16U h = PWM_1;
+            INT16U h = POS_1;
             xQueueSend( SPI_queue,
                         (void * ) &h,
                         0);

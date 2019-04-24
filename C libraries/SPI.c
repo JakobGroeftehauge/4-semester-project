@@ -126,6 +126,7 @@ extern void SPI_task(void * pvParameters)
         INT16S status;
         for( ;; )
         {
+
             status = xQueueReceive( SPI_queue, &receivedValue, portMAX_DELAY);
 
             send_data( 0xFFFF, receivedValue );
@@ -156,8 +157,9 @@ extern void update_values_task(void * pvParameters)
 
     for( ;; )
         {
+            INT16U h = PWM_1;
             xQueueSend( SPI_queue,
-                        PWM_1,
+                        (void * ) &h,
                         0);
 
         //    Tjek op på enheden af tid her

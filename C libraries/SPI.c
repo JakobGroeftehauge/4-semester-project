@@ -121,24 +121,29 @@ extern void SPI_task(void * pvParameters)
 ******************************************************************************/
 {
 
-    //SEND DATA
-    INT16S data;
-    //BaseType_t xQueueReceive( SPI_queue, void * const &data, portMAX_DELAY);
 
-    send_data( 0xFFFF, data );
+        INT16S receivedValue = 0;
+        INT16S status;
+        for( ;; )
+        {
+            status = xQueueReceive( SPI_queue, &receivedValue, portMAX_DELAY);
 
-    //Do a dummy receive to empty SPI buffer
-    INT16S position = receive_data();
+            send_data( 0xFFFF, receivedValue );
 
-    INT8U data_HIGH = position & 0xFF;
-    INT8U data_LOW = (position >> 8);
-//    while( !uart0_tx_rdy() )
-//    {}
-//    uart0_putc(data_LOW);
-//    while( !uart0_tx_rdy() )
-//    {}
-//    uart0_putc(data_HIGH);
+            //Do a dummy receive to empty SPI buffer
+            INT16S position = receive_data();
 
+    //        INT8U data_HIGH = position & 0xFF;
+    //        INT8U data_LOW = (position >> 8);
+    //        while( !uart0_tx_rdy() )
+    //        {}
+    //        uart0_putc(data_LOW);
+    //        while( !uart0_tx_rdy() )
+    //        {}
+    //        uart0_putc(data_HIGH);
+
+
+        }
 }
 
 extern void update_values_task(void * pvParameters)
@@ -149,12 +154,16 @@ extern void update_values_task(void * pvParameters)
 ******************************************************************************/
 {
 
-    xQueueSend( SPI_queue,
-                POS_1,
-                0);
+    for( ;; )
+        {
+            xQueueSend( SPI_queue,
+                        PWM_1,
+                        0);
 
-//    Tjek op på enheden af tid her
-    vTaskDelay(100);
+        //    Tjek op på enheden af tid her
+            vTaskDelay(100);
+        }
+
 
 }
 

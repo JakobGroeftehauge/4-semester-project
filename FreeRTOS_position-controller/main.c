@@ -71,10 +71,12 @@ int main(void)
 
     // Create tasks
     // -------------------
-    //PID PC tasken er udkommenteret da debuggeren bliver stuck derinde pga semaphore
+    //Debuggeren bliver stuck derinde pga semaphore
    // xTaskCreate(PID_PC_task, "Position controller 1", 100, &PID1_PC, 8, &PC_PID1_handle);
 
     xTaskCreate(SPI_task, "SPI module", 100, 4, 1, &SPI_handle);
+
+    //Bruges til at teste passing a structs i queues.
     xTaskCreate(update_values_task, "Update values module", 100, &PID1_PC, 1, &adjust_values_handle);
 
 

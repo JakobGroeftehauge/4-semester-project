@@ -121,56 +121,60 @@ extern void SPI_task(void * pvParameters)
 ******************************************************************************/
 {
         uint8_t received_id = 0;
-        int16_t received_data = 0;
-        INT16U dummyReceive;
+        int16_t received_data_queue = 0;
+        float received_data_SPI = 0;
+        int16_t dummyReceive;
 
         SPI_queue_element received_struct;
-
-        BaseType_t qStatus;
         for( ;; )
         {
-            qStatus = xQueueReceive( SPI_queue, &received_struct, portMAX_DELAY);
-
-            if( qStatus == pdPASS )
+            if( xQueueReceive( SPI_queue, &received_struct, portMAX_DELAY) == pdPASS )
             {
+                //Get id and data from SPI_queue
                 received_id = received_struct.id;
-                received_data = received_struct.data;
+                received_data_queue = received_struct.data;
 
-                vTaskDelay(50);
+                // Send data to slave
+                send_data( received_data_queue, received_id );
+
+                // Receive data from slave and put into correct buffer
+                switch( received_id )
+                {
+                case POS_1:
+                    received_data_SPI = receive_data();
+                    //Semaphore
+                        //Put in correct buffer
+                    break;
+
+                case VEL_1:
+                    received_data_SPI = receive_data();
+                    //Semaphore
+                        //Put in correct buffer
+                    break;
+
+                case POS_2:
+                    received_data_SPI = receive_data();
+                    //Semaphore
+                        //Put in correct buffer
+                    break;
+
+                case VEL_2:
+                    received_data_SPI = receive_data();
+                    //Semaphore
+                        //Put in correct buffer
+                    break;
+
+                case PROTOCOL_SLAVE:
+                    received_data_SPI = receive_data();
+                    //Semaphore
+                        //Put in correct buffer
+                    break;
+
+                // Do dummy receive to empty SPI buffer
+                default:
+                    dummyReceive = receive_data();
+                }
             }
-
-
-
-
-
-
-
-//            if( (xQueueReceive( SPI_queue, &receivedValue, 0)) == pdPASS )
-//            {
-//                send_data( 0xFFFF, receivedValue );
-//                INT32U position = receive_data();
-//                xTaskNotify(PC_PID1_handle, position, eSetValueWithOverwrite );
-//            }
-//
-//            if ( (ulTaskNotifyTake(pdTRUE, 0 )) > 0 )
-//            {
-//                PWM_value = * PID1_PC.place_to_store_output;
-//                send_data( PWM_value, PWM_1);
-//                dummyReceive = receive_data();
-//            }
-
-
-
-    //        INT8U data_HIGH = position & 0xFF;
-    //        INT8U data_LOW = (position >> 8);
-    //        while( !uart0_tx_rdy() )
-    //        {}
-    //        uart0_putc(data_LOW);
-    //        while( !uart0_tx_rdy() )
-    //        {}
-    //        uart0_putc(data_HIGH);
-
-
         }
 }
 
@@ -192,8 +196,6 @@ extern void update_values_task(void * pvParameters)
             SPI_queue_element SPI_struct_send;
             SPI_struct_send.id = id;
             SPI_struct_send.data = data;
-
-
 
             xQueueSend( SPI_queue, (void * ) &SPI_struct_send, 0);
 

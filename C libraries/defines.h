@@ -27,10 +27,15 @@ extern volatile int16_t output_PC1;
 
 typedef volatile struct {
     uint8_t id;
+    uint8_t slave_id;
     int16_t *place_to_store_output;
+    SemaphoreHandle_t output_semaphore;
     float  *reference_signal;
+    SemaphoreHandle_t *reference_semaphore;
     float  *feedback_signal;
+    SemaphoreHandle_t *feedback_semaphore;
     uint16_t delayTime;
+    SemaphoreHandle_t queue_semaphore;
 } PID_parameter;
 
 

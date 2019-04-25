@@ -49,8 +49,8 @@ volatile float feedback;
 volatile int16_t output_PC1;
 volatile int16_t output_PC2;
 
-PID_parameter PID1_PC = {CC_CONTROLLER_ID, &output_PC1, &control_signal_PC1};
-PID_parameter PID2_PC = {CC_CONTROLLER_ID, &output_PC2, &control_signal_PC2};
+//PID_parameter PID1_PC = {CC_CONTROLLER_ID, &output_PC1, &control_signal_PC1};
+//PID_parameter PID2_PC = {CC_CONTROLLER_ID, &output_PC2, &control_signal_PC2};
 
 //uint32_t SystemCoreClock;
 

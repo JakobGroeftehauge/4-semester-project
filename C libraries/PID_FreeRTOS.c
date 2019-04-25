@@ -41,13 +41,37 @@ extern void PID_PC_task(void* pvParameters)
     TickType_t xLastWakeTime;
     float result_PID;
 
-    xLastWakeTime = xTaskGetTickCount();
+
 
     for (;;)
     {
+        xLastWakeTime = xTaskGetTickCount();
 
-        result_PID = run_PID(*controller_parameter.feedback_signal, *controller_parameter.reference_signal, controller_parameter.id);
-        *controller_parameter.place_to_store_output = voltage_to_duty_cycle(result_PID);
+        if(xSemaphoreTake(controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
+        {
+            //ask for new value
+            /// Give semaphore
+            xSemaphoreGive(controller_parameter.queue_semaphore);
+        }
+
+        if(xSemaphoreTake(controller_parameter.feedback_semaphore, portMAX_DELAY)==pdTRUE)
+        {
+            if(xSemaphoreTake(controller_parameter.reference_semaphore, portMAX_DELAY)==pdTRUE)
+            {
+                result_PID = run_PID(*controller_parameter.feedback_signal, *controller_parameter.reference_signal, controller_parameter.id);
+                xSemaphoreGive(controller_parameter.reference_semaphore);
+            }
+
+            xSemaphoreGive(controller_parameter.feedback_semaphore);
+        }
+
+
+        if(xSemaphoreTake(controller_parameter.output_semaphore, portMAX_DELAY)==pdTRUE)
+        {
+            *controller_parameter.place_to_store_output = voltage_to_duty_cycle(result_PID);
+            xSemaphoreGive(controller_parameter.output_semaphore);
+        }
+
         vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS(controller_parameter.delayTime) );
     }
 

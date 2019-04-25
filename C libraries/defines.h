@@ -12,7 +12,7 @@
 #include "semphr.h"
 #include "PID_FreeRTOS.h"
 
-// Slaves
+
 #define POS_1           0
 #define VEL_1           1
 #define CUR_1           2
@@ -38,6 +38,10 @@ typedef volatile struct {
     SemaphoreHandle_t queue_semaphore;
 } PID_parameter;
 
+typedef volatile struct {
+    uint8_t id;
+    int16_t data;
+} SPI_queue_element;
 
 
 PID_parameter PID1_PC;
@@ -48,6 +52,7 @@ PID_parameter PID2_PC;
 
 // Queues
 QueueHandle_t SPI_queue;
+
 
 //Task handles
 extern TaskHandle_t PC_PID1_handle;

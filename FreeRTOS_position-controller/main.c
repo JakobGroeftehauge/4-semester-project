@@ -66,12 +66,14 @@ int main(void)
     // Create queues
     // -------------------
     SPI_queue = xQueueCreate(100, //Number of elements in queue
-                             2); //Number of bytes for each element
+                             sizeof( SPI_queue_element ) ); //Number of bytes for each element
 
 
     // Create tasks
     // -------------------
-    xTaskCreate(PID_PC_task, "Position controller 1", 100, &PID1_PC, 8, &PC_PID1_handle);
+    //PID PC tasken er udkommenteret da debuggeren bliver stuck derinde pga semaphore
+   // xTaskCreate(PID_PC_task, "Position controller 1", 100, &PID1_PC, 8, &PC_PID1_handle);
+
     xTaskCreate(SPI_task, "SPI module", 100, 4, 1, &SPI_handle);
     xTaskCreate(update_values_task, "Update values module", 100, &PID1_PC, 1, &adjust_values_handle);
 

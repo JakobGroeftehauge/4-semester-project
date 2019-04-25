@@ -42,7 +42,6 @@ extern void PID_PC_task(void* pvParameters)
     float result_PID;
 
 
-
     for (;;)
     {
         xLastWakeTime = xTaskGetTickCount();

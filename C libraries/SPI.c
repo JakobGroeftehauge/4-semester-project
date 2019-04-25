@@ -120,27 +120,44 @@ extern void SPI_task(void * pvParameters)
 *   Function : -
 ******************************************************************************/
 {
-        INT16S receivedValue = 0;
-        INT16S PWM_value;
+        uint8_t received_id = 0;
+        int16_t received_data = 0;
         INT16U dummyReceive;
-        //SPI_queue_element receivedValue = 0;
-        INT16S status;
+
+        SPI_queue_element received_struct;
+
+        BaseType_t qStatus;
         for( ;; )
         {
+            qStatus = xQueueReceive( SPI_queue, &received_struct, portMAX_DELAY);
 
-            if( (xQueueReceive( SPI_queue, &receivedValue, 0)) == pdPASS )
+            if( qStatus == pdPASS )
             {
-                send_data( 0xFFFF, receivedValue );
-                INT32U position = receive_data();
-                xTaskNotify(PC_PID1_handle, position, eSetValueWithOverwrite );
+                received_id = received_struct.id;
+                received_data = received_struct.data;
+
+                vTaskDelay(50);
             }
 
-            if ( (ulTaskNotifyTake(pdTRUE, 0 )) > 0 )
-            {
-                PWM_value = * PID1_PC.place_to_store_output;
-                send_data( PWM_value, PWM_1);
-                dummyReceive = receive_data();
-            }
+
+
+
+
+
+
+//            if( (xQueueReceive( SPI_queue, &receivedValue, 0)) == pdPASS )
+//            {
+//                send_data( 0xFFFF, receivedValue );
+//                INT32U position = receive_data();
+//                xTaskNotify(PC_PID1_handle, position, eSetValueWithOverwrite );
+//            }
+//
+//            if ( (ulTaskNotifyTake(pdTRUE, 0 )) > 0 )
+//            {
+//                PWM_value = * PID1_PC.place_to_store_output;
+//                send_data( PWM_value, PWM_1);
+//                dummyReceive = receive_data();
+//            }
 
 
 
@@ -167,13 +184,21 @@ extern void update_values_task(void * pvParameters)
 
     for( ;; )
         {
-            INT16U h = POS_1;
-            xQueueSend( SPI_queue,
-                        (void * ) &h,
-                        0);
+            //INT16U h = PWM_1;
+
+            int8_t id = PWM_1;
+            int16_t data = 0x00CC;
+
+            SPI_queue_element SPI_struct_send;
+            SPI_struct_send.id = id;
+            SPI_struct_send.data = data;
+
+
+
+            xQueueSend( SPI_queue, (void * ) &SPI_struct_send, 0);
 
         //    Tjek op på enheden af tid her
-            vTaskDelay(100);
+           vTaskDelay(100);
         }
 
 

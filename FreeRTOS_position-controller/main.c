@@ -66,7 +66,7 @@ int main(void)
     // Create queues
     // -------------------
     SPI_queue = xQueueCreate(100, //Number of elements in queue
-                             sizeof( SPI_queue_element ) ); //Number of bytes for each element
+                             sizeof( struct SPI_queue_element  ) ); //Number of bytes for each element
 
 
     // Create tasks

@@ -125,7 +125,7 @@ extern void SPI_task(void * pvParameters)
         float received_data_SPI = 0;
         int16_t dummyReceive;
 
-        SPI_queue_element received_struct;
+        struct SPI_queue_element received_struct;
         for( ;; )
         {
             if( xQueueReceive( SPI_queue, &received_struct, portMAX_DELAY) == pdPASS )
@@ -185,23 +185,17 @@ extern void update_values_task(void * pvParameters)
 *   Function : -
 ******************************************************************************/
 {
-
     for( ;; )
-        {
-            //INT16U h = PWM_1;
+    {
+        struct SPI_queue_element SPI_struct_send;
 
-            int8_t id = PWM_1;
-            int16_t data = 0x00CC;
+        SPI_struct_send.id = PWM_1;
+        SPI_struct_send.data = 0x00CC;
 
-            SPI_queue_element SPI_struct_send;
-            SPI_struct_send.id = id;
-            SPI_struct_send.data = data;
+        xQueueSend( SPI_queue, (void * ) &SPI_struct_send, 0);
 
-            xQueueSend( SPI_queue, (void * ) &SPI_struct_send, 0);
-
-        //    Tjek op på enheden af tid her
-           vTaskDelay(100);
-        }
+        vTaskDelay(100);
+    }
 
 
 }

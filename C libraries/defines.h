@@ -38,10 +38,10 @@ typedef volatile struct {
     SemaphoreHandle_t queue_semaphore;
 } PID_parameter;
 
-typedef volatile struct {
+typedef volatile struct SPI_queue_element {
     uint8_t id;
     int16_t data;
-} SPI_queue_element;
+};
 
 
 PID_parameter PID1_PC;

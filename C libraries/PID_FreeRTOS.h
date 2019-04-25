@@ -49,7 +49,7 @@ typedef struct
 
 /*************************  Function interfaces ****************************/
 
-extern void PID_task(void *pvParameter );
+extern void PID_PC_task(void *pvParameter );
 /*****************************************************************************
 *   Function : Task for the PID controller
 ******************************************************************************/

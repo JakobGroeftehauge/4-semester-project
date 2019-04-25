@@ -33,31 +33,53 @@ PID_controller PID_pool[NOF_PIDS];
 //extern volatile float feedback;
 //extern volatile int16_t output_PC1;
 
-extern void PID_task( void * pvParameters)
-/*****************************************************************************
-*   Function : PID controller task
-******************************************************************************/
+
+extern void PID_PC_task(void* pvParameters)
 {
-	for(;;)
-	{
-		float result_PID; 
-		uint32_t passedValue;
-		float    passedValue_float = *((float*) passedValue);
-		PID_parameter controller_parameter = *((PID_parameter *) pvParameters);
 
-		xTaskNotifyWait(0x00, 0xffffffff, &passedValue, portMAX_DELAY);
+    PID_parameter controller_parameter = *((PID_parameter *) pvParameters);
+    TickType_t xLastWakeTime;
+    float result_PID;
 
+    xLastWakeTime = xTaskGetTickCount();
 
-		//if(ulTaskNotifyTake(pdTRUE, portMAX_DELAY) == pdTRUE)
-		//{
-			result_PID = run_PID(passedValue_float, *controller_parameter.control_signal, controller_parameter.id);
-			*controller_parameter.place_to_store_output = voltage_to_duty_cycle(result_PID);
-			xTaskNotifyGive( SPI_task );
-		//}
-	}
-	
+    for (;;)
+    {
+
+        result_PID = run_PID(*controller_parameter.feedback_signal, *controller_parameter.reference_signal, controller_parameter.id);
+        *controller_parameter.place_to_store_output = voltage_to_duty_cycle(result_PID);
+        vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS(controller_parameter.delayTime) );
+    }
 
 }
+
+//extern void PID_task( void * pvParameters)
+///*****************************************************************************
+//*   Function : PID controller task
+//******************************************************************************/
+//{
+//	for(;;)
+//	{
+//		float result_PID;
+//		uint32_t passedValue;
+//		float    passedValue_float = *((float*) passedValue);
+//		PID_parameter controller_parameter = *((PID_parameter *) pvParameters);
+//
+//		xTaskNotifyWait(0x00, 0xffffffff, &passedValue, portMAX_DELAY);
+//
+//
+//		//if(ulTaskNotifyTake(pdTRUE, portMAX_DELAY) == pdTRUE)
+//		//{
+//			result_PID = run_PID(passedValue_float, *controller_parameter.control_signal, controller_parameter.id);
+//			*controller_parameter.place_to_store_output = voltage_to_duty_cycle(result_PID);
+//			xTaskNotifyGive( SPI_task );
+//		//}
+//	}
+//
+//
+//}
+
+
 
 
 extern void init_PIDs()

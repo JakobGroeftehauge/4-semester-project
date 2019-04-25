@@ -71,7 +71,7 @@ int main(void)
 
     // Create tasks
     // -------------------
-    xTaskCreate(PID_task, "Position controller 1", 100, &PID1_PC, 8, &PC_PID1_handle);
+    xTaskCreate(PID_PC_task, "Position controller 1", 100, &PID1_PC, 8, &PC_PID1_handle);
     xTaskCreate(SPI_task, "SPI module", 100, 4, 1, &SPI_handle);
     xTaskCreate(update_values_task, "Update values module", 100, &PID1_PC, 1, &adjust_values_handle);
 

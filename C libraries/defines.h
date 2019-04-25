@@ -28,7 +28,9 @@ extern volatile int16_t output_PC1;
 typedef volatile struct {
     uint8_t id;
     int16_t *place_to_store_output;
-    float  *control_signal;
+    float  *reference_signal;
+    float  *feedback_signal;
+    uint16_t delayTime;
 } PID_parameter;
 
 

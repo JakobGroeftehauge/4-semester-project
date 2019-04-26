@@ -18,6 +18,9 @@
 //Task handles
 TaskHandle_t PC_PID1_handle = NULL;
 TaskHandle_t PC_PID2_handle = NULL;
+TaskHandle_t VC_PID1_handle = NULL;
+TaskHandle_t VC_PID2_handle = NULL;
+
 
 TaskHandle_t SPI_handle = NULL;
 TaskHandle_t adjust_values_handle = NULL;

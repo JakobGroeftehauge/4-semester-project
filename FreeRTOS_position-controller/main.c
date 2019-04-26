@@ -1,14 +1,12 @@
 /***************************** Include files *******************************/
 
 /* Standard includes. */
+#include <setup.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stddef.h>
 #include "EMP_type.h"
 #include "defines.h"
-#include "setup_sem_queue.h"
-
-/* Kernel includes. */
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"

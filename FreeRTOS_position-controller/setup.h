@@ -1,6 +1,6 @@
 
-#ifndef SETUP_SEM_QUEUE_H_
-#define SETUP_SEM_QUEUE_H_
+#ifndef SETUP_H_
+#define SETUP_H_
 
 /***************************** Include files *******************************/
 #include "tm4c123gh6pm.h"
@@ -28,5 +28,11 @@ extern void init_queue();
 *   Function : -
 ******************************************************************************/
 
+extern void init_parameters();
+/*****************************************************************************
+*   Input    : -
+*   Output   : -
+*   Function : -
+******************************************************************************/
 
-#endif /* SETUP_SEM_QUEUE_H_ */
+#endif /* SETUP_H_ */

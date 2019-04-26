@@ -38,9 +38,16 @@ extern void PID_PC_task(void* pvParameters)
 {
 
     PID_parameter controller_parameter = *((PID_parameter *) pvParameters);
+    struct SPI_queue_element data_request;
     TickType_t xLastWakeTime;
     float result_PID;
+    float temp_feedback;
+    float temp_reference;
+    int16_t temp_output;
 
+
+    data_request.id = controller_parameter.slave_id;
+    data_request.data = 0xFFFF;
 
     for (;;)
     {
@@ -48,26 +55,31 @@ extern void PID_PC_task(void* pvParameters)
 
         if(xSemaphoreTake(controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
         {
-            //ask for new value
-            /// Give semaphore
+            xQueueSend( SPI_queue, (void * ) &data_request, 0);
             xSemaphoreGive(controller_parameter.queue_semaphore);
         }
 
-        if(xSemaphoreTake(controller_parameter.feedback_semaphore, portMAX_DELAY)==pdTRUE)
+        if(xSemaphoreTake(controller_parameter.feedback_semaphore, portMAX_DELAY) == pdTRUE)
         {
-            if(xSemaphoreTake(controller_parameter.reference_semaphore, portMAX_DELAY)==pdTRUE)
+            if(xSemaphoreTake(controller_parameter.reference_semaphore, portMAX_DELAY) == pdTRUE)
             {
-                result_PID = run_PID(*controller_parameter.feedback_signal, *controller_parameter.reference_signal, controller_parameter.id);
+
+                temp_feedback = *controller_parameter.feedback_signal;
+                temp_reference = *controller_parameter.reference_signal;
                 xSemaphoreGive(controller_parameter.reference_semaphore);
+
+
             }
 
-            xSemaphoreGive(controller_parameter.feedback_semaphore);
+            result_PID = run_PID(temp_feedback, temp_reference, controller_parameter.id);
+
         }
 
+        temp_output = voltage_to_duty_cycle(result_PID);
 
         if(xSemaphoreTake(controller_parameter.output_semaphore, portMAX_DELAY)==pdTRUE)
         {
-            *controller_parameter.place_to_store_output = voltage_to_duty_cycle(result_PID);
+            *controller_parameter.place_to_store_output = temp_output;
             xSemaphoreGive(controller_parameter.output_semaphore);
         }
 

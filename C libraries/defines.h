@@ -36,6 +36,7 @@ typedef volatile struct {
     SemaphoreHandle_t *feedback_semaphore;
     uint16_t delayTime;
     SemaphoreHandle_t queue_semaphore;
+    uint8_t output_id;
 } PID_parameter;
 
 typedef volatile struct SPI_queue_element {

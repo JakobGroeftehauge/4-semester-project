@@ -88,6 +88,65 @@ extern void PID_PC_task(void* pvParameters)
 
 }
 
+
+extern void PID_VC_task(void* pvParameters)
+{
+
+    PID_parameter controller_parameter = *((PID_parameter *) pvParameters);
+    struct SPI_queue_element data_request;
+    struct SPI_queue_element data_to_send;
+    TickType_t xLastWakeTime;
+    float result_PID;
+    float temp_feedback;
+    float temp_reference;
+    int16_t temp_output;
+
+
+    data_request.id = controller_parameter.slave_id;
+    data_request.data = 0xFFFF;
+    data_to_send.id = controller_parameter.output_id;
+
+    for (;;)
+    {
+        xLastWakeTime = xTaskGetTickCount();
+
+        if(xSemaphoreTake(controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
+        {
+            xQueueSend( SPI_queue, (void * ) &data_request, 0);
+            xSemaphoreGive(controller_parameter.queue_semaphore);
+        }
+
+        if(xSemaphoreTake(controller_parameter.feedback_semaphore, portMAX_DELAY) == pdTRUE)
+        {
+            if(xSemaphoreTake(controller_parameter.reference_semaphore, portMAX_DELAY) == pdTRUE)
+            {
+
+                temp_feedback = *controller_parameter.feedback_signal;
+                temp_reference = *controller_parameter.reference_signal;
+                xSemaphoreGive(controller_parameter.reference_semaphore);
+
+
+            }
+
+            result_PID = run_PID(temp_feedback, temp_reference, controller_parameter.id);
+
+        }
+
+            data_to_send.data = voltage_to_duty_cycle(result_PID);
+
+
+        if(xSemaphoreTake(controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
+        {
+            xQueueSendToFront( SPI_queue, (void * ) &data_to_send, 0);
+            xSemaphoreGive(controller_parameter.queue_semaphore);
+        }
+
+
+        vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS(controller_parameter.delayTime) );
+    }
+
+}
+
 //extern void PID_task( void * pvParameters)
 ///*****************************************************************************
 //*   Function : PID controller task

@@ -6,6 +6,7 @@
 #include <stddef.h>
 #include "EMP_type.h"
 #include "defines.h"
+#include "setup_sem_queue.h"
 
 /* Kernel includes. */
 #include "FreeRTOS.h"
@@ -61,12 +62,8 @@ int main(void)
     //SystemCoreClock;
     //init_systick();
     init_gpio();
-
-
-    // Create queues
-    // -------------------
-    SPI_queue = xQueueCreate(100, //Number of elements in queue
-                             sizeof( struct SPI_queue_element  ) ); //Number of bytes for each element
+    init_sem();
+    init_queue();
 
 
     // Create tasks

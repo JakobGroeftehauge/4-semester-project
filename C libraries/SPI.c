@@ -34,7 +34,7 @@ extern volatile INT16S pos_var;
 extern volatile INT16S pwm_var;
 
 /*****************************   Functions   *******************************/
-void SPI_init(void)
+void SPI_init()
 /*****************************************************************************
 *   Input    :
 *   Output   :
@@ -190,7 +190,8 @@ extern void update_values_task(void * pvParameters)
         struct SPI_queue_element SPI_struct_send;
 
         SPI_struct_send.id = PWM_1;
-        SPI_struct_send.data = 0x00CC;
+
+        SPI_struct_send.data = 0xFFFF;
 
         xQueueSend( SPI_queue, (void * ) &SPI_struct_send, 0);
 
@@ -215,7 +216,7 @@ void data_transmit(INT16U data)
 
 }
 
-void send_data(INT16U data, INT8U slave_no)
+void send_data(uint16_t data, uint8_t slave_no)
 /*****************************************************************************
 *   Input    :byte that is being sent by SPI
 *             slave select
@@ -278,7 +279,7 @@ void send_data(INT16U data, INT8U slave_no)
     }
 }
 
-INT16S receive_data()
+int16_t receive_data()
 /*****************************************************************************
 *   Input    :
 *   Output   : The function return the received data.

@@ -1,6 +1,7 @@
 #ifndef DEFINES_H_
 #define DEFINES_H_
 
+/***************************** Include files *******************************/
 #include <stdint.h>
 #include <stdio.h>
 #include <stddef.h>
@@ -12,7 +13,7 @@
 #include "semphr.h"
 #include "PID_FreeRTOS.h"
 
-
+/*****************************    Defines    *******************************/
 #define POS_1           0
 #define VEL_1           1
 #define CUR_1           2
@@ -23,8 +24,25 @@
 #define PWM_2           7
 #define PROTOCOL_SLAVE  8
 
-extern volatile int16_t output_PC1;
 
+/********************** External declaration of Variables ******************/
+extern volatile int16_t control_1_pos;
+extern volatile int16_t control_1_vel;
+extern volatile int16_t control_1_cur;
+extern volatile int16_t control_2_pos;
+extern volatile int16_t control_2_vel;
+extern volatile int16_t control_2_cur;
+
+extern volatile int16_t control_1_pos_ref;
+extern volatile int16_t control_1_vel_ref;
+extern volatile int16_t control_1_cur_ref;
+extern volatile int16_t control_2_pos_ref;
+extern volatile int16_t control_2_vel_ref;
+extern volatile int16_t control_2_cur_ref;
+
+extern volatile int16_t glob_protocol;
+
+/*****************************     Structs     ****************************/
 typedef volatile struct {
     uint8_t id;
     uint8_t slave_id;
@@ -54,6 +72,22 @@ PID_parameter PID2_PC;
 // Queues
 QueueHandle_t SPI_queue;
 
+// Semaphores
+SemaphoreHandle_t POS_1_SEM;
+SemaphoreHandle_t VEL_1_SEM;
+SemaphoreHandle_t CUR_1_SEM;
+SemaphoreHandle_t POS_2_SEM;
+SemaphoreHandle_t VEL_2_SEM;
+SemaphoreHandle_t CUR_2_SEM;
+
+SemaphoreHandle_t POS_1_REF_SEM;
+SemaphoreHandle_t VEL_1_REF_SEM;
+SemaphoreHandle_t CUR_1_REF_SEM;
+SemaphoreHandle_t POS_2_REF_SEM;
+SemaphoreHandle_t VEL_2_REF_SEM;
+SemaphoreHandle_t CUR_2_REF_SEM;
+
+SemaphoreHandle_t QUEUE_SEM;
 
 //Task handles
 extern TaskHandle_t PC_PID1_handle;

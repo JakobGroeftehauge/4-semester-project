@@ -1,6 +1,23 @@
 #include "FPGA_comp.h"
 #include "FreeRTOS.h"
 #include "defines.h"
+#include "PID_freeRTOS.h"
+
+volatile int16_t control_1_pos;
+volatile int16_t control_1_vel;
+volatile int16_t control_1_cur;
+volatile int16_t control_2_pos;
+volatile int16_t control_2_vel;
+volatile int16_t control_2_cur;
+
+volatile int16_t control_1_pos_ref;
+volatile int16_t control_1_vel_ref;
+volatile int16_t control_1_cur_ref;
+volatile int16_t control_2_pos_ref;
+volatile int16_t control_2_vel_ref;
+volatile int16_t control_2_cur_ref;
+
+volatile int16_t glob_protocol;
 
 extern void init_sem()
 /*****************************************************************************
@@ -46,61 +63,65 @@ extern void init_parameters()
 *   Function : -
 ******************************************************************************/
 {
-    static const PID_parameter PC_1_parameter =
-    {
-     // id
-     // slave_id
-     // *place to store output
-     // *output semaphore
-     // *reference_signal
-     // *reference_semaphore
-     // *feedback_semaphore
-     // delay time
-     // *queue_semaphore
-     // output id
+     struct PID_parameter PC_1_parameter =
+     {
+     PC_CONTROLLER_1_ID,// id
+     POS_1,// slave_id
+     &control_1_vel_ref, // *place to store output
+     &VEL_1_REF_SEM, // *output semaphore
+     &control_1_pos_ref, // *reference_signal
+     &POS_1_REF_SEM, // *reference_semaphore
+     &control_1_pos, // *feedback_signal
+     &POS_1_SEM, // *feedback_semaphore
+     20, // delay time (ms)
+     &QUEUE_SEM, // *queue_semaphore
+     0// output id
     };
 
 
-    static const PID_parameter VC_1_parameter =
+    struct PID_parameter VC_1_parameter =
     {
-         // id
-         // slave_id
-         // *place to store output
-         // *output semaphore
-         // *reference_signal
-         // *reference_semaphore
-         // *feedback_semaphore
-         // delay time
-         // *queue_semaphore
-         // output id
+     VC_CONTROLLER_1_ID,// id
+     VEL_1,// slave_id
+     &control_1_vel_ref, // *place to store output (BRUGES IKKE)
+     &VEL_1_REF_SEM, // *output semaphore (BRUGES IKKE)
+     &control_1_vel_ref, // *reference_signal
+     &VEL_1_REF_SEM, // *reference_semaphore
+     &control_1_vel, // *feedback_signal
+     &VEL_1_SEM, // *feedback_semaphore
+     5, // delay time (ms)
+     &QUEUE_SEM, // *queue_semaphore
+     0// output id
     };
 
-    static const PID_parameter PC_2_parameter =
+    struct PID_parameter PC_2_parameter =
     {
-         // id
-         // slave_id
-         // *place to store output
-         // *output semaphore
-         // *reference_signal
-         // *reference_semaphore
-         // *feedback_semaphore
-         // delay time
-         // *queue_semaphore
-         // output id
+     PC_CONTROLLER_2_ID,// id
+     POS_2,// slave_id
+     &control_2_vel_ref, // *place to store output
+     &VEL_2_REF_SEM, // *output semaphore
+     &control_2_pos_ref, // *reference_signal
+     &POS_2_REF_SEM, // *reference_semaphore
+     &control_2_pos, // *feedback_signal
+     &POS_2_SEM, // *feedback_semaphore
+     20, // delay time (ms)
+     &QUEUE_SEM, // *queue_semaphore
+     0// output id
     };
 
-    static const PID_parameter VC_2_parameter =
+    struct PID_parameter VC_2_parameter =
     {
-         // id
-         // slave_id
-         // *place to store output
-         // *output semaphore
-         // *reference_signal
-         // *reference_semaphore
-         // *feedback_semaphore
-         // delay time
-         // *queue_semaphore
-         // output id
+     VC_CONTROLLER_2_ID,// id
+     VEL_2,             // slave_id
+     &control_2_vel_ref, // *place to store output (BRUGES IKKE)
+     &VEL_2_REF_SEM, // *output semaphore (BRUGES IKKE)
+     &control_2_vel_ref, // *reference_signal
+     &VEL_2_REF_SEM, // *reference_semaphore
+     &control_2_vel, // *feedback_signal
+     &VEL_2_SEM, // *feedback_semaphore
+     5, // delay time (ms)
+     &QUEUE_SEM, // *queue_semaphore
+     0// output id
     };
 
 }

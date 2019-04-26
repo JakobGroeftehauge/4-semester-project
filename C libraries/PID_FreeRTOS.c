@@ -32,7 +32,7 @@ PID_controller PID_pool[NOF_PIDS];
 extern void PID_PC_task(void* pvParameters)
 {
 
-    PID_parameter controller_parameter = *((PID_parameter *) pvParameters);
+    struct PID_parameter controller_parameter = *((struct PID_parameter *) pvParameters);
     struct SPI_queue_element data_request;
     TickType_t xLastWakeTime;
     float result_PID = 0;
@@ -87,7 +87,7 @@ extern void PID_PC_task(void* pvParameters)
 extern void PID_VC_task(void* pvParameters)
 {
 
-    PID_parameter controller_parameter = *((PID_parameter *) pvParameters);
+    struct PID_parameter controller_parameter = *((struct PID_parameter *) pvParameters);
     struct SPI_queue_element data_request;
     struct SPI_queue_element data_to_send;
     TickType_t xLastWakeTime;

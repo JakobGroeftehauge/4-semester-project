@@ -26,10 +26,10 @@
 #include "emp_type.h"
 
 /*****************************    Defines    *******************************/
-#define PC_CONTROLLER_1_ID    FILTER_1
-#define VC_CONTROLLER_1_ID    FILTER_2
-#define PC_CONTROLLER_2_ID    FILTER_3
-#define VC_CONTROLLER_2_ID    FILTER_4
+#define PC_CONTROLLER_1_ID    0
+#define VC_CONTROLLER_1_ID    1
+#define PC_CONTROLLER_2_ID    2
+#define VC_CONTROLLER_2_ID    3
 
 typedef struct
 {

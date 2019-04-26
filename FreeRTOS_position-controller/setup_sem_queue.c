@@ -16,12 +16,12 @@ extern void init_sem()
     VEL_2_SEM = xSemaphoreCreateBinary();
     CUR_2_SEM = xSemaphoreCreateBinary();
 
-    POS_1_SET_SEM = xSemaphoreCreateBinary();
-    VEL_1_SET_SEM = xSemaphoreCreateBinary();
-    CUR_1_SET_SEM = xSemaphoreCreateBinary();
-    POS_2_SET_SEM = xSemaphoreCreateBinary();
-    VEL_2_SET_SEM = xSemaphoreCreateBinary();
-    CUR_2_SET_SEM = xSemaphoreCreateBinary();
+    POS_1_REF_SEM = xSemaphoreCreateBinary();
+    VEL_1_REF_SEM = xSemaphoreCreateBinary();
+    CUR_1_REF_SEM = xSemaphoreCreateBinary();
+    POS_2_REF_SEM = xSemaphoreCreateBinary();
+    VEL_2_REF_SEM = xSemaphoreCreateBinary();
+    CUR_2_REF_SEM = xSemaphoreCreateBinary();
 
     QUEUE_SEM = xSemaphoreCreateBinary();
 

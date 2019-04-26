@@ -26,7 +26,21 @@
 
 
 /********************** External declaration of Variables ******************/
-extern volatile int16_t output_PC1;
+extern volatile int16_t control_1_pos;
+extern volatile int16_t control_1_vel;
+extern volatile int16_t control_1_cur;
+extern volatile int16_t control_2_pos;
+extern volatile int16_t control_2_vel;
+extern volatile int16_t control_2_cur;
+
+extern volatile int16_t control_1_pos_ref;
+extern volatile int16_t control_1_vel_ref;
+extern volatile int16_t control_1_cur_ref;
+extern volatile int16_t control_2_pos_ref;
+extern volatile int16_t control_2_vel_ref;
+extern volatile int16_t control_2_cur_ref;
+
+extern volatile int16_t glob_protocol;
 
 /*****************************     Structs     ****************************/
 typedef volatile struct {
@@ -65,12 +79,12 @@ SemaphoreHandle_t POS_2_SEM;
 SemaphoreHandle_t VEL_2_SEM;
 SemaphoreHandle_t CUR_2_SEM;
 
-SemaphoreHandle_t POS_1_SET_SEM;
-SemaphoreHandle_t VEL_1_SET_SEM;
-SemaphoreHandle_t CUR_1_SET_SEM;
-SemaphoreHandle_t POS_2_SET_SEM;
-SemaphoreHandle_t VEL_2_SET_SEM;
-SemaphoreHandle_t CUR_2_SET_SEM;
+SemaphoreHandle_t POS_1_REF_SEM;
+SemaphoreHandle_t VEL_1_REF_SEM;
+SemaphoreHandle_t CUR_1_REF_SEM;
+SemaphoreHandle_t POS_2_REF_SEM;
+SemaphoreHandle_t VEL_2_REF_SEM;
+SemaphoreHandle_t CUR_2_REF_SEM;
 
 SemaphoreHandle_t QUEUE_SEM;
 

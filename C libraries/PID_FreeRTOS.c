@@ -22,16 +22,11 @@
 
 
 /*****************************    Defines    *******************************/
-#define NOF_PIDS     2
+#define NOF_PIDS     4
 
 
 /*****************************   Variables   *******************************/
 PID_controller PID_pool[NOF_PIDS];
-//volatile INT16S pwm_var;
-//volatile INT16S pos_var;
-//extern volatile float controlSignal;
-//extern volatile float feedback;
-//extern volatile int16_t output_PC1;
 
 
 extern void PID_PC_task(void* pvParameters)
@@ -40,10 +35,10 @@ extern void PID_PC_task(void* pvParameters)
     PID_parameter controller_parameter = *((PID_parameter *) pvParameters);
     struct SPI_queue_element data_request;
     TickType_t xLastWakeTime;
-    float result_PID;
-    float temp_feedback;
-    float temp_reference;
-    int16_t temp_output;
+    float result_PID = 0;
+    float temp_feedback = 0;
+    float temp_reference = 0;
+    int16_t temp_output = 0;
 
 
     data_request.id = controller_parameter.slave_id;
@@ -96,11 +91,9 @@ extern void PID_VC_task(void* pvParameters)
     struct SPI_queue_element data_request;
     struct SPI_queue_element data_to_send;
     TickType_t xLastWakeTime;
-    float result_PID;
-    float temp_feedback;
-    float temp_reference;
-    int16_t temp_output;
-
+    float result_PID = 0;
+    float temp_feedback = 0;
+    float temp_reference = 0;
 
     data_request.id = controller_parameter.slave_id;
     data_request.data = 0xFFFF;
@@ -124,8 +117,6 @@ extern void PID_VC_task(void* pvParameters)
                 temp_feedback = *controller_parameter.feedback_signal;
                 temp_reference = *controller_parameter.reference_signal;
                 xSemaphoreGive(controller_parameter.reference_semaphore);
-
-
             }
 
             result_PID = run_PID(temp_feedback, temp_reference, controller_parameter.id);
@@ -147,33 +138,6 @@ extern void PID_VC_task(void* pvParameters)
 
 }
 
-//extern void PID_task( void * pvParameters)
-///*****************************************************************************
-//*   Function : PID controller task
-//******************************************************************************/
-//{
-//	for(;;)
-//	{
-//		float result_PID;
-//		uint32_t passedValue;
-//		float    passedValue_float = *((float*) passedValue);
-//		PID_parameter controller_parameter = *((PID_parameter *) pvParameters);
-//
-//		xTaskNotifyWait(0x00, 0xffffffff, &passedValue, portMAX_DELAY);
-//
-//
-//		//if(ulTaskNotifyTake(pdTRUE, portMAX_DELAY) == pdTRUE)
-//		//{
-//			result_PID = run_PID(passedValue_float, *controller_parameter.control_signal, controller_parameter.id);
-//			*controller_parameter.place_to_store_output = voltage_to_duty_cycle(result_PID);
-//			xTaskNotifyGive( SPI_task );
-//		//}
-//	}
-//
-//
-//}
-
-
 
 
 extern void init_PIDs()
@@ -181,29 +145,76 @@ extern void init_PIDs()
 *   Function : Initialize all the PID controllers
 ******************************************************************************/
 {
-    //Setup of the Current Controller
-    PID_pool[CC_CONTROLLER_ID].Kp = 1;
-    PID_pool[CC_CONTROLLER_ID].Kd = 0.01;
-    PID_pool[CC_CONTROLLER_ID].Ki = 5;
-    PID_pool[CC_CONTROLLER_ID].dt = 0.005;
-    PID_pool[CC_CONTROLLER_ID].integral = 0;
-    PID_pool[CC_CONTROLLER_ID].previous_error = 0;
-    PID_pool[CC_CONTROLLER_ID].upper_sat = 12;
-    PID_pool[CC_CONTROLLER_ID].lower_sat = -12;
-    PID_pool[CC_CONTROLLER_ID].filter_id = CC_CONTROLLER_ID;
-    PID_pool[CC_CONTROLLER_ID].pastError = 0;
-    PID_pool[CC_CONTROLLER_ID].Ud = 0;
-    PID_pool[CC_CONTROLLER_ID].sat_flag = 0;
-    float CC_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249, 1, 1, 1, 1, 1, 1, 1};
-    init_filter(CC_CONTROLLER_ID, CC_Filter_Coef, 2);
+    //Setup of position controller 1:
+
+    PID_pool[PC_CONTROLLER_1_ID].Kp = 1;
+    PID_pool[PC_CONTROLLER_1_ID].Kd = 0.01;
+    PID_pool[PC_CONTROLLER_1_ID].Ki = 5;
+    PID_pool[PC_CONTROLLER_1_ID].dt = 0.005;
+    PID_pool[PC_CONTROLLER_1_ID].integral = 0;
+    PID_pool[PC_CONTROLLER_1_ID].previous_error = 0;
+    PID_pool[PC_CONTROLLER_1_ID].upper_sat = 12;
+    PID_pool[PC_CONTROLLER_1_ID].lower_sat = -12;
+    PID_pool[PC_CONTROLLER_1_ID].filter_id = PC_CONTROLLER_1_ID;
+    PID_pool[PC_CONTROLLER_1_ID].pastError = 0;
+    PID_pool[PC_CONTROLLER_1_ID].Ud = 0;
+    PID_pool[PC_CONTROLLER_1_ID].sat_flag = 0;
+    float PC1_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249, 1, 1, 1, 1, 1, 1, 1};
+    init_filter(PC_CONTROLLER_1_ID, PC1_Filter_Coef, 2);
+
+    //Setup of position controller 2:
+
+    PID_pool[PC_CONTROLLER_2_ID].Kp = 1;
+    PID_pool[PC_CONTROLLER_2_ID].Kd = 0.01;
+    PID_pool[PC_CONTROLLER_2_ID].Ki = 5;
+    PID_pool[PC_CONTROLLER_2_ID].dt = 0.005;
+    PID_pool[PC_CONTROLLER_2_ID].integral = 0;
+    PID_pool[PC_CONTROLLER_2_ID].previous_error = 0;
+    PID_pool[PC_CONTROLLER_2_ID].upper_sat = 12;
+    PID_pool[PC_CONTROLLER_2_ID].lower_sat = -12;
+    PID_pool[PC_CONTROLLER_2_ID].filter_id = PC_CONTROLLER_2_ID;
+    PID_pool[PC_CONTROLLER_2_ID].pastError = 0;
+    PID_pool[PC_CONTROLLER_2_ID].Ud = 0;
+    PID_pool[PC_CONTROLLER_2_ID].sat_flag = 0;
+    float PC2_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249, 1, 1, 1, 1, 1, 1, 1};
+    init_filter(PC_CONTROLLER_2_ID, PC2_Filter_Coef, 2);
+
+
     
+    //Setup of velocity controller 1:
 
-    //SETUP FILTER
+     PID_pool[VC_CONTROLLER_1_ID].Kp = 1;
+     PID_pool[VC_CONTROLLER_1_ID].Kd = 0.01;
+     PID_pool[VC_CONTROLLER_1_ID].Ki = 5;
+     PID_pool[VC_CONTROLLER_1_ID].dt = 0.005;
+     PID_pool[VC_CONTROLLER_1_ID].integral = 0;
+     PID_pool[VC_CONTROLLER_1_ID].previous_error = 0;
+     PID_pool[VC_CONTROLLER_1_ID].upper_sat = 12;
+     PID_pool[VC_CONTROLLER_1_ID].lower_sat = -12;
+     PID_pool[VC_CONTROLLER_1_ID].filter_id = VC_CONTROLLER_1_ID;
+     PID_pool[VC_CONTROLLER_1_ID].pastError = 0;
+     PID_pool[VC_CONTROLLER_1_ID].Ud = 0;
+     PID_pool[VC_CONTROLLER_1_ID].sat_flag = 0;
+     float VC1_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249, 1, 1, 1, 1, 1, 1, 1};
+     init_filter(VC_CONTROLLER_1_ID, VC1_Filter_Coef, 2);
 
-    //Setup of the Velocity Controller
+     //Setup of velocity controller 2:
 
+     PID_pool[VC_CONTROLLER_2_ID].Kp = 1;
+     PID_pool[VC_CONTROLLER_2_ID].Kd = 0.01;
+     PID_pool[VC_CONTROLLER_2_ID].Ki = 5;
+     PID_pool[VC_CONTROLLER_2_ID].dt = 0.005;
+     PID_pool[VC_CONTROLLER_2_ID].integral = 0;
+     PID_pool[VC_CONTROLLER_2_ID].previous_error = 0;
+     PID_pool[VC_CONTROLLER_2_ID].upper_sat = 12;
+     PID_pool[VC_CONTROLLER_2_ID].lower_sat = -12;
+     PID_pool[VC_CONTROLLER_2_ID].filter_id = VC_CONTROLLER_1_ID;
+     PID_pool[VC_CONTROLLER_2_ID].pastError = 0;
+     PID_pool[VC_CONTROLLER_2_ID].Ud = 0;
+     PID_pool[VC_CONTROLLER_2_ID].sat_flag = 0;
+     float VC2_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249, 1, 1, 1, 1, 1, 1, 1};
+     init_filter(VC_CONTROLLER_2_ID, VC2_Filter_Coef, 2);
 
-    //Setup of the Position controller
 
 }
 
@@ -230,7 +241,7 @@ extern float run_PID(float feedback, float setpoint, uint8_t id) // CHANGE TO PI
    float derivative_term = PID_pool[id].Kd*2/T*(error - PID_pool[id].previous_error);// - PID_pool[id].Ud;
 
 
-// integral is only given a value if the controller is not in saturation
+   // integral is only given a value if the controller is not in saturation
    if (PID_pool[id].sat_flag)
    {
        integral_term = 0;

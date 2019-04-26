@@ -22,6 +22,7 @@ C:/Users/jmkaa/git/4-semester-project/C\ libraries/circular_buffer.c \
 ../main.c \
 ../port.c \
 ../queue.c \
+../setup_sem_queue.c \
 ../tasks.c \
 ../timers.c \
 ../tm4c123gh6pm_startup_ccs_gcc.c 
@@ -40,6 +41,7 @@ C_DEPS += \
 ./main.d \
 ./port.d \
 ./queue.d \
+./setup_sem_queue.d \
 ./tasks.d \
 ./timers.d \
 ./tm4c123gh6pm_startup_ccs_gcc.d 
@@ -58,6 +60,7 @@ OBJS += \
 ./main.o \
 ./port.o \
 ./queue.o \
+./setup_sem_queue.o \
 ./tasks.o \
 ./timers.o \
 ./tm4c123gh6pm_startup_ccs_gcc.o 
@@ -76,6 +79,7 @@ OBJS__QUOTED += \
 "main.o" \
 "port.o" \
 "queue.o" \
+"setup_sem_queue.o" \
 "tasks.o" \
 "timers.o" \
 "tm4c123gh6pm_startup_ccs_gcc.o" 
@@ -94,6 +98,7 @@ C_DEPS__QUOTED += \
 "main.d" \
 "port.d" \
 "queue.d" \
+"setup_sem_queue.d" \
 "tasks.d" \
 "timers.d" \
 "tm4c123gh6pm_startup_ccs_gcc.d" 
@@ -112,6 +117,7 @@ C_SRCS__QUOTED += \
 "../main.c" \
 "../port.c" \
 "../queue.c" \
+"../setup_sem_queue.c" \
 "../tasks.c" \
 "../timers.c" \
 "../tm4c123gh6pm_startup_ccs_gcc.c" 

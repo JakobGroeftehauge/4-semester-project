@@ -17,9 +17,8 @@ main.o: ../main.c ../EMP_type.h \
  C:/Users/jmkaa/git/4-semester-project/C\ libraries/filter.h \
  C:/Users/jmkaa/git/4-semester-project/C\ libraries/circular_buffer.h \
  C:/Users/jmkaa/git/4-semester-project/FreeRTOS_position-controller/emp_type.h \
- ../tm4c123gh6pm.h ../gpio.h \
+ ../setup_sem_queue.h ../tm4c123gh6pm.h ../gpio.h \
  C:/Users/jmkaa/git/4-semester-project/C\ libraries/SPI.h \
- C:/Users/jmkaa/git/4-semester-project/FreeRTOS_position-controller/tm4c123gh6pm.h \
  C:/Users/jmkaa/git/4-semester-project/C\ libraries/PID_FreeRTOS.h
 
 ../EMP_type.h:
@@ -60,12 +59,12 @@ C:/Users/jmkaa/git/4-semester-project/C\ libraries/circular_buffer.h:
 
 C:/Users/jmkaa/git/4-semester-project/FreeRTOS_position-controller/emp_type.h:
 
+../setup_sem_queue.h:
+
 ../tm4c123gh6pm.h:
 
 ../gpio.h:
 
 C:/Users/jmkaa/git/4-semester-project/C\ libraries/SPI.h:
-
-C:/Users/jmkaa/git/4-semester-project/FreeRTOS_position-controller/tm4c123gh6pm.h:
 
 C:/Users/jmkaa/git/4-semester-project/C\ libraries/PID_FreeRTOS.h:

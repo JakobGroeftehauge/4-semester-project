@@ -27,6 +27,7 @@
 #define FILTER_1        BUFFER_FILTER_1	//Buffer_Filters are defined in circular_buffer.h
 #define FILTER_2        BUFFER_FILTER_2	
 #define FILTER_3        BUFFER_FILTER_3
+#define FILTER_4        BUFFER_FILTER_4
 
 
 typedef struct

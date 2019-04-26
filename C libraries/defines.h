@@ -47,7 +47,7 @@ typedef volatile struct {
     uint8_t id;
     uint8_t slave_id;
     int16_t *place_to_store_output;
-    SemaphoreHandle_t output_semaphore;
+    SemaphoreHandle_t *output_semaphore;
     float  *reference_signal;
     SemaphoreHandle_t *reference_semaphore;
     float  *feedback_signal;
@@ -62,17 +62,15 @@ typedef volatile struct SPI_queue_element {
     int16_t data;
 };
 
-
 PID_parameter PID1_PC;
 PID_parameter PID2_PC;
 //PID1_PC.id = CC_CONTROLLER_ID;
 //PID_PC1.place_to_store_output = &output_PC1;
 
-
-// Queues
+/*****************************     Queues     ****************************/
 QueueHandle_t SPI_queue;
 
-// Semaphores
+/****************************    Semaphores    ***************************/
 SemaphoreHandle_t POS_1_SEM;
 SemaphoreHandle_t VEL_1_SEM;
 SemaphoreHandle_t CUR_1_SEM;
@@ -89,13 +87,11 @@ SemaphoreHandle_t CUR_2_REF_SEM;
 
 SemaphoreHandle_t QUEUE_SEM;
 
-//Task handles
+/*****************************     Tasks     ****************************/
 extern TaskHandle_t PC_PID1_handle;
 extern TaskHandle_t PC_PID2_handle;
 
 extern TaskHandle_t SPI_handle;
 extern TaskHandle_t adjust_values_handle;
-
-
 
 #endif /* DEFINES_H_ */

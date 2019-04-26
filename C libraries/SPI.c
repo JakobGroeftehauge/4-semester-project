@@ -33,6 +33,12 @@
 extern volatile INT16S pos_var;
 extern volatile INT16S pwm_var;
 
+volatile int16_t control_1_pos;
+volatile int16_t control_1_vel;
+volatile int16_t control_1_cur;
+volatile int16_t control_2_pos;
+volatile int16_t control_2_vel;
+volatile int16_t control_2_cur;
 /*****************************   Functions   *******************************/
 void SPI_init()
 /*****************************************************************************
@@ -142,26 +148,42 @@ extern void SPI_task(void * pvParameters)
                 {
                 case POS_1:
                     received_data_SPI = receive_data();
-                    //Semaphore
-                        //Put in correct buffer
+
+                    //Put in correct buffer
+                    control_1_pos = received_data_SPI;
+
+                    // Signal Semaphore
+                    xSemaphoreGive( POS_1_SEM );
                     break;
 
                 case VEL_1:
                     received_data_SPI = receive_data();
-                    //Semaphore
-                        //Put in correct buffer
+
+                    //Put in correct buffer
+                    control_1_vel = received_data_SPI;
+
+                    // Signal Semaphore
+                    xSemaphoreGive( VEL_1_SEM );
                     break;
 
                 case POS_2:
                     received_data_SPI = receive_data();
-                    //Semaphore
-                        //Put in correct buffer
+
+                    //Put in correct buffer
+                    control_2_pos = received_data_SPI;
+
+                    // Signal Semaphore
+                    xSemaphoreGive( POS_2_SEM );
                     break;
 
                 case VEL_2:
                     received_data_SPI = receive_data();
-                    //Semaphore
-                        //Put in correct buffer
+
+                    //Put in correct buffer
+                    control_2_vel = received_data_SPI;
+
+                    // Signal Semaphore
+                    xSemaphoreGive( VEL_2_SEM );
                     break;
 
                 case PROTOCOL_SLAVE:

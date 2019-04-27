@@ -39,7 +39,6 @@ extern void PID_PC_task(void* pvParameters)
     float temp_feedback = 0;
     float temp_reference = 0;
     int16_t temp_output = 0;
-    SemaphoreHandle_t QUEUE_SEM;
 
 
     data_request.id = controller_parameter.slave_id;
@@ -49,20 +48,20 @@ extern void PID_PC_task(void* pvParameters)
     {
         xLastWakeTime = xTaskGetTickCount();
 
-        if(xSemaphoreTake(QUEUE_SEM, portMAX_DELAY)==pdTRUE)
+        if(xSemaphoreTake(*controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
         {
             xQueueSend( SPI_queue, (void * ) &data_request, 0);
-            xSemaphoreGive(controller_parameter.queue_semaphore);
+            xSemaphoreGive(*controller_parameter.queue_semaphore);
         }
 
-        if(xSemaphoreTake(controller_parameter.feedback_semaphore, portMAX_DELAY) == pdTRUE)
+        if(xSemaphoreTake(*controller_parameter.feedback_semaphore, portMAX_DELAY) == pdTRUE)
         {
-            if(xSemaphoreTake(controller_parameter.reference_semaphore, portMAX_DELAY) == pdTRUE)
+            if(xSemaphoreTake(*controller_parameter.reference_semaphore, portMAX_DELAY) == pdTRUE)
             {
 
                 temp_feedback = *controller_parameter.feedback_signal;
                 temp_reference = *controller_parameter.reference_signal;
-                xSemaphoreGive(controller_parameter.reference_semaphore);
+                xSemaphoreGive(*controller_parameter.reference_semaphore);
 
 
             }
@@ -73,10 +72,10 @@ extern void PID_PC_task(void* pvParameters)
 
         //temp_output = voltage_to_duty_cycle(result_PID);
 
-        if(xSemaphoreTake(controller_parameter.output_semaphore, portMAX_DELAY)==pdTRUE)
+        if(xSemaphoreTake(*controller_parameter.output_semaphore, portMAX_DELAY)==pdTRUE)
         {
             *controller_parameter.place_to_store_output = result_PID;
-            xSemaphoreGive(controller_parameter.output_semaphore);
+            xSemaphoreGive(*controller_parameter.output_semaphore);
         }
 
         vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS(controller_parameter.delayTime) );
@@ -103,36 +102,33 @@ extern void PID_VC_task(void* pvParameters)
     for (;;)
     {
         xLastWakeTime = xTaskGetTickCount();
-        uint8_t bb = controller_parameter.place_to_store_output;
-
 
         if(xSemaphoreTake(*controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
         {
             xQueueSend( SPI_queue, (void * ) &data_request, 0);
-            xSemaphoreGive(controller_parameter.queue_semaphore);
+            xSemaphoreGive(*controller_parameter.queue_semaphore);
         }
 
-        if(xSemaphoreTake(controller_parameter.feedback_semaphore, portMAX_DELAY) == pdTRUE)
+        if(xSemaphoreTake(*controller_parameter.feedback_semaphore, portMAX_DELAY) == pdTRUE)
         {
-            if(xSemaphoreTake(controller_parameter.reference_semaphore, portMAX_DELAY) == pdTRUE)
+            if(xSemaphoreTake(*controller_parameter.reference_semaphore, portMAX_DELAY) == pdTRUE)
             {
-
                 temp_feedback = *controller_parameter.feedback_signal;
                 temp_reference = *controller_parameter.reference_signal;
-                xSemaphoreGive(controller_parameter.reference_semaphore);
+                xSemaphoreGive(*controller_parameter.reference_semaphore);
             }
 
             result_PID = run_PID(temp_feedback, temp_reference, controller_parameter.id);
 
         }
 
-            data_to_send.data = voltage_to_duty_cycle(result_PID);
+            data_to_send.data = (result_PID / 12) * 1023 + 0.5;//voltage_to_duty_cycle(result_PID);
 
 
-        if(xSemaphoreTake(controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
+        if(xSemaphoreTake(*controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
         {
             xQueueSendToFront( SPI_queue, (void * ) &data_to_send, 0);
-            xSemaphoreGive(controller_parameter.queue_semaphore);
+            xSemaphoreGive(*controller_parameter.queue_semaphore);
         }
 
 

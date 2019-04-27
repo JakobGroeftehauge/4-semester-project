@@ -39,6 +39,22 @@ int16_t control_1_cur;
 int16_t control_2_pos;
 int16_t control_2_vel;
 int16_t control_2_cur;
+
+SemaphoreHandle_t POS_1_SEM;
+SemaphoreHandle_t VEL_1_SEM;
+SemaphoreHandle_t CUR_1_SEM;
+SemaphoreHandle_t POS_2_SEM;
+SemaphoreHandle_t VEL_2_SEM;
+SemaphoreHandle_t CUR_2_SEM;
+
+SemaphoreHandle_t POS_1_REF_SEM;
+SemaphoreHandle_t VEL_1_REF_SEM;
+SemaphoreHandle_t CUR_1_REF_SEM;
+SemaphoreHandle_t POS_2_REF_SEM;
+SemaphoreHandle_t VEL_2_REF_SEM;
+SemaphoreHandle_t CUR_2_REF_SEM;
+
+SemaphoreHandle_t QUEUE_SEM;
 /*****************************   Functions   *******************************/
 void SPI_init()
 /*****************************************************************************

@@ -39,6 +39,7 @@ extern void PID_PC_task(void* pvParameters)
     float temp_feedback = 0;
     float temp_reference = 0;
     int16_t temp_output = 0;
+    SemaphoreHandle_t QUEUE_SEM;
 
 
     data_request.id = controller_parameter.slave_id;
@@ -48,7 +49,7 @@ extern void PID_PC_task(void* pvParameters)
     {
         xLastWakeTime = xTaskGetTickCount();
 
-        if(xSemaphoreTake(controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
+        if(xSemaphoreTake(QUEUE_SEM, portMAX_DELAY)==pdTRUE)
         {
             xQueueSend( SPI_queue, (void * ) &data_request, 0);
             xSemaphoreGive(controller_parameter.queue_semaphore);
@@ -102,8 +103,10 @@ extern void PID_VC_task(void* pvParameters)
     for (;;)
     {
         xLastWakeTime = xTaskGetTickCount();
+        uint8_t bb = controller_parameter.place_to_store_output;
 
-        if(xSemaphoreTake(controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
+
+        if(xSemaphoreTake(QUEUE_SEM, portMAX_DELAY)==pdTRUE)
         {
             xQueueSend( SPI_queue, (void * ) &data_request, 0);
             xSemaphoreGive(controller_parameter.queue_semaphore);

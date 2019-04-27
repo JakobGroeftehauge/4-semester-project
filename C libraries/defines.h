@@ -55,7 +55,7 @@ typedef struct PID_parameter {
     uint16_t delayTime;
     SemaphoreHandle_t *queue_semaphore;
     uint8_t output_id;
-};
+} ;
 
 typedef volatile struct SPI_queue_element {
     uint8_t id;
@@ -63,15 +63,10 @@ typedef volatile struct SPI_queue_element {
 };
 
 /***************************** Struct init  ****************************/
-struct PID_parameter PC_1_parameter;
-struct PID_parameter VC_1_parameter;
-struct PID_parameter PC_2_parameter;
-struct PID_parameter VC_2_parameter;
-
-//structPID_parameter PID1_PC;
-//PID_parameter PID2_PC;
-//PID1_PC.id = CC_CONTROLLER_ID;
-//PID_PC1.place_to_store_output = &output_PC1;
+extern struct PID_parameter PC_1_parameter;
+extern struct PID_parameter VC_1_parameter;
+extern struct PID_parameter PC_2_parameter;
+extern struct PID_parameter VC_2_parameter;
 
 /*****************************     Queues     ****************************/
 QueueHandle_t SPI_queue;
@@ -91,7 +86,7 @@ SemaphoreHandle_t POS_2_REF_SEM;
 SemaphoreHandle_t VEL_2_REF_SEM;
 SemaphoreHandle_t CUR_2_REF_SEM;
 
-SemaphoreHandle_t QUEUE_SEM;
+extern volatile SemaphoreHandle_t QUEUE_SEM;
 
 /*****************************     Tasks     ****************************/
 extern TaskHandle_t PC_PID1_handle;

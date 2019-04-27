@@ -26,19 +26,19 @@
 
 
 /********************** External declaration of Variables ******************/
-extern int16_t control_1_pos;
-extern int16_t control_1_vel;
-extern int16_t control_1_cur;
-extern int16_t control_2_pos;
-extern int16_t control_2_vel;
-extern int16_t control_2_cur;
+extern float control_1_pos;
+extern float control_1_vel;
+extern float control_1_cur;
+extern float control_2_pos;
+extern float control_2_vel;
+extern float control_2_cur;
 
-extern int16_t control_1_pos_ref;
-extern int16_t control_1_vel_ref;
-extern int16_t control_1_cur_ref;
-extern int16_t control_2_pos_ref;
-extern int16_t control_2_vel_ref;
-extern int16_t control_2_cur_ref;
+extern float control_1_pos_ref;
+extern float control_1_vel_ref;
+extern float control_1_cur_ref;
+extern float control_2_pos_ref;
+extern float control_2_vel_ref;
+extern float control_2_cur_ref;
 
 extern int16_t glob_protocol;
 
@@ -46,7 +46,7 @@ extern int16_t glob_protocol;
 typedef struct PID_parameter {
     uint8_t             id;
     uint8_t             slave_id;
-    int16_t             *place_to_store_output;
+    float               *place_to_store_output;
     SemaphoreHandle_t   *output_semaphore;
     float               *reference_signal;
     SemaphoreHandle_t   *reference_semaphore;
@@ -55,7 +55,7 @@ typedef struct PID_parameter {
     uint16_t            delayTime;
     SemaphoreHandle_t   *queue_semaphore;
     uint8_t             output_id;
-} ;
+};
 
 typedef volatile struct SPI_queue_element {
     uint8_t id;

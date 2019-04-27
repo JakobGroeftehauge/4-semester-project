@@ -62,8 +62,6 @@ extern void PID_PC_task(void* pvParameters)
                 temp_feedback = *controller_parameter.feedback_signal;
                 temp_reference = *controller_parameter.reference_signal;
                 xSemaphoreGive(*controller_parameter.reference_semaphore);
-
-
             }
 
             result_PID = run_PID(temp_feedback, temp_reference, controller_parameter.id);

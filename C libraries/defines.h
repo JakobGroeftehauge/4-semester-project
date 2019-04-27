@@ -72,19 +72,19 @@ extern struct PID_parameter VC_2_parameter;
 QueueHandle_t SPI_queue;
 
 /****************************    Semaphores    ***************************/
-SemaphoreHandle_t POS_1_SEM;
-SemaphoreHandle_t VEL_1_SEM;
-SemaphoreHandle_t CUR_1_SEM;
-SemaphoreHandle_t POS_2_SEM;
-SemaphoreHandle_t VEL_2_SEM;
-SemaphoreHandle_t CUR_2_SEM;
+extern SemaphoreHandle_t POS_1_SEM;
+extern SemaphoreHandle_t VEL_1_SEM;
+extern SemaphoreHandle_t CUR_1_SEM;
+extern SemaphoreHandle_t POS_2_SEM;
+extern SemaphoreHandle_t VEL_2_SEM;
+extern SemaphoreHandle_t CUR_2_SEM;
 
-SemaphoreHandle_t POS_1_REF_SEM;
-SemaphoreHandle_t VEL_1_REF_SEM;
-SemaphoreHandle_t CUR_1_REF_SEM;
-SemaphoreHandle_t POS_2_REF_SEM;
-SemaphoreHandle_t VEL_2_REF_SEM;
-SemaphoreHandle_t CUR_2_REF_SEM;
+extern SemaphoreHandle_t POS_1_REF_SEM;
+extern SemaphoreHandle_t VEL_1_REF_SEM;
+extern SemaphoreHandle_t CUR_1_REF_SEM;
+extern SemaphoreHandle_t POS_2_REF_SEM;
+extern SemaphoreHandle_t VEL_2_REF_SEM;
+extern SemaphoreHandle_t CUR_2_REF_SEM;
 
 
 extern SemaphoreHandle_t QUEUE_SEM;

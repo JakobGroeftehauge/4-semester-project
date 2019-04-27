@@ -69,21 +69,30 @@ int main(void)
     init_PIDs();
     init_parameters();
 
+
+    send_data(0, PWM_1);
+    float dummy = receive_data();
+    send_data(0, PWM_2);
+    dummy = receive_data();
+
     pos_var = 32;
 
     // Create tasks
     // -------------------
-    xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 8, &PC_PID1_handle);
-    xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 8, &VC_PID1_handle);
-    xTaskCreate(PID_PC_task, "Position controller 2", 100, &PC_2_parameter, 8, &PC_PID2_handle);
+    //xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 8, &PC_PID1_handle);
+    //xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 8, &VC_PID1_handle);
+//    xTaskCreate(PID_PC_task, "Position controller 2", 100, &PC_2_parameter, 8, &PC_PID2_handle);
     xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 8, &VC_PID2_handle);
 
     uint8_t empty = 4;
     xTaskCreate(SPI_task, "SPI module", 100, &empty, 1, &SPI_handle);
 
-    control_1_pos_ref = 500;
-    control_2_pos_ref = 500;
-    control_2_pos = 200;
+    control_1_pos_ref = 100;
+    control_2_pos_ref = 30;
+
+
+
+
 
 
     // Start the scheduler.

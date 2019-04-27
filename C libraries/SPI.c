@@ -165,8 +165,8 @@ extern void SPI_task(void * pvParameters)
                 case POS_1:
                     received_data_SPI = receive_data();
 
-                    //Put in correct buffer
-                    control_1_pos = received_data_SPI;
+                    //Convert to degrees and put in correct buffer
+                    control_1_pos = received_data_SPI / 3;
 
                     // Signal Semaphore
                     xSemaphoreGive( POS_1_SEM );
@@ -185,8 +185,8 @@ extern void SPI_task(void * pvParameters)
                 case POS_2:
                     received_data_SPI = receive_data();
 
-                    //Put in correct buffer
-                    control_2_pos = received_data_SPI;
+                    //Convert to degrees and put in correct buffer
+                    control_2_pos = received_data_SPI / 3;
 
                     // Signal Semaphore
                     xSemaphoreGive( POS_2_SEM );

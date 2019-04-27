@@ -94,17 +94,30 @@ extern void init_parameters()
     PC_1_parameter.queue_semaphore =        &QUEUE_SEM;
     PC_1_parameter.output_id =              0;
 
+//    VC_1_parameter.id =                     VC_CONTROLLER_1_ID;
+//    VC_1_parameter.slave_id =               VEL_1;
+//    VC_1_parameter.place_to_store_output =  &control_1_vel_ref;
+//    VC_1_parameter.output_semaphore =       &VEL_1_REF_SEM;
+//    VC_1_parameter.reference_signal =       &control_1_vel_ref;
+//    VC_1_parameter.reference_semaphore =    &VEL_1_REF_SEM;
+//    VC_1_parameter.feedback_signal =        &control_1_vel;
+//    VC_1_parameter.feedback_semaphore =     &VEL_1_SEM;
+//    VC_1_parameter.delayTime =              5;
+//    VC_1_parameter.queue_semaphore =        &QUEUE_SEM;
+//    VC_1_parameter.output_id =              PWM_1;
+
     VC_1_parameter.id =                     VC_CONTROLLER_1_ID;
-    VC_1_parameter.slave_id =               VEL_1;
+    VC_1_parameter.slave_id =               POS_1;//VEL_1;
     VC_1_parameter.place_to_store_output =  &control_1_vel_ref;
     VC_1_parameter.output_semaphore =       &VEL_1_REF_SEM;
-    VC_1_parameter.reference_signal =       &control_1_vel_ref;
-    VC_1_parameter.reference_semaphore =    &VEL_1_REF_SEM;
-    VC_1_parameter.feedback_signal =        &control_1_vel;
-    VC_1_parameter.feedback_semaphore =     &VEL_1_SEM;
+    VC_1_parameter.reference_signal =       &control_1_pos_ref;//&control_1_vel_ref;
+    VC_1_parameter.reference_semaphore =    &POS_1_REF_SEM;//&VEL_1_REF_SEM;
+    VC_1_parameter.feedback_signal =        &control_1_pos;//&control_1_vel;
+    VC_1_parameter.feedback_semaphore =     &POS_1_SEM;//&VEL_1_SEM;
     VC_1_parameter.delayTime =              5;
     VC_1_parameter.queue_semaphore =        &QUEUE_SEM;
     VC_1_parameter.output_id =              PWM_1;
+
 
     PC_2_parameter.id =                     PC_CONTROLLER_2_ID;
     PC_2_parameter.slave_id =               POS_2;
@@ -118,18 +131,31 @@ extern void init_parameters()
     PC_2_parameter.queue_semaphore =        &QUEUE_SEM;
     PC_2_parameter.output_id =              0;
 
+//    VC_2_parameter.id =                     VC_CONTROLLER_2_ID;
+//    VC_2_parameter.slave_id =               VEL_2;
+//    VC_2_parameter.place_to_store_output =  &control_2_vel_ref;
+//    VC_2_parameter.output_semaphore =       &VEL_2_REF_SEM;
+//    VC_2_parameter.reference_signal =       &control_2_vel_ref;
+//    VC_2_parameter.reference_semaphore =    &VEL_2_REF_SEM;
+//    VC_2_parameter.feedback_signal =        &control_2_vel;
+//    VC_2_parameter.feedback_semaphore =     &VEL_2_SEM;
+//    VC_2_parameter.delayTime =              5;
+//    VC_2_parameter.queue_semaphore =        &QUEUE_SEM;
+//    VC_2_parameter.output_id =              PWM_2;
+
     VC_2_parameter.id =                     VC_CONTROLLER_2_ID;
-    VC_2_parameter.slave_id =               VEL_2;
+    VC_2_parameter.slave_id =               POS_2;//VEL_1;
     VC_2_parameter.place_to_store_output =  &control_2_vel_ref;
     VC_2_parameter.output_semaphore =       &VEL_2_REF_SEM;
-    VC_2_parameter.reference_signal =       &control_2_vel_ref;
-    VC_2_parameter.reference_semaphore =    &VEL_2_REF_SEM;
-    VC_2_parameter.feedback_signal =        &control_2_vel;
-    VC_2_parameter.feedback_semaphore =     &VEL_2_SEM;
+    VC_2_parameter.reference_signal =       &control_2_pos_ref;//&control_1_vel_ref;
+    VC_2_parameter.reference_semaphore =    &POS_2_REF_SEM;//&VEL_1_REF_SEM;
+    VC_2_parameter.feedback_signal =        &control_2_pos;//&control_1_vel;
+    VC_2_parameter.feedback_semaphore =     &POS_2_SEM;//&VEL_1_SEM;
     VC_2_parameter.delayTime =              5;
     VC_2_parameter.queue_semaphore =        &QUEUE_SEM;
     VC_2_parameter.output_id =              PWM_2;
 }
+
 
 
 

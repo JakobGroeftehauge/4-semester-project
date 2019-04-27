@@ -70,11 +70,11 @@ extern void PID_PC_task(void* pvParameters)
 
         }
 
-        temp_output = voltage_to_duty_cycle(result_PID);
+        //temp_output = voltage_to_duty_cycle(result_PID);
 
         if(xSemaphoreTake(controller_parameter.output_semaphore, portMAX_DELAY)==pdTRUE)
         {
-            *controller_parameter.place_to_store_output = temp_output;
+            *controller_parameter.place_to_store_output = result_PID;
             xSemaphoreGive(controller_parameter.output_semaphore);
         }
 

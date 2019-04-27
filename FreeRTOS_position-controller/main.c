@@ -71,9 +71,7 @@ int main(void)
     init_PIDs();
     init_parameters();
 
-    int16_t control_1_pos_ref;
-    control_1_pos_ref = 500;
-
+    pos_var = 32;
     // Create tasks
     // -------------------
     xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 8, &PC_PID1_handle);
@@ -84,6 +82,10 @@ int main(void)
     uint8_t empty = 4;
     xTaskCreate(SPI_task, "SPI module", 100, &empty, 1, &SPI_handle);
 
+    int16_t control_1_pos_ref;
+    int16_t control_2_pos_ref;
+    control_1_pos_ref = 500;
+    control_2_pos_ref = 500;
     //Bruges til at teste passing a structs i queues.
     //xTaskCreate(update_values_task, "Update values module", 100, &PID1_PC, 1, &adjust_values_handle);
 

@@ -73,7 +73,6 @@ extern void init_queue()
 {
     SPI_queue = xQueueCreate(100, //Number of elements in queue
                              sizeof( struct SPI_queue_element  ) ); //Number of bytes for each element
-
 }
 
 extern void init_parameters()
@@ -130,7 +129,6 @@ extern void init_parameters()
     VC_2_parameter.delayTime =              5;
     VC_2_parameter.queue_semaphore =        &QUEUE_SEM;
     VC_2_parameter.output_id =              PWM_2;
-
 }
 
 

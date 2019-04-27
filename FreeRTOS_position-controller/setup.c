@@ -3,21 +3,21 @@
 #include "defines.h"
 #include "PID_freeRTOS.h"
 
-volatile int16_t control_1_pos;
-volatile int16_t control_1_vel;
-volatile int16_t control_1_cur;
-volatile int16_t control_2_pos;
-volatile int16_t control_2_vel;
-volatile int16_t control_2_cur;
+int16_t control_1_pos;
+int16_t control_1_vel;
+int16_t control_1_cur;
+int16_t control_2_pos;
+int16_t control_2_vel;
+int16_t control_2_cur;
 
-volatile int16_t control_1_pos_ref;
-volatile int16_t control_1_vel_ref;
-volatile int16_t control_1_cur_ref;
-volatile int16_t control_2_pos_ref;
-volatile int16_t control_2_vel_ref;
-volatile int16_t control_2_cur_ref;
+int16_t control_1_pos_ref;
+int16_t control_1_vel_ref;
+int16_t control_1_cur_ref;
+int16_t control_2_pos_ref;
+int16_t control_2_vel_ref;
+int16_t control_2_cur_ref;
 
-volatile int16_t glob_protocol;
+int16_t glob_protocol;
 
 extern void init_sem()
 /*****************************************************************************

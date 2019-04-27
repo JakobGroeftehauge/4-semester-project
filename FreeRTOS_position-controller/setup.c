@@ -3,6 +3,7 @@
 #include "defines.h"
 #include "PID_freeRTOS.h"
 
+/********************** External declaration of Variables ******************/
 int16_t control_1_pos;
 int16_t control_1_vel;
 int16_t control_1_cur;
@@ -18,6 +19,9 @@ int16_t control_2_vel_ref;
 int16_t control_2_cur_ref;
 
 int16_t glob_protocol;
+
+/****************************    Semaphores    ***************************/
+volatile SemaphoreHandle_t QUEUE_SEM;
 
 extern void init_sem()
 /*****************************************************************************
@@ -42,6 +46,7 @@ extern void init_sem()
 
     QUEUE_SEM = xSemaphoreCreateBinary();
 
+    xSemaphoreGive(QUEUE_SEM);
 }
 
 extern void init_queue()
@@ -109,20 +114,17 @@ extern void init_parameters()
      0// output id
     };
 
-    struct PID_parameter VC_2_parameter =
-    {
-     VC_CONTROLLER_2_ID,// id
-     VEL_2,             // slave_id
-     &control_2_vel_ref, // *place to store output (BRUGES IKKE)
-     &VEL_2_REF_SEM, // *output semaphore (BRUGES IKKE)
-     &control_2_vel_ref, // *reference_signal
-     &VEL_2_REF_SEM, // *reference_semaphore
-     &control_2_vel, // *feedback_signal
-     &VEL_2_SEM, // *feedback_semaphore
-     5, // delay time (ms)
-     &QUEUE_SEM, // *queue_semaphore
-     0// output id
-    };
+    VC_2_parameter.id = VC_CONTROLLER_2_ID;
+    VC_2_parameter.slave_id = VEL_2;
+    VC_2_parameter.place_to_store_output = &control_2_vel_ref;
+    VC_2_parameter.output_semaphore = &VEL_2_REF_SEM;
+    VC_2_parameter.reference_signal = &control_2_vel_ref;
+    VC_2_parameter.reference_semaphore = &VEL_2_REF_SEM;
+    VC_2_parameter.feedback_signal = &control_2_vel;
+    VC_2_parameter.feedback_semaphore = &VEL_2_SEM;
+    VC_2_parameter.delayTime = 5;
+    VC_2_parameter.queue_semaphore = &QUEUE_SEM;
+    VC_2_parameter.output_id = 0;
 
 }
 

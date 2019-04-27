@@ -123,7 +123,7 @@ extern void PID_VC_task(void* pvParameters)
 
         }
 
-            data_to_send.data = voltage_to_duty_cycle(result_PID);
+            data_to_send.data = (result_PID / 12) * 1023 + 0.5;//voltage_to_duty_cycle(result_PID);
 
 
         if(xSemaphoreTake(*controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)

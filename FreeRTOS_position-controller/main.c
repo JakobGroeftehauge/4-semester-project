@@ -65,6 +65,7 @@ int main(void)
     //SystemCoreClock;
     //init_systick();
     init_gpio();
+    SPI_init();
     init_sem();
     init_queue();
     init_PIDs();
@@ -72,11 +73,12 @@ int main(void)
 
     int16_t control_1_pos_ref;
     control_1_pos_ref = 500;
+
     // Create tasks
     // -------------------
-//    xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 8, &PC_PID1_handle);
-//    xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 8, &VC_PID1_handle);
-//    xTaskCreate(PID_PC_task, "Position controller 2", 100, &PC_2_parameter, 8, &PC_PID2_handle);
+    xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 8, &PC_PID1_handle);
+    xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 8, &VC_PID1_handle);
+    xTaskCreate(PID_PC_task, "Position controller 2", 100, &PC_2_parameter, 8, &PC_PID2_handle);
     xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 8, &VC_PID2_handle);
 
     uint8_t empty = 4;

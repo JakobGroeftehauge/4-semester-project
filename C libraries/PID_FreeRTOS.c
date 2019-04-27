@@ -106,7 +106,7 @@ extern void PID_VC_task(void* pvParameters)
         uint8_t bb = controller_parameter.place_to_store_output;
 
 
-        if(xSemaphoreTake(QUEUE_SEM, portMAX_DELAY)==pdTRUE)
+        if(xSemaphoreTake(*controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
         {
             xQueueSend( SPI_queue, (void * ) &data_request, 0);
             xSemaphoreGive(controller_parameter.queue_semaphore);

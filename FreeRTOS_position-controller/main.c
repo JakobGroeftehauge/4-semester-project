@@ -6,11 +6,11 @@
 #include <stdio.h>
 #include <stddef.h>
 #include "EMP_type.h"
-#include "defines.h"
+
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
-
+#include "defines.h"
 /* Hardware includes. */
 //#include "hardware_tm4c123g.h" // Requires TivaWare library
 //#include "systick_frt.h"    // From Mortens Lessons
@@ -70,9 +70,9 @@ int main(void)
     init_PIDs();
     init_parameters();
 
-    SemaphoreHandle_t QUEUE_SEM;
+    //SemaphoreHandle_t QUEUE_SEM;
 
-    xSemaphoreTake(QUEUE_SEM, portMAX_DELAY);
+    //xSemaphoreTake(QUEUE_SEM, portMAX_DELAY);
 
 
 

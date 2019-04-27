@@ -1,7 +1,9 @@
+#include "setup.h"
 #include "FPGA_comp.h"
 #include "FreeRTOS.h"
 #include "defines.h"
 #include "PID_freeRTOS.h"
+
 
 /********************** External declaration of Variables ******************/
 int16_t control_1_pos;
@@ -21,7 +23,7 @@ int16_t control_2_cur_ref;
 int16_t glob_protocol;
 
 /****************************    Semaphores    ***************************/
-volatile SemaphoreHandle_t QUEUE_SEM;
+SemaphoreHandle_t QUEUE_SEM;
 
 extern void init_sem()
 /*****************************************************************************
@@ -44,9 +46,9 @@ extern void init_sem()
     VEL_2_REF_SEM = xSemaphoreCreateBinary();
     CUR_2_REF_SEM = xSemaphoreCreateBinary();
 
-    QUEUE_SEM = xSemaphoreCreateBinary();
+    QUEUE_SEM = xSemaphoreCreateCounting(1, 1);
 
-    xSemaphoreGive(QUEUE_SEM);
+    //xSemaphoreGive(QUEUE_SEM);
 }
 
 extern void init_queue()

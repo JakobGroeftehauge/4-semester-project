@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stddef.h>
+#include "defines.h"
+
 #include "EMP_type.h"
 
 /* Kernel includes. */
@@ -9,7 +11,6 @@
 #include "task.h"
 #include "semphr.h"
 #include "PID_FreeRTOS.h"
-#include "defines.h"
 
 // Slaves
 

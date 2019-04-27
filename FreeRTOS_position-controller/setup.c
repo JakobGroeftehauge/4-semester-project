@@ -21,7 +21,7 @@ int16_t control_2_cur_ref;
 int16_t glob_protocol;
 
 /****************************    Semaphores    ***************************/
-QUEUE_SEM;
+SemaphoreHandle_t QUEUE_SEM;
 
 extern void init_sem()
 /*****************************************************************************

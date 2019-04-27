@@ -26,24 +26,24 @@
 
 
 /********************** External declaration of Variables ******************/
-extern volatile int16_t control_1_pos;
-extern volatile int16_t control_1_vel;
-extern volatile int16_t control_1_cur;
-extern volatile int16_t control_2_pos;
-extern volatile int16_t control_2_vel;
-extern volatile int16_t control_2_cur;
+extern int16_t control_1_pos;
+extern int16_t control_1_vel;
+extern int16_t control_1_cur;
+extern int16_t control_2_pos;
+extern int16_t control_2_vel;
+extern int16_t control_2_cur;
 
-extern volatile int16_t control_1_pos_ref;
-extern volatile int16_t control_1_vel_ref;
-extern volatile int16_t control_1_cur_ref;
-extern volatile int16_t control_2_pos_ref;
-extern volatile int16_t control_2_vel_ref;
-extern volatile int16_t control_2_cur_ref;
+extern int16_t control_1_pos_ref;
+extern int16_t control_1_vel_ref;
+extern int16_t control_1_cur_ref;
+extern int16_t control_2_pos_ref;
+extern int16_t control_2_vel_ref;
+extern int16_t control_2_cur_ref;
 
-extern volatile int16_t glob_protocol;
+extern int16_t glob_protocol;
 
 /*****************************     Structs     ****************************/
-typedef volatile struct PID_parameter {
+typedef struct PID_parameter {
     uint8_t id;
     uint8_t slave_id;
     int16_t *place_to_store_output;

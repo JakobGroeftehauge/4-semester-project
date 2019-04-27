@@ -33,12 +33,12 @@
 extern volatile INT16S pos_var;
 extern volatile INT16S pwm_var;
 
-volatile int16_t control_1_pos;
-volatile int16_t control_1_vel;
-volatile int16_t control_1_cur;
-volatile int16_t control_2_pos;
-volatile int16_t control_2_vel;
-volatile int16_t control_2_cur;
+int16_t control_1_pos;
+int16_t control_1_vel;
+int16_t control_1_cur;
+int16_t control_2_pos;
+int16_t control_2_vel;
+int16_t control_2_cur;
 /*****************************   Functions   *******************************/
 void SPI_init()
 /*****************************************************************************

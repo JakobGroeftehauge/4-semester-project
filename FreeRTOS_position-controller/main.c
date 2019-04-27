@@ -65,7 +65,7 @@ int main(void)
     init_PIDs();
     init_parameters();
 
-    extern int16_t control_1_pos_ref;
+    int16_t control_1_pos_ref;
     control_1_pos_ref = 500;
     // Create tasks
     // -------------------

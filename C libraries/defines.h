@@ -44,17 +44,17 @@ extern int16_t glob_protocol;
 
 /*****************************     Structs     ****************************/
 typedef struct PID_parameter {
-    uint8_t id;
-    uint8_t slave_id;
-    int16_t *place_to_store_output;
-    SemaphoreHandle_t *output_semaphore;
-    float  *reference_signal;
-    SemaphoreHandle_t *reference_semaphore;
-    float  *feedback_signal;
-    SemaphoreHandle_t *feedback_semaphore;
-    uint16_t delayTime;
-    SemaphoreHandle_t *queue_semaphore;
-    uint8_t output_id;
+    uint8_t             id;
+    uint8_t             slave_id;
+    int16_t             *place_to_store_output;
+    SemaphoreHandle_t   *output_semaphore;
+    float               *reference_signal;
+    SemaphoreHandle_t   *reference_semaphore;
+    float               *feedback_signal;
+    SemaphoreHandle_t   *feedback_semaphore;
+    uint16_t            delayTime;
+    SemaphoreHandle_t   *queue_semaphore;
+    uint8_t             output_id;
 } ;
 
 typedef volatile struct SPI_queue_element {

@@ -113,7 +113,6 @@ extern void PID_VC_task(void* pvParameters)
         {
             if(xSemaphoreTake(*controller_parameter.reference_semaphore, portMAX_DELAY) == pdTRUE)
             {
-
                 temp_feedback = *controller_parameter.feedback_signal;
                 temp_reference = *controller_parameter.reference_signal;
                 xSemaphoreGive(*controller_parameter.reference_semaphore);

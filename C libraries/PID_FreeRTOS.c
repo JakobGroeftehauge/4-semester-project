@@ -157,7 +157,7 @@ extern void init_PIDs()
     PID_pool[PC_CONTROLLER_1_ID].Kp = 1;
     PID_pool[PC_CONTROLLER_1_ID].Kd = 0.01;
     PID_pool[PC_CONTROLLER_1_ID].Ki = 5;
-    PID_pool[PC_CONTROLLER_1_ID].dt = 0.005;
+    PID_pool[PC_CONTROLLER_1_ID].dt = 0.01;
     PID_pool[PC_CONTROLLER_1_ID].integral = 0;
     PID_pool[PC_CONTROLLER_1_ID].previous_error = 0;
     PID_pool[PC_CONTROLLER_1_ID].upper_sat = 12;
@@ -174,7 +174,7 @@ extern void init_PIDs()
     PID_pool[PC_CONTROLLER_2_ID].Kp = 1;
     PID_pool[PC_CONTROLLER_2_ID].Kd = 0.01;
     PID_pool[PC_CONTROLLER_2_ID].Ki = 5;
-    PID_pool[PC_CONTROLLER_2_ID].dt = 0.005;
+    PID_pool[PC_CONTROLLER_2_ID].dt = 0.01;
     PID_pool[PC_CONTROLLER_2_ID].integral = 0;
     PID_pool[PC_CONTROLLER_2_ID].previous_error = 0;
     PID_pool[PC_CONTROLLER_2_ID].upper_sat = 12;
@@ -191,8 +191,8 @@ extern void init_PIDs()
     //Setup of velocity controller 1:
 
      PID_pool[VC_CONTROLLER_1_ID].Kp = 1;
-     PID_pool[VC_CONTROLLER_1_ID].Kd = 0.01;
-     PID_pool[VC_CONTROLLER_1_ID].Ki = 5;
+     PID_pool[VC_CONTROLLER_1_ID].Kd = 0.02;
+     PID_pool[VC_CONTROLLER_1_ID].Ki = 2;
      PID_pool[VC_CONTROLLER_1_ID].dt = 0.001;
      PID_pool[VC_CONTROLLER_1_ID].integral = 0;
      PID_pool[VC_CONTROLLER_1_ID].previous_error = 0;
@@ -208,8 +208,8 @@ extern void init_PIDs()
      //Setup of velocity controller 2:
 
      PID_pool[VC_CONTROLLER_2_ID].Kp = 1;
-     PID_pool[VC_CONTROLLER_2_ID].Kd = 0.01;
-     PID_pool[VC_CONTROLLER_2_ID].Ki = 5;
+     PID_pool[VC_CONTROLLER_2_ID].Kd = 0.02;
+     PID_pool[VC_CONTROLLER_2_ID].Ki = 2;
      PID_pool[VC_CONTROLLER_2_ID].dt = 0.001;
      PID_pool[VC_CONTROLLER_2_ID].integral = 0;
      PID_pool[VC_CONTROLLER_2_ID].previous_error = 0;

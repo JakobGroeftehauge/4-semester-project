@@ -121,7 +121,7 @@ void SPI_init()
 
     // Configure the clock prescale divisor by writing the SSICPSR register.
 
-    SSI1_CPSR_R = 128; //selecting divisor 64 for SSI clock
+    SSI1_CPSR_R = 6; //selecting divisor 6 for SSI clock
                       // SSInClk = SysClk / (CPSDVSR * (1 + SCR) SCR = 0;
 
     //Write theSSICR0register with the following configuration
@@ -130,7 +130,8 @@ void SPI_init()
     // Enable the SSI by setting theSSEbit in theSSICR1register.
     SSI1_CR1_R |= (1<<1);
 
-    GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4); //Make sure all SS are high
+    //Make sure all SS are high
+    GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4);
 }
 
 

@@ -23,7 +23,8 @@ main.o: ../main.c \
  C:/Users/jmkaa/git/4-semester-project/FreeRTOS_position-controller/emp_type.h \
  ../tm4c123gh6pm.h ../gpio.h \
  C:/Users/jmkaa/git/4-semester-project/C\ libraries/SPI.h \
- C:/Users/jmkaa/git/4-semester-project/C\ libraries/PID_FreeRTOS.h
+ C:/Users/jmkaa/git/4-semester-project/C\ libraries/PID_FreeRTOS.h \
+ C:/Users/jmkaa/git/4-semester-project/TivaWare_C_Series-2.1.4.178/driverlib/sysctl.h
 
 C:/Users/jmkaa/git/4-semester-project/FreeRTOS_position-controller/setup.h:
 
@@ -76,3 +77,5 @@ C:/Users/jmkaa/git/4-semester-project/FreeRTOS_position-controller/emp_type.h:
 C:/Users/jmkaa/git/4-semester-project/C\ libraries/SPI.h:
 
 C:/Users/jmkaa/git/4-semester-project/C\ libraries/PID_FreeRTOS.h:
+
+C:/Users/jmkaa/git/4-semester-project/TivaWare_C_Series-2.1.4.178/driverlib/sysctl.h:

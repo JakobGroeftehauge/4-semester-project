@@ -114,7 +114,7 @@ extern void init_parameters()
     VC_1_parameter.reference_semaphore =    &POS_1_REF_SEM;//&VEL_1_REF_SEM;
     VC_1_parameter.feedback_signal =        &control_1_pos;//&control_1_vel;
     VC_1_parameter.feedback_semaphore =     &POS_1_SEM;//&VEL_1_SEM;
-    VC_1_parameter.delayTime =              5;
+    VC_1_parameter.delayTime =              1;
     VC_1_parameter.queue_semaphore =        &QUEUE_SEM;
     VC_1_parameter.output_id =              PWM_1;
 
@@ -151,7 +151,7 @@ extern void init_parameters()
     VC_2_parameter.reference_semaphore =    &POS_2_REF_SEM;//&VEL_1_REF_SEM;
     VC_2_parameter.feedback_signal =        &control_2_pos;//&control_1_vel;
     VC_2_parameter.feedback_semaphore =     &POS_2_SEM;//&VEL_1_SEM;
-    VC_2_parameter.delayTime =              5;
+    VC_2_parameter.delayTime =              1;
     VC_2_parameter.queue_semaphore =        &QUEUE_SEM;
     VC_2_parameter.output_id =              PWM_2;
 }

@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stddef.h>
+#include <stdbool.h>
 #include "EMP_type.h"
 
 #include "FreeRTOS.h"
@@ -20,6 +21,9 @@
 /* Task includes */
 #include "SPI.h"
 #include "PID_FreeRTOS.h"
+
+/* Tiva includes */
+#include <driverlib/sysctl.h>
 
 
 
@@ -69,18 +73,15 @@ int main(void)
     init_PIDs();
     init_parameters();
 
-
     send_data(0, PWM_1);
     float dummy = receive_data();
     send_data(0, PWM_2);
     dummy = receive_data();
 
-    pos_var = 32;
-
     // Create tasks
     // -------------------
     //xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 8, &PC_PID1_handle);
-    //xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 8, &VC_PID1_handle);
+    xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 8, &VC_PID1_handle);
 //    xTaskCreate(PID_PC_task, "Position controller 2", 100, &PC_2_parameter, 8, &PC_PID2_handle);
     xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 8, &VC_PID2_handle);
 
@@ -89,9 +90,6 @@ int main(void)
 
     control_1_pos_ref = 100;
     control_2_pos_ref = 30;
-
-
-
 
 
 

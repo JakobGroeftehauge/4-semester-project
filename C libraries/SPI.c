@@ -121,7 +121,7 @@ void SPI_init()
 
     // Configure the clock prescale divisor by writing the SSICPSR register.
 
-    SSI1_CPSR_R = 64; //selecting divisor 64 for SSI clock
+    SSI1_CPSR_R = 128; //selecting divisor 64 for SSI clock
                       // SSInClk = SysClk / (CPSDVSR * (1 + SCR) SCR = 0;
 
     //Write theSSICR0register with the following configuration

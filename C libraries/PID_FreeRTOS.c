@@ -18,6 +18,7 @@
 #include "SPI.h"
 #include "FreeRTOS.h"
 #include "defines.h"
+#include "setup.h"
 
 
 
@@ -96,12 +97,15 @@ extern void PID_VC_task(void* pvParameters)
     data_request.data = 0xFFFF;
     data_to_send.id = controller_parameter.output_id;
 
+    xLastWakeTime = xTaskGetTickCount(); // Is automatically updated by vTaskDelayUntil()
     for (;;)
     {
-        xLastWakeTime = xTaskGetTickCount();
+        GPIO_PORTA_DATA_R &= ~(0x04);
+
 
         if(xSemaphoreTake(*controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
         {
+            GPIO_PORTA_DATA_R &= ~(0x10);
             xQueueSend( SPI_queue, (void * ) &data_request, 0);
             xSemaphoreGive(*controller_parameter.queue_semaphore);
         }
@@ -110,9 +114,11 @@ extern void PID_VC_task(void* pvParameters)
         {
             if(xSemaphoreTake(*controller_parameter.reference_semaphore, portMAX_DELAY) == pdTRUE)
             {
+
                 temp_feedback = *controller_parameter.feedback_signal;
                 temp_reference = *controller_parameter.reference_signal;
                 xSemaphoreGive(*controller_parameter.reference_semaphore);
+                GPIO_PORTA_DATA_R |= 0x10;
             }
 
             result_PID = run_PID(temp_feedback, temp_reference, controller_parameter.id);
@@ -128,8 +134,13 @@ extern void PID_VC_task(void* pvParameters)
             xSemaphoreGive(*controller_parameter.queue_semaphore);
         }
 
+        GPIO_PORTA_DATA_R |= 0x04;
 
         vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS(controller_parameter.delayTime) );
+        //GPIO_PORTA_DATA_R ^= (0x04);
+        //GPIO_PORTA_DATA_R |= 0x04;
+        //vTaskDelay(pdMS_TO_TICKS(10));
+
     }
 
 }
@@ -182,7 +193,7 @@ extern void init_PIDs()
      PID_pool[VC_CONTROLLER_1_ID].Kp = 1;
      PID_pool[VC_CONTROLLER_1_ID].Kd = 0.01;
      PID_pool[VC_CONTROLLER_1_ID].Ki = 5;
-     PID_pool[VC_CONTROLLER_1_ID].dt = 0.005;
+     PID_pool[VC_CONTROLLER_1_ID].dt = 0.001;
      PID_pool[VC_CONTROLLER_1_ID].integral = 0;
      PID_pool[VC_CONTROLLER_1_ID].previous_error = 0;
      PID_pool[VC_CONTROLLER_1_ID].upper_sat = 12;
@@ -199,7 +210,7 @@ extern void init_PIDs()
      PID_pool[VC_CONTROLLER_2_ID].Kp = 1;
      PID_pool[VC_CONTROLLER_2_ID].Kd = 0.01;
      PID_pool[VC_CONTROLLER_2_ID].Ki = 5;
-     PID_pool[VC_CONTROLLER_2_ID].dt = 0.005;
+     PID_pool[VC_CONTROLLER_2_ID].dt = 0.001;
      PID_pool[VC_CONTROLLER_2_ID].integral = 0;
      PID_pool[VC_CONTROLLER_2_ID].previous_error = 0;
      PID_pool[VC_CONTROLLER_2_ID].upper_sat = 12;

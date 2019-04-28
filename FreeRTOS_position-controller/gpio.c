@@ -9,6 +9,9 @@
 #include <stdint.h>
 #include "tm4c123gh6pm.h"
 #include "gpio.h"
+
+#include <stdbool.h>
+#include <driverlib/sysctl.h>
 /*****************************    Defines    *******************************/
 
 /*****************************   Constants   *******************************/
@@ -57,11 +60,13 @@ void init_gpio(void)
     GPIO_PORTC_DIR_R = 0xF0;
     GPIO_PORTD_DIR_R = 0x4C;
     GPIO_PORTF_DIR_R = 0x0E;
+    GPIO_PORTA_DIR_R |= 0x14; //PA2 and PA4
 
     // Enable the GPIO pins for digital function (PF0, PF1, PF2, PF3, PF4).
     GPIO_PORTC_DEN_R = 0xF0;
     GPIO_PORTD_DEN_R = 0x4C;
     GPIO_PORTF_DEN_R = 0x1F;
+    GPIO_PORTA_DEN_R |= 0x14;
 
     // Enable internal pull-up (PF0 and PF4).
     GPIO_PORTF_PUR_R = 0x11;
@@ -71,7 +76,7 @@ void init_gpio(void)
 //
 //  // Enable the GPIO pins for digital function (PD6).
 //  GPIO_PORTD_DEN_R = 0x40;
-
+    SysCtlClockSet(SYSCTL_SYSDIV_2_5|SYSCTL_USE_PLL|SYSCTL_XTAL_16MHZ|SYSCTL_OSC_MAIN); //TivaWare API calls for running the system at 80 Mhz from PLL
 
 }
 

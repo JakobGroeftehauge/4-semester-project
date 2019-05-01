@@ -62,6 +62,12 @@ float control_1_pos_ref;
 
 /*****************************   Functions   *******************************/
 
+void enable_global_int()
+{
+  // enable interrupts.
+  __asm("cpsie i");
+}
+
 int main(void)
 {
     //SystemCoreClock;
@@ -72,16 +78,16 @@ int main(void)
     init_queue();
     init_PIDs();
     init_parameters();
-
-    send_data(0, PWM_1);
-    float dummy = receive_data();
-    send_data(0, PWM_2);
-    dummy = receive_data();
+    enable_global_int();
+//    send_data(0, PWM_1);
+//    float dummy = receive_data();
+//    send_data(0, PWM_2);
+//    dummy = receive_data();
 
     // Create tasks
     // -------------------
-    //xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 8, &PC_PID1_handle);
-    xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 8, &VC_PID1_handle);
+    xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 8, &PC_PID1_handle);
+    //xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 8, &VC_PID1_handle);
     //xTaskCreate(PID_PC_task, "Position controller 2", 100, &PC_2_parameter, 8, &PC_PID2_handle);
     //xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 8, &VC_PID2_handle);
 
@@ -92,7 +98,7 @@ int main(void)
     //control_2_pos_ref = 30;
     control_1_vel_ref = 5;
 
-
+    taskENABLE_INTERRUPTS();
 
     // Start the scheduler.
     // --------------------

@@ -128,7 +128,10 @@ void SPI_init()
     SSI1_CR0_R |= 0xF|(1<<7); //freescale mode, 16 bit data, steady clock low
 
     // Enable the SSI by setting theSSEbit in theSSICR1register.
-    SSI1_CR1_R |= (1<<1);
+    SSI1_CR1_R |= (1<<1);//|(1<<4); //Set EOT (4),SSI_CR1_EOT, in order to use the end of transmission interrupt
+
+    // Enable interrupt on end of transmission
+    //SSI1_IM_R |= (1 << 3); // maybe this can be used, SSI_IM_TXIM,
 
     //Make sure all SS are high
     GPIO_PORTC_DATA_R |= (1<<7)|(1<<6)|(1<<5)|(1<<4);
@@ -349,6 +352,56 @@ int16_t receive_data()
 //            uart0_putc(data_HIGH);
 
     return data;
+}
+
+int16_t receive_data_ISR()
+/*****************************************************************************
+*   Input    :
+*   Output   : The function return the received data.
+*   Function : receiving data with SPI
+******************************************************************************/
+{
+    INT16S data;
+
+    // is this the right way to do it? It probably is fine if the code is preemptive.
+        // is it possible to somehow wait for a signal or semaphore or interrupt instead?
+        // using vTaskNotifyGiveFromISR() and an ISR, the above mentioned should be achievable
+        // it seems that it is only possible to interrupt on FIFO half full. Instead it might be enough to make sure
+        // that the last bit has been sent
+        // it seems that it might be possible to use the end of transmission (EOT) combined with the SSI Transmit FIFO Interrupt
+        // to achieve the desired behaviour
+
+    if(xSemaphoreTake(SPI_EOT_SEM, portMAX_DELAY)==pdTRUE)
+    {
+        data = SSI1_DR_R;
+
+    }
+
+
+
+    //Til uart test
+//            INT8U data_HIGH = data & 0xFF;
+//            INT8U data_LOW = (data >> 8);
+//            while( !uart0_tx_rdy() )
+//            {}
+//            uart0_putc(data_LOW);
+//            while( !uart0_tx_rdy() )
+//            {}
+//            uart0_putc(data_HIGH);
+
+    return data;
+}
+
+void ssi1_eot_ISR()
+{// look into page 956
+
+    BaseType_t  xHigherPriorityTaskWoken = pdFALSE;
+    if (SSI1_RIS_R & SSI_RIS_TXRIS)
+    {
+        xSemaphoreGiveFromISR(SPI_EOT_SEM, &xHigherPriorityTaskWoken);
+    }
+
+    //maybe clear an interrupt flag
 }
 
 /****************************** End Of Module *******************************/

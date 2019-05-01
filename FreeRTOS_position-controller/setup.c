@@ -37,6 +37,8 @@ SemaphoreHandle_t POS_2_REF_SEM;
 SemaphoreHandle_t VEL_2_REF_SEM;
 SemaphoreHandle_t CUR_2_REF_SEM;
 
+SemaphoreHandle_t SPI_EOT_SEM;
+
 SemaphoreHandle_t QUEUE_SEM;
 
 
@@ -60,6 +62,8 @@ extern void init_sem()
     POS_2_REF_SEM = xSemaphoreCreateCounting(1, 1);
     VEL_2_REF_SEM = xSemaphoreCreateCounting(1, 1);
     CUR_2_REF_SEM = xSemaphoreCreateCounting(1, 1);
+
+    SPI_EOT_SEM = xSemaphoreCreateCounting(1, 0);
 
     QUEUE_SEM = xSemaphoreCreateCounting(1, 1);
 }

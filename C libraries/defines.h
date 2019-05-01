@@ -86,6 +86,7 @@ extern SemaphoreHandle_t POS_2_REF_SEM;
 extern SemaphoreHandle_t VEL_2_REF_SEM;
 extern SemaphoreHandle_t CUR_2_REF_SEM;
 
+extern SemaphoreHandle_t SPI_EOT_SEM;
 
 extern SemaphoreHandle_t QUEUE_SEM;
 

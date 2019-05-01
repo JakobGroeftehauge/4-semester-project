@@ -55,6 +55,7 @@ static uint32_t pui32Stack[128];
 //*****************************************************************************
 //
 // External declarations for the interrupt handlers used by the application.
+extern void ssi1_eot_ISR();
 //
 //*****************************************************************************
 // To be added by user
@@ -124,7 +125,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // GPIO Port G
     IntDefaultHandler,                      // GPIO Port H
     IntDefaultHandler,                      // UART2 Rx and Tx
-    IntDefaultHandler,                      // SSI1 Rx and Tx
+    ssi1_eot_ISR,                           // SSI1 Rx and Tx
     IntDefaultHandler,                      // Timer 3 subtimer A
     IntDefaultHandler,                      // Timer 3 subtimer B
     IntDefaultHandler,                      // I2C1 Master and Slave

@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lc C:/Users/jmkaa/git/4-semester-project/TivaWare_C_Series-2.1.4.178/driverlib/ccs/Debug/driverlib.lib
+LIBS := -lc C:/Users/Mads/Documents/GitHub/4-semester-project/TivaWare_C_Series-2.1.4.178/driverlib/ccs/Debug/driverlib.lib
 

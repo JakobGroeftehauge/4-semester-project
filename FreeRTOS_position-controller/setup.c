@@ -160,35 +160,6 @@ extern void init_parameters()
 //    VC_2_parameter.output_id =              PWM_2;
 }
 
-extern void reset_all()
-/*****************************************************************************
-*   Input    : -
-*   Output   : -
-*   Function : -
-******************************************************************************/
-{
-    control_1_pos = 0;
-    control_1_vel = 0;
-    control_1_cur = 0;
-    control_2_pos = 0;
-    control_2_vel = 0;
-    control_2_cur = 0;
-
-    control_1_pos_ref = 0;
-    control_1_vel_ref = 0;
-    control_1_cur_ref = 0;
-    control_2_pos_ref = 0;
-    control_2_vel_ref = 0;
-    control_2_cur_ref = 0;
-
-    xQueueReset( SPI_queue );
-
-    vTaskDelete( PC_PID1_handle );
-    vTaskDelete( PC_PID2_handle );
-    vTaskDelete( VC_PID1_handle );
-    vTaskDelete( VC_PID2_handle );
-
-}
 
 
 

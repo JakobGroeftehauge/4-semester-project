@@ -12,17 +12,29 @@
 #include "task.h"
 #include "semphr.h"
 #include "PID_FreeRTOS.h"
+#include "uart_protocol.h"
 
 /*****************************    Defines    *******************************/
-#define POS_1           0
-#define VEL_1           1
-#define CUR_1           2
-#define PWM_1           3
-#define POS_2           4
-#define VEL_2           5
-#define CUR_2           6
-#define PWM_2           7
-#define PROTOCOL_SLAVE  8
+// Slaves
+#define POS_1                   0
+#define VEL_1                   1
+#define CUR_1                   2
+#define PWM_1                   3
+#define POS_2                   4
+#define VEL_2                   5
+#define CUR_2                   6
+#define PWM_2                   7
+#define PROTOCOL_SLAVE          8
+
+// UART
+#define UI_WAITING_FOR_COMMAND  0
+#define UI_COMMAND_READY        1
+
+#define RESET_COMMAND           0
+#define HOME_MOTOR_COMMAND      1
+#define INCREMENT_MOTOR_COMMAND 2
+#define GO_TO_POSITION_COMMAND  3
+#define ABORT_COMMAND           4
 
 
 /********************** External declaration of Variables ******************/
@@ -70,6 +82,7 @@ extern struct PID_parameter VC_2_parameter;
 
 /*****************************     Queues     ****************************/
 QueueHandle_t SPI_queue;
+QueueHandle_t xUARTReceive_queue;
 
 /****************************    Semaphores    ***************************/
 extern SemaphoreHandle_t POS_1_SEM;
@@ -87,17 +100,21 @@ extern SemaphoreHandle_t VEL_2_REF_SEM;
 extern SemaphoreHandle_t CUR_2_REF_SEM;
 
 extern SemaphoreHandle_t SPI_EOT_SEM;
-
 extern SemaphoreHandle_t QUEUE_SEM;
 
 
 /*****************************     Tasks     ****************************/
+// Controllers
 extern TaskHandle_t PC_PID1_handle;
 extern TaskHandle_t PC_PID2_handle;
 extern TaskHandle_t VC_PID1_handle;
 extern TaskHandle_t VC_PID2_handle;
 
+// SPI
 extern TaskHandle_t SPI_handle;
 extern TaskHandle_t adjust_values_handle;
 
+// UART
+extern TaskHandle_t UI_task_handle;
+extern TaskHandle_t UART_driver_task_handle;
 #endif /* DEFINES_H_ */

@@ -9,11 +9,11 @@ LDS_SRCS += \
 ../tm4c123gh6pm.lds 
 
 C_SRCS += \
-C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/FPGA_comp.c \
-C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/Filter.c \
-C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/PID_FreeRTOS.c \
-C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/SPI.c \
-C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/circular_buffer.c \
+C:/Users/jmkaa/git/4-semester-project/C\ libraries/FPGA_comp.c \
+C:/Users/jmkaa/git/4-semester-project/C\ libraries/Filter.c \
+C:/Users/jmkaa/git/4-semester-project/C\ libraries/PID_FreeRTOS.c \
+C:/Users/jmkaa/git/4-semester-project/C\ libraries/SPI.c \
+C:/Users/jmkaa/git/4-semester-project/C\ libraries/circular_buffer.c \
 ../common.c \
 ../defines.c \
 ../gpio.c \
@@ -25,7 +25,9 @@ C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-
 ../setup.c \
 ../tasks.c \
 ../timers.c \
-../tm4c123gh6pm_startup_ccs_gcc.c 
+../tm4c123gh6pm_startup_ccs_gcc.c \
+../uart0.c \
+../uart_protocol.c 
 
 C_DEPS += \
 ./FPGA_comp.d \
@@ -44,7 +46,9 @@ C_DEPS += \
 ./setup.d \
 ./tasks.d \
 ./timers.d \
-./tm4c123gh6pm_startup_ccs_gcc.d 
+./tm4c123gh6pm_startup_ccs_gcc.d \
+./uart0.d \
+./uart_protocol.d 
 
 OBJS += \
 ./FPGA_comp.o \
@@ -63,7 +67,9 @@ OBJS += \
 ./setup.o \
 ./tasks.o \
 ./timers.o \
-./tm4c123gh6pm_startup_ccs_gcc.o 
+./tm4c123gh6pm_startup_ccs_gcc.o \
+./uart0.o \
+./uart_protocol.o 
 
 OBJS__QUOTED += \
 "FPGA_comp.o" \
@@ -82,7 +88,9 @@ OBJS__QUOTED += \
 "setup.o" \
 "tasks.o" \
 "timers.o" \
-"tm4c123gh6pm_startup_ccs_gcc.o" 
+"tm4c123gh6pm_startup_ccs_gcc.o" \
+"uart0.o" \
+"uart_protocol.o" 
 
 C_DEPS__QUOTED += \
 "FPGA_comp.d" \
@@ -101,14 +109,16 @@ C_DEPS__QUOTED += \
 "setup.d" \
 "tasks.d" \
 "timers.d" \
-"tm4c123gh6pm_startup_ccs_gcc.d" 
+"tm4c123gh6pm_startup_ccs_gcc.d" \
+"uart0.d" \
+"uart_protocol.d" 
 
 C_SRCS__QUOTED += \
-"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/FPGA_comp.c" \
-"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/Filter.c" \
-"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/PID_FreeRTOS.c" \
-"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/SPI.c" \
-"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/circular_buffer.c" \
+"C:/Users/jmkaa/git/4-semester-project/C libraries/FPGA_comp.c" \
+"C:/Users/jmkaa/git/4-semester-project/C libraries/Filter.c" \
+"C:/Users/jmkaa/git/4-semester-project/C libraries/PID_FreeRTOS.c" \
+"C:/Users/jmkaa/git/4-semester-project/C libraries/SPI.c" \
+"C:/Users/jmkaa/git/4-semester-project/C libraries/circular_buffer.c" \
 "../common.c" \
 "../defines.c" \
 "../gpio.c" \
@@ -120,6 +130,8 @@ C_SRCS__QUOTED += \
 "../setup.c" \
 "../tasks.c" \
 "../timers.c" \
-"../tm4c123gh6pm_startup_ccs_gcc.c" 
+"../tm4c123gh6pm_startup_ccs_gcc.c" \
+"../uart0.c" \
+"../uart_protocol.c" 
 
 

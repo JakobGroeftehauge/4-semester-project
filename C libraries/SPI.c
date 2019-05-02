@@ -23,8 +23,7 @@
 #include <stdint.h>
 #include "tm4c123gh6pm.h"
 #include "defines.h"
-#include "rtcs.h"
-#include "uart.h"
+#include "uart0.h"
 /*****************************    Defines    *******************************/
 
 /*****************************   Constants   *******************************/
@@ -150,6 +149,7 @@ extern void SPI_task(void * pvParameters)
         int16_t received_data_queue = 0;
         float received_data_SPI = 0;
         int16_t dummyReceive;
+        float temp_1_vel;
 
         struct SPI_queue_element received_struct;
         for( ;; )
@@ -180,7 +180,22 @@ extern void SPI_task(void * pvParameters)
                     received_data_SPI = receive_data();
 
                     //Put in correct buffer
-                    control_1_vel = received_data_SPI;
+                    temp_1_vel = received_data_SPI;
+                    if(temp_1_vel == 0)
+                        control_1_vel = temp_1_vel;
+                    else
+                        control_1_vel = 1/temp_1_vel;
+
+//                    while( !uart0_tx_rdy() )
+//                    {
+//                        ;
+//                    }
+//                    uart0_putc( (int16_t) control_1_vel & 0xFF );
+//                    while( !uart0_tx_rdy() )
+//                    {
+//                        ;
+//                    }
+//                    uart0_putc( (int16_t)control_1_vel >> 8 );
 
                     // Signal Semaphore
                     xSemaphoreGive( VEL_1_SEM );

@@ -21,6 +21,7 @@
 /* Task includes */
 #include "SPI.h"
 #include "PID_FreeRTOS.h"
+#include "uart_protocol.h"
 
 /* Tiva includes */
 #include <driverlib/sysctl.h>
@@ -62,11 +63,11 @@ float control_1_pos_ref;
 
 /*****************************   Functions   *******************************/
 
-void enable_global_int()
-{
-  // enable interrupts.
-  __asm("cpsie i");
-}
+//void enable_global_int()
+//{
+//  // enable interrupts.
+//  __asm("cpsie i");
+//}
 
 int main(void)
 {
@@ -78,27 +79,32 @@ int main(void)
     init_queue();
     init_PIDs();
     init_parameters();
-    enable_global_int();
+    //enable_global_int();
+    //uart0_init(9600, 8, 1, 0);
 //    send_data(0, PWM_1);
 //    float dummy = receive_data();
 //    send_data(0, PWM_2);
 //    dummy = receive_data();
 
+//    while( !uart0_tx_rdy() ){       ;       }
+//    uart0_putc( 'k' );
+
     // Create tasks
     // -------------------
-    xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 8, &PC_PID1_handle);
-    //xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 8, &VC_PID1_handle);
+    //xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 8, &PC_PID1_handle);
+    xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 8, &VC_PID1_handle);
     //xTaskCreate(PID_PC_task, "Position controller 2", 100, &PC_2_parameter, 8, &PC_PID2_handle);
     //xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 8, &VC_PID2_handle);
 
-    uint8_t empty = 4;
-    xTaskCreate(SPI_task, "SPI module", 100, &empty, 1, &SPI_handle);
+
+//    xTaskCreate(UARTDriverTask, "Get from UART queue", 100, NULL, 1, &UART_driver_task_handle);
+  //  xTaskCreate(UITask, "UI", 100, NULL, 1, &UI_task_handle);
+    xTaskCreate(SPI_task, "SPI module", 100, NULL, 1, &SPI_handle);
 
     control_1_pos_ref = 100;
     //control_2_pos_ref = 30;
-    control_1_vel_ref = 5;
+    control_1_vel_ref = 8.5;
 
-    taskENABLE_INTERRUPTS();
 
     // Start the scheduler.
     // --------------------

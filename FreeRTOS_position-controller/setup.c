@@ -3,6 +3,7 @@
 #include "FreeRTOS.h"
 #include "defines.h"
 #include "PID_freeRTOS.h"
+#include "SPI.h"
 
 
 /********************** External declaration of Variables ******************/
@@ -77,6 +78,8 @@ extern void init_queue()
 {
     SPI_queue = xQueueCreate(100, //Number of elements in queue
                              sizeof( struct SPI_queue_element  ) ); //Number of bytes for each element
+
+    xUARTReceive_queue = xQueueCreate(15, 8);
 }
 
 extern void init_parameters()
@@ -161,6 +164,70 @@ extern void init_parameters()
 }
 
 
+extern void reset_all()
+/*****************************************************************************
+*   Input    : -
+*   Output   : -
+*   Function : -
+******************************************************************************/
+{
+    while( !uart0_tx_rdy() )
+    {
+        ;
+    }
+    uart0_putc( 's' );
+    // Reset tasks
+    vTaskDelete(&PC_PID1_handle);
+    vTaskDelete(&VC_PID1_handle);
+    vTaskDelete(&PC_PID2_handle);
+    vTaskDelete(&VC_PID2_handle);
 
+    // Reset queues
+    xQueueReset(SPI_queue);
 
+    // Reset buffers
+    control_1_pos = 0;
+    control_1_vel = 0;
+    control_1_cur = 0;
+    control_2_pos = 0;
+    control_2_vel = 0;
+    control_2_cur = 0;
+
+    control_1_pos_ref = 0;
+    control_1_vel_ref = 0;
+    control_1_cur_ref = 0;
+    control_2_pos_ref = 0;
+    control_2_vel_ref = 0;
+    control_2_cur_ref = 0;
+
+    // Reset semaphores
+    vSemaphoreDelete(POS_1_SEM);
+    vSemaphoreDelete(VEL_1_SEM);
+    vSemaphoreDelete(CUR_1_SEM);
+    vSemaphoreDelete(POS_2_SEM);
+    vSemaphoreDelete(VEL_2_SEM);
+    vSemaphoreDelete(CUR_2_SEM);
+
+    vSemaphoreDelete(POS_1_REF_SEM);
+    vSemaphoreDelete(VEL_1_REF_SEM);
+    vSemaphoreDelete(CUR_1_REF_SEM);
+    vSemaphoreDelete(POS_2_REF_SEM);
+    vSemaphoreDelete(VEL_2_REF_SEM);
+    vSemaphoreDelete(CUR_2_REF_SEM);
+
+    vSemaphoreDelete(SPI_EOT_SEM);
+    vSemaphoreDelete(QUEUE_SEM);
+
+    // Initialize again
+    init_sem();
+    init_queue();
+
+    xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 8, &PC_PID1_handle);
+    xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 8, &VC_PID1_handle);
+    xTaskCreate(PID_PC_task, "Position controller 2", 100, &PC_2_parameter, 8, &PC_PID2_handle);
+    xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 8, &VC_PID2_handle);
+
+    uint8_t empty = 4;
+    xTaskCreate(SPI_task, "SPI module", 100, &empty, 1, &SPI_handle);
+}
 

@@ -8,6 +8,7 @@
 #include "uart_protocol.h"
 #include "uart0.h"
 #include "setup.h"
+#include "queue.h"
 
 /*****************************    Defines    *******************************/
 
@@ -28,29 +29,29 @@ float control_2_cur_ref;
 
 volatile uint8_t UITaskCommandReady         = UI_COMMAND_READY;
 volatile uint8_t *first_byte_from_queue_ptr = 0;
-volatile uint8_t *receive_character         = 0;
 volatile uint8_t *byte_from_UART_queue      = 0;
 volatile uint8_t first_byte_from_queue      = 0;
+volatile UBaseType_t elementsInQueue            = 0;
+volatile uint8_t *receive_character = 0;
 
 /****************************    Semaphores    ***************************/
 SemaphoreHandle_t POS_1_SEM;
 SemaphoreHandle_t VEL_1_SEM;
-SemaphoreHandle_t CUR_1_SEM;
 SemaphoreHandle_t POS_2_SEM;
 SemaphoreHandle_t VEL_2_SEM;
-SemaphoreHandle_t CUR_2_SEM;
 
 SemaphoreHandle_t POS_1_REF_SEM;
 SemaphoreHandle_t VEL_1_REF_SEM;
-SemaphoreHandle_t CUR_1_REF_SEM;
 SemaphoreHandle_t POS_2_REF_SEM;
 SemaphoreHandle_t VEL_2_REF_SEM;
-SemaphoreHandle_t CUR_2_REF_SEM;
+
 
 SemaphoreHandle_t SPI_EOT_SEM;
-
+SemaphoreHandle_t UART_RECEIVE_SEM;
 SemaphoreHandle_t QUEUE_SEM;
+
 /*****************************   Constants   *******************************/
+
 
 /*************************  Function interfaces ****************************/
 
@@ -63,16 +64,18 @@ void UARTDriverTask (void * pvParameters)
 {
     TickType_t xLastWakeTime;
     xLastWakeTime = xTaskGetTickCount();
+
     for (;;)
     {
         if (uart0_rx_rdy())
         {
             receive_character = uart0_getc();
-            xQueueSend(xUARTReceive_queue,  &receive_character, (TickType_t) 0); //(void *)
-        }
-        while( !uart0_tx_rdy() ){       ;       }
-            uart0_putc( 'k' );
+            if( xQueueSend(xUARTReceive_queue, &receive_character, (TickType_t) 0) == pdPASS); //(void *)
+                //elementsInQueue = 100;
 
+        }
+
+        elementsInQueue = uxQueueMessagesWaiting( xUARTReceive_queue );
         vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS( 50 ) );
         //vTaskDelay(pdMS_TO_TICKS( 50 ));
     }
@@ -91,20 +94,31 @@ void UITask( void * pvParameters)
     struct SPI_queue_element SPI_protocol_struct;
     for (;;)
     {
+        //xSemaphoreTake( UART_RECEIVE_SEM, portMAX_DELAY );
+
+        elementsInQueue = uxQueueMessagesWaiting( xUARTReceive_queue );
+        // Get first byte from queue
         if (UITaskCommandReady)
         {
             xQueueReceive( xUARTReceive_queue, &first_byte_from_queue_ptr , ( TickType_t ) portMAX_DELAY );
             first_byte_from_queue = first_byte_from_queue_ptr;
         }
 
+        //Current number of elements in queue
         UBaseType_t UARTMessagesWaiting = uxQueueMessagesWaiting(xUARTReceive_queue);
+
+        //Protocol actions from first received byte
         switch ( first_byte_from_queue - 48 )
         {
             case (RESET_COMMAND):
                 UITaskCommandReady = UI_COMMAND_READY;
-                //GPIO_PORTF_DATA_R ^= 0x02; // Debug
 
-                reset_all();
+                // Reset all tasks, queues and semaphore
+                //reset_all();
+
+                SPI_protocol_struct.id = PROTOCOL_SLAVE;
+                SPI_protocol_struct.data = 0x00AA;
+                xQueueSend( SPI_queue, (void *) &SPI_protocol_struct, 0);
 
                 SPI_protocol_struct.id = PROTOCOL_SLAVE;
                 SPI_protocol_struct.data = 0x00CC;
@@ -117,8 +131,7 @@ void UITask( void * pvParameters)
                 {
                     UITaskCommandReady = UI_COMMAND_READY;
                     xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
-                    //GPIO_PORTF_DATA_R ^= 0x04; // Debug
-                    if( byte_from_UART_queue == 0 )
+                    if( (byte_from_UART_queue - 48) == 0 )
                     {
                         if( xSemaphoreTake( POS_1_REF_SEM, portMAX_DELAY ) == pdTRUE )
                         {
@@ -126,7 +139,7 @@ void UITask( void * pvParameters)
                             xSemaphoreGive(POS_1_REF_SEM);
                         }
                     }
-                    else if( byte_from_UART_queue == 1 )
+                    else if( (byte_from_UART_queue - 48) == 1 )
                     {
                         if( xSemaphoreTake( POS_2_REF_SEM, portMAX_DELAY ) == pdTRUE )
                         {
@@ -180,13 +193,6 @@ void UITask( void * pvParameters)
 
                 break;
         }
-
-
-
-
-
-
-
 
         //vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS( 1000 ) );
 //        vTaskDelay( pdMS_TO_TICKS( 3000 ) );

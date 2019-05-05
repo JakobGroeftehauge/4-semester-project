@@ -53,6 +53,7 @@ extern float control_2_vel_ref;
 extern float control_2_cur_ref;
 
 extern int16_t glob_protocol;
+extern int16_t global_test;
 
 /*****************************     Structs     ****************************/
 typedef struct PID_parameter {
@@ -87,20 +88,19 @@ QueueHandle_t xUARTReceive_queue;
 /****************************    Semaphores    ***************************/
 extern SemaphoreHandle_t POS_1_SEM;
 extern SemaphoreHandle_t VEL_1_SEM;
-extern SemaphoreHandle_t CUR_1_SEM;
 extern SemaphoreHandle_t POS_2_SEM;
 extern SemaphoreHandle_t VEL_2_SEM;
-extern SemaphoreHandle_t CUR_2_SEM;
+
 
 extern SemaphoreHandle_t POS_1_REF_SEM;
 extern SemaphoreHandle_t VEL_1_REF_SEM;
-extern SemaphoreHandle_t CUR_1_REF_SEM;
 extern SemaphoreHandle_t POS_2_REF_SEM;
 extern SemaphoreHandle_t VEL_2_REF_SEM;
-extern SemaphoreHandle_t CUR_2_REF_SEM;
+
 
 extern SemaphoreHandle_t SPI_EOT_SEM;
 extern SemaphoreHandle_t QUEUE_SEM;
+extern SemaphoreHandle_t UART_RECEIVE_SEM;
 
 
 /*****************************     Tasks     ****************************/

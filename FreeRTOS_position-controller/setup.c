@@ -1,9 +1,23 @@
+#include <setup.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <stdbool.h>
+#include "EMP_type.h"
+
 #include "setup.h"
 #include "FPGA_comp.h"
 #include "FreeRTOS.h"
 #include "defines.h"
 #include "PID_freeRTOS.h"
 #include "SPI.h"
+
+
+
+#include "task.h"
+#include "semphr.h"
+#include "tm4c123gh6pm.h"
+#include "gpio.h"
 
 
 /********************** External declaration of Variables ******************/
@@ -26,21 +40,18 @@ int16_t glob_protocol;
 /****************************    Semaphores    ***************************/
 SemaphoreHandle_t POS_1_SEM;
 SemaphoreHandle_t VEL_1_SEM;
-SemaphoreHandle_t CUR_1_SEM;
 SemaphoreHandle_t POS_2_SEM;
 SemaphoreHandle_t VEL_2_SEM;
-SemaphoreHandle_t CUR_2_SEM;
 
 SemaphoreHandle_t POS_1_REF_SEM;
 SemaphoreHandle_t VEL_1_REF_SEM;
-SemaphoreHandle_t CUR_1_REF_SEM;
 SemaphoreHandle_t POS_2_REF_SEM;
 SemaphoreHandle_t VEL_2_REF_SEM;
-SemaphoreHandle_t CUR_2_REF_SEM;
+
 
 SemaphoreHandle_t SPI_EOT_SEM;
-
 SemaphoreHandle_t QUEUE_SEM;
+SemaphoreHandle_t UART_RECEIVE_SEM;
 
 
 extern void init_sem()
@@ -52,21 +63,17 @@ extern void init_sem()
 {
     POS_1_SEM = xSemaphoreCreateCounting(1, 0);
     VEL_1_SEM = xSemaphoreCreateCounting(1, 0);
-    CUR_1_SEM = xSemaphoreCreateCounting(1, 0);
     POS_2_SEM = xSemaphoreCreateCounting(1, 0);
     VEL_2_SEM = xSemaphoreCreateCounting(1, 0);
-    CUR_2_SEM = xSemaphoreCreateCounting(1, 0);
 
     POS_1_REF_SEM = xSemaphoreCreateCounting(1, 1);
     VEL_1_REF_SEM = xSemaphoreCreateCounting(1, 1);
-    CUR_1_REF_SEM = xSemaphoreCreateCounting(1, 1);
     POS_2_REF_SEM = xSemaphoreCreateCounting(1, 1);
     VEL_2_REF_SEM = xSemaphoreCreateCounting(1, 1);
-    CUR_2_REF_SEM = xSemaphoreCreateCounting(1, 1);
 
     SPI_EOT_SEM = xSemaphoreCreateCounting(1, 0);
-
     QUEUE_SEM = xSemaphoreCreateCounting(1, 1);
+    UART_RECEIVE_SEM = xSemaphoreCreateCounting(1, 0);
 }
 
 extern void init_queue()
@@ -76,10 +83,8 @@ extern void init_queue()
 *   Function : -
 ******************************************************************************/
 {
-    SPI_queue = xQueueCreate(100, //Number of elements in queue
+    SPI_queue = xQueueCreate(10, //Number of elements in queue
                              sizeof( struct SPI_queue_element  ) ); //Number of bytes for each element
-
-    xUARTReceive_queue = xQueueCreate(15, 8);
 }
 
 extern void init_parameters()
@@ -109,7 +114,7 @@ extern void init_parameters()
     VC_1_parameter.reference_semaphore =    &VEL_1_REF_SEM;
     VC_1_parameter.feedback_signal =        &control_1_vel;
     VC_1_parameter.feedback_semaphore =     &VEL_1_SEM;
-    VC_1_parameter.delayTime =              5;
+    VC_1_parameter.delayTime =              1;
     VC_1_parameter.queue_semaphore =        &QUEUE_SEM;
     VC_1_parameter.output_id =              PWM_1;
 
@@ -171,11 +176,6 @@ extern void reset_all()
 *   Function : -
 ******************************************************************************/
 {
-    while( !uart0_tx_rdy() )
-    {
-        ;
-    }
-    uart0_putc( 's' );
     // Reset tasks
     vTaskDelete(&PC_PID1_handle);
     vTaskDelete(&VC_PID1_handle);
@@ -203,20 +203,17 @@ extern void reset_all()
     // Reset semaphores
     vSemaphoreDelete(POS_1_SEM);
     vSemaphoreDelete(VEL_1_SEM);
-    vSemaphoreDelete(CUR_1_SEM);
     vSemaphoreDelete(POS_2_SEM);
     vSemaphoreDelete(VEL_2_SEM);
-    vSemaphoreDelete(CUR_2_SEM);
 
     vSemaphoreDelete(POS_1_REF_SEM);
     vSemaphoreDelete(VEL_1_REF_SEM);
-    vSemaphoreDelete(CUR_1_REF_SEM);
     vSemaphoreDelete(POS_2_REF_SEM);
     vSemaphoreDelete(VEL_2_REF_SEM);
-    vSemaphoreDelete(CUR_2_REF_SEM);
 
     vSemaphoreDelete(SPI_EOT_SEM);
     vSemaphoreDelete(QUEUE_SEM);
+    vSemaphoreDelete(UART_RECEIVE_SEM);
 
     // Initialize again
     init_sem();
@@ -229,5 +226,11 @@ extern void reset_all()
 
     uint8_t empty = 4;
     xTaskCreate(SPI_task, "SPI module", 100, &empty, 1, &SPI_handle);
+
+    while( !uart0_tx_rdy() )
+    {
+        ;
+    }
+    uart0_putc( 'p' );
 }
 

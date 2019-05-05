@@ -39,6 +39,8 @@ float control_2_pos;
 float control_2_vel;
 float control_2_cur;
 
+int16_t global_test;
+
 SemaphoreHandle_t POS_1_SEM;
 SemaphoreHandle_t VEL_1_SEM;
 SemaphoreHandle_t CUR_1_SEM;
@@ -180,11 +182,11 @@ extern void SPI_task(void * pvParameters)
                     received_data_SPI = receive_data();
 
                     //Put in correct buffer
-                    temp_1_vel = received_data_SPI;
-                    if(temp_1_vel == 0)
-                        control_1_vel = temp_1_vel;
+                    global_test = received_data_SPI;
+                    if(global_test == 0)
+                        control_1_vel = global_test;
                     else
-                        control_1_vel = 1/temp_1_vel;
+                        control_1_vel = 1/global_test;
 
 //                    while( !uart0_tx_rdy() )
 //                    {

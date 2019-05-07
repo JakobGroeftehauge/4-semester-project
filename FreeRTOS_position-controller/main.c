@@ -92,6 +92,7 @@ int main(void)
     xTaskCreate(SPI_task, "SPI module", 100, NULL, 1, &SPI_handle);
 
     control_1_pos_ref = 100;
+    control_2_pos_ref = 100;
     //control_2_pos_ref = 30;
     //control_1_vel_ref = -12.5;
 

@@ -27,12 +27,16 @@ float control_2_pos_ref;
 float control_2_vel_ref;
 float control_2_cur_ref;
 
-volatile uint8_t UITaskCommandReady         = UI_COMMAND_READY;
-volatile uint8_t *first_byte_from_queue_ptr = 0;
-volatile uint8_t *byte_from_UART_queue      = 0;
-volatile uint8_t first_byte_from_queue      = 0;
+volatile uint8_t     UITaskCommandReady         = UI_COMMAND_READY;
+volatile uint8_t     *first_byte_from_queue_ptr = 0;
+volatile uint8_t     *byte_from_UART_queue      = 0;
+volatile uint8_t     first_byte_from_queue      = 0;
 volatile UBaseType_t elementsInQueue            = 0;
-volatile uint8_t *receive_character = 0;
+volatile uint8_t     *receive_character         = 0;
+volatile UBaseType_t UARTMessagesWaiting        = 0;
+volatile uint16_t    temp_motor_position        = 0;
+volatile float       motor_position             = 0;
+
 
 /****************************    Semaphores    ***************************/
 SemaphoreHandle_t POS_1_SEM;
@@ -105,7 +109,7 @@ void UITask( void * pvParameters)
         }
 
         //Current number of elements in queue
-        UBaseType_t UARTMessagesWaiting = uxQueueMessagesWaiting(xUARTReceive_queue);
+        UARTMessagesWaiting = uxQueueMessagesWaiting(xUARTReceive_queue);
 
         //Protocol actions from first received byte
         switch ( first_byte_from_queue - 48 )
@@ -149,24 +153,10 @@ void UITask( void * pvParameters)
                     }
                 } else {
                     UITaskCommandReady = UI_WAITING_FOR_COMMAND;
-                    vTaskDelay( pdMS_TO_TICKS( 3000 ) );
+                    vTaskDelay( pdMS_TO_TICKS( 200 ) );
                 }
 
 
-                break;
-
-            case (INCREMENT_MOTOR_COMMAND): //Vent til sidst
-                if (UARTMessagesWaiting >= 2)
-                {
-                   UITaskCommandReady = UI_COMMAND_READY;
-                   xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
-                   xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
-                   // GPIO_PORTF_DATA_R ^= 0x08; // Debug
-                   // DO stuff
-                } else {
-                    UITaskCommandReady = UI_WAITING_FOR_COMMAND;
-                    vTaskDelay( pdMS_TO_TICKS( 3000 ) );
-                }
                 break;
 
             case (GO_TO_POSITION_COMMAND):
@@ -174,14 +164,60 @@ void UITask( void * pvParameters)
                 {
                     UITaskCommandReady = UI_COMMAND_READY;
                     xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
-                    xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
-                    xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
-                    xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
-                    xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
-                    GPIO_PORTF_DATA_R ^= 0x02;
+                    if( (byte_from_UART_queue - 48) == 0 )
+                    {
+                        motor_position = 0;
+                        xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
+                        temp_motor_position = (byte_from_UART_queue - 48);
+                        motor_position = (float) temp_motor_position * 1000;
+
+                        xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
+                        temp_motor_position = (byte_from_UART_queue - 48);
+                        motor_position += temp_motor_position * 100;
+
+                        xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
+                        temp_motor_position= (byte_from_UART_queue - 48);
+                        motor_position += temp_motor_position * 10;
+
+                        xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
+                        temp_motor_position = (byte_from_UART_queue - 48);
+                        motor_position += temp_motor_position;
+
+                        control_1_pos_ref = motor_position;
+                    }
+                    else if( (byte_from_UART_queue - 48) == 1 )
+                    {
+                        motor_position = 0;
+                        xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
+                        temp_motor_position = (byte_from_UART_queue - 48);
+                        motor_position = (float) temp_motor_position * 1000;
+
+                        xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
+                        temp_motor_position = (byte_from_UART_queue - 48);
+                        motor_position += temp_motor_position * 100;
+
+                        xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
+                        temp_motor_position= (byte_from_UART_queue - 48);
+                        motor_position += temp_motor_position * 10;
+
+                        xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
+                        temp_motor_position = (byte_from_UART_queue - 48);
+                        motor_position += temp_motor_position;
+
+                        control_2_pos_ref = motor_position;
+                    }
+                    else
+                    {
+                        // If it ends up here wrong motor number entered - empty queue
+                        xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
+                        xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
+                        xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
+                        xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
+                    }
+
                 } else {
                     UITaskCommandReady = UI_WAITING_FOR_COMMAND;
-                    vTaskDelay( pdMS_TO_TICKS( 3000 ) );
+                    vTaskDelay( pdMS_TO_TICKS( 200 ) );
                 }
                 break;
 
@@ -190,12 +226,8 @@ void UITask( void * pvParameters)
                 break;
 
             default:
-
                 break;
         }
-
-        //vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS( 1000 ) );
-//        vTaskDelay( pdMS_TO_TICKS( 3000 ) );
     }
 }
 

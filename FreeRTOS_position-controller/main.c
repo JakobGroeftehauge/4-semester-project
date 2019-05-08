@@ -83,6 +83,8 @@ int main(void)
     //xTaskCreate(PID_PC_task, "Position controller 2", 100, &PC_2_parameter, 8, &PC_PID2_handle);
     xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 8, &VC_PID2_handle);
 
+    //send_data( 0x00CC, 8);
+
     xTaskCreate(UARTDriverTask, "Get from UART queue", 150, NULL, 1, &UART_driver_task_handle);
     xTaskCreate(UITask, "UI", 100, NULL, 1, &UI_task_handle);
     xTaskCreate(SPI_task, "SPI module", 100, NULL, 1, &SPI_handle);

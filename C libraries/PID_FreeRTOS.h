@@ -31,6 +31,11 @@
 #define PC_CONTROLLER_2_ID    2
 #define VC_CONTROLLER_2_ID    3
 
+#define PC_CONTROLLER_DTERM_1_ID    4
+#define VC_CONTROLLER_DTERM_1_ID    5
+#define PC_CONTROLLER_DTERM_2_ID    6
+#define VC_CONTROLLER_DTERM_2_ID    7
+
 typedef struct
 {
   float Kp;
@@ -44,6 +49,7 @@ typedef struct
   float pastError;
   float Ud;
   uint8_t filter_id;
+  uint8_t filter_dterm_id;
   uint8_t sat_flag;
 } PID_controller;
 

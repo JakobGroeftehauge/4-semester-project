@@ -17,7 +17,7 @@
 #include "circular_buffer.h"
 #include <stdint.h>
 /*****************************    Defines    *******************************/
-#define NOF_FILTERS     3
+#define NOF_FILTERS     8
 
 /*****************************   Variables   *******************************/
 filter_descriptor filter_pool[NOF_FILTERS]; //Pool of filters

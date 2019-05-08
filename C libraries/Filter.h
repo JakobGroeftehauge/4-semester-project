@@ -28,6 +28,10 @@
 #define FILTER_2        BUFFER_FILTER_2	
 #define FILTER_3        BUFFER_FILTER_3
 #define FILTER_4        BUFFER_FILTER_4
+#define FILTER_5		BUFFER_FILTER_5
+#define FILTER_6		BUFFER_FILTER_6
+#define FILTER_7		BUFFER_FILTER_7
+#define FILTER_8		BUFFER_FILTER_8
 
 
 typedef struct

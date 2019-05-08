@@ -28,10 +28,10 @@
 #define BUFFER_FILTER_2    1
 #define BUFFER_FILTER_3    2
 #define BUFFER_FILTER_4    3
-#define BUFFER_5           4
-#define BUFFER_6           5
-#define BUFFER_7           6
-#define BUFFER_8           7
+#define BUFFER_FILTER_5    4
+#define BUFFER_FILTER_6    5
+#define BUFFER_FILTER_7    6
+#define BUFFER_FILTER_8    7
 /*************************  Function interfaces ****************************/
 
 extern void initialize_buffer(uint8_t id);

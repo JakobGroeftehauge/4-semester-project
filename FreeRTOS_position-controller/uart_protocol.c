@@ -76,7 +76,6 @@ void UARTDriverTask (void * pvParameters)
             receive_character = uart0_getc();
             if( xQueueSend(xUARTReceive_queue, &receive_character, (TickType_t) 0) == pdPASS); //(void *)
                 //elementsInQueue = 100;
-
         }
 
         elementsInQueue = uxQueueMessagesWaiting( xUARTReceive_queue );
@@ -119,16 +118,16 @@ void UITask( void * pvParameters)
 
 
 
-//            if( xSemaphoreTake( POS_1_REF_SEM, portMAX_DELAY ) == pdTRUE )
-//             {
-//                 control_1_pos_ref = 0;
-//                 xSemaphoreGive(POS_1_REF_SEM);
-//             }
-//             if( xSemaphoreTake( POS_2_REF_SEM, portMAX_DELAY ) == pdTRUE )
-//             {
-//                 control_2_pos_ref = 0;
-//                 xSemaphoreGive(POS_2_REF_SEM);
-//             }
+            if( xSemaphoreTake( POS_1_REF_SEM, portMAX_DELAY ) == pdTRUE )
+             {
+                 control_1_pos_ref = 0;
+                 xSemaphoreGive(POS_1_REF_SEM);
+             }
+             if( xSemaphoreTake( POS_2_REF_SEM, portMAX_DELAY ) == pdTRUE )
+             {
+                 control_2_pos_ref = 0;
+                 xSemaphoreGive(POS_2_REF_SEM);
+             }
 
 
                 SPI_protocol_struct.id = PROTOCOL_SLAVE;

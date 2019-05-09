@@ -85,12 +85,12 @@ int main(void)
 
     //send_data( 0x00CC, 8);
 
-    xTaskCreate(UARTDriverTask, "Get from UART queue", 150, NULL, 1, &UART_driver_task_handle);
+    xTaskCreate(UARTDriverTask, "Get from UART queue", 100, NULL, 1, &UART_driver_task_handle);
     xTaskCreate(UITask, "UI", 100, NULL, 1, &UI_task_handle);
     xTaskCreate(SPI_task, "SPI module", 100, NULL, 1, &SPI_handle);
 
-    control_1_pos_ref = 0;
-    control_2_pos_ref = 0;
+    control_1_pos_ref = 100;
+    control_2_pos_ref = 100;
     //control_2_pos_ref = 30;
     //control_1_vel_ref = 20.5;
 

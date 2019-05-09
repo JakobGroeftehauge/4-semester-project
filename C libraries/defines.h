@@ -53,7 +53,7 @@ extern float control_2_vel_ref;
 extern float control_2_cur_ref;
 
 extern int16_t glob_protocol;
-extern int16_t global_test;
+//extern int16_t global_test;
 
 /*****************************     Structs     ****************************/
 typedef struct PID_parameter {

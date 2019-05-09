@@ -81,7 +81,7 @@ int main(void)
     //xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 3, &PC_PID1_handle);
     xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 2, &VC_PID1_handle);
     //xTaskCreate(PID_PC_task, "Position controller 2", 100, &PC_2_parameter, 3, &PC_PID2_handle);
-    xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 2, &VC_PID2_handle);
+    //xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 2, &VC_PID2_handle);
 
     //send_data( 0x00CC, 8);
 
@@ -94,6 +94,7 @@ int main(void)
     //control_2_pos_ref = 30;
     //control_1_vel_ref = 20.5;
 
+    control_1_vel_ref = 7;
 
     // Start the scheduler.
     // --------------------

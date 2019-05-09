@@ -22,7 +22,7 @@
 #include <stdint.h>
 #include "circular_buffer.h"
 /*****************************    Defines    *******************************/
-#define MAX_NUMBER_OF_TABS 20
+#define MAX_NUMBER_OF_TABS 6
 
 #define FILTER_1        BUFFER_FILTER_1	//Buffer_Filters are defined in circular_buffer.h
 #define FILTER_2        BUFFER_FILTER_2	

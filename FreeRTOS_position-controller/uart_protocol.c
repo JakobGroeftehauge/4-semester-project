@@ -79,6 +79,7 @@ void UARTDriverTask (void * pvParameters)
 
         }
 
+
         elementsInQueue = uxQueueMessagesWaiting( xUARTReceive_queue );
         vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS( 50 ) );
         //vTaskDelay(pdMS_TO_TICKS( 50 ));
@@ -99,6 +100,7 @@ void UITask( void * pvParameters)
     for (;;)
     {
         //xSemaphoreTake( UART_RECEIVE_SEM, portMAX_DELAY );
+        GPIO_PORTA_DATA_R |= 0x80;
 
         elementsInQueue = uxQueueMessagesWaiting( xUARTReceive_queue );
         // Get first byte from queue
@@ -239,6 +241,7 @@ void UITask( void * pvParameters)
             default:
                 break;
         }
+        GPIO_PORTA_DATA_R &= ~(0x80);
     }
 }
 

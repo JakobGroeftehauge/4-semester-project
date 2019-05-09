@@ -156,8 +156,10 @@ extern void SPI_task(void * pvParameters)
         struct SPI_queue_element received_struct;
         for( ;; )
         {
+
             if( xQueueReceive( SPI_queue, &received_struct, portMAX_DELAY) == pdPASS )
             {
+                GPIO_PORTA_DATA_R |= 0x04;
                 //Get id and data from SPI_queue
                 received_id = received_struct.id;
                 received_data_queue = received_struct.data;
@@ -187,17 +189,6 @@ extern void SPI_task(void * pvParameters)
                         control_1_vel = global_test;
                     else
                         control_1_vel = 1/global_test;
-
-//                    while( !uart0_tx_rdy() )
-//                    {
-//                        ;
-//                    }
-//                    uart0_putc( (int16_t) control_1_vel & 0xFF );
-//                    while( !uart0_tx_rdy() )
-//                    {
-//                        ;
-//                    }
-//                    uart0_putc( (int16_t)control_1_vel >> 8 );
 
                     // Signal Semaphore
                     xSemaphoreGive( VEL_1_SEM );
@@ -234,6 +225,7 @@ extern void SPI_task(void * pvParameters)
                     dummyReceive = receive_data();
                 }
             }
+            GPIO_PORTA_DATA_R &= ~(0x04);
         }
 }
 

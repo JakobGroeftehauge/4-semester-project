@@ -102,9 +102,10 @@ extern void init_parameters()
 //    PC_1_parameter.reference_semaphore =    &POS_1_REF_SEM;
 //    PC_1_parameter.feedback_signal =        &control_1_pos;
 //    PC_1_parameter.feedback_semaphore =     &POS_1_SEM;
-//    PC_1_parameter.delayTime =              10;
+//    PC_1_parameter.delayTime =              5;
 //    PC_1_parameter.queue_semaphore =        &QUEUE_SEM;
 //    PC_1_parameter.output_id =              0;
+//    PC_1_parameter.test_led =               0x10;
 //
 //    VC_1_parameter.id =                     VC_CONTROLLER_1_ID;
 //    VC_1_parameter.slave_id =               VEL_1;
@@ -117,6 +118,7 @@ extern void init_parameters()
 //    VC_1_parameter.delayTime =              1;
 //    VC_1_parameter.queue_semaphore =        &QUEUE_SEM;
 //    VC_1_parameter.output_id =              PWM_1;
+//    VC_1_parameter.test_led =               0x40;
 
     VC_1_parameter.id =                     VC_CONTROLLER_1_ID;
     VC_1_parameter.slave_id =               POS_1;
@@ -139,10 +141,11 @@ extern void init_parameters()
 //    PC_2_parameter.reference_semaphore =    &POS_2_REF_SEM;
 //    PC_2_parameter.feedback_signal =        &control_2_pos;
 //    PC_2_parameter.feedback_semaphore =     &POS_2_SEM;
-//    PC_2_parameter.delayTime =              10;
+//    PC_2_parameter.delayTime =              5;
 //    PC_2_parameter.queue_semaphore =        &QUEUE_SEM;
 //    PC_2_parameter.output_id =              0;
-//
+//    PC_2_parameter.test_led =               0x10;
+
 //    VC_2_parameter.id =                     VC_CONTROLLER_2_ID;
 //    VC_2_parameter.slave_id =               VEL_2;
 //    VC_2_parameter.place_to_store_output =  &control_2_vel_ref;
@@ -154,6 +157,8 @@ extern void init_parameters()
 //    VC_2_parameter.delayTime =              1;
 //    VC_2_parameter.queue_semaphore =        &QUEUE_SEM;
 //    VC_2_parameter.output_id =              PWM_2;
+//    VC_2_parameter.test_led =               0x40;
+
 
     VC_2_parameter.id =                     VC_CONTROLLER_2_ID;
     VC_2_parameter.slave_id =               POS_2;//VEL_1;

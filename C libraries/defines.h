@@ -68,6 +68,7 @@ typedef struct PID_parameter {
     uint16_t            delayTime;
     SemaphoreHandle_t   *queue_semaphore;
     uint8_t             output_id;
+    uint8_t             test_led;
 };
 
 typedef volatile struct SPI_queue_element {

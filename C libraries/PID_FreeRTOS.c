@@ -218,7 +218,9 @@ extern void init_PIDs()
      PID_pool[VC_CONTROLLER_1_ID].pastError = 0;
      PID_pool[VC_CONTROLLER_1_ID].Ud = 0;
      PID_pool[VC_CONTROLLER_1_ID].sat_flag = 0;
+
      float VC1_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249};
+
      float VC1_Filter_Coef_dTerm[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};//{0.0312,0.0937, 0.1562,0.2187,0.2187, 0.1562,0.0937,0.0312};//{0.125,  0.375, 0.375, 0.125};
      init_filter(VC_CONTROLLER_1_ID, VC1_Filter_Coef, 3);
      init_filter(VC_CONTROLLER_DTERM_1_ID, VC1_Filter_Coef_dTerm, 6);

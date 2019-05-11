@@ -35,6 +35,7 @@
 #define INCREMENT_MOTOR_COMMAND 2
 #define GO_TO_POSITION_COMMAND  3
 #define ABORT_COMMAND           4
+#define MAX_PWM_TILT            5
 
 
 /********************** External declaration of Variables ******************/

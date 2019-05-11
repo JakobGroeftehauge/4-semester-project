@@ -160,7 +160,7 @@ extern void SPI_task(void * pvParameters)
 
             if( xQueueReceive( SPI_queue, &received_struct, portMAX_DELAY) == pdPASS )
             {
-                GPIO_PORTA_DATA_R |= 0x04;
+                //GPIO_PORTA_DATA_R |= 0x04;
                 //Get id and data from SPI_queue
                 received_id = received_struct.id;
                 received_data_queue = received_struct.data;
@@ -227,7 +227,7 @@ extern void SPI_task(void * pvParameters)
                     dummyReceive = receive_data();
                 }
             }
-            GPIO_PORTA_DATA_R &= ~(0x04);
+            //GPIO_PORTA_DATA_R &= ~(0x04);
         }
 }
 

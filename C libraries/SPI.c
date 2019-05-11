@@ -18,6 +18,12 @@
 *****************************************************************************/
 
 /***************************** Include files *******************************/
+#include <setup.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <stdbool.h>
+
 #include "SPI.h"
 #include "EMP_type.h"
 #include <stdint.h>
@@ -256,9 +262,40 @@ extern void update_values_task(void * pvParameters)
 
         vTaskDelay(100);
     }
-
-
 }
+
+extern void SPI_test_task(void * pvParameters)
+/*****************************************************************************
+*   Input    : -
+*   Output   : -
+*   Function : -
+******************************************************************************/
+{
+    bool isFinished = 0;
+    struct SPI_queue_element data_to_send;
+    data_to_send.id = PROTOCOL_SLAVE;
+    for( ;; )
+    {
+        if( isFinished == 0)
+        {
+            for(uint16_t i = 0; i < 10000; i++)
+            {
+                if( i == 204 )
+                    i++;
+                if(xSemaphoreTake(QUEUE_SEM, portMAX_DELAY)==pdTRUE)
+                {
+                    data_to_send.data = i;
+                    xQueueSend( SPI_queue, (void * ) &data_to_send, 0);
+                    xSemaphoreGive(QUEUE_SEM);
+                }
+                vTaskDelay(1);
+            }
+            isFinished = 1;
+        }
+    }
+}
+
+
 
 void data_transmit(INT16U data)
 /*****************************************************************************
@@ -357,17 +394,6 @@ int16_t receive_data()
     while( !(SSI1_SR_R & (0b00000010)) ) //Check if receive FIFO empty
     {}
     data = SSI1_DR_R;
-
-    //Til uart test
-//            INT8U data_HIGH = data & 0xFF;
-//            INT8U data_LOW = (data >> 8);
-//            while( !uart0_tx_rdy() )
-//            {}
-//            uart0_putc(data_LOW);
-//            while( !uart0_tx_rdy() )
-//            {}
-//            uart0_putc(data_HIGH);
-
     return data;
 }
 
@@ -393,19 +419,6 @@ int16_t receive_data_ISR()
         data = SSI1_DR_R;
 
     }
-
-
-
-    //Til uart test
-//            INT8U data_HIGH = data & 0xFF;
-//            INT8U data_LOW = (data >> 8);
-//            while( !uart0_tx_rdy() )
-//            {}
-//            uart0_putc(data_LOW);
-//            while( !uart0_tx_rdy() )
-//            {}
-//            uart0_putc(data_HIGH);
-
     return data;
 }
 

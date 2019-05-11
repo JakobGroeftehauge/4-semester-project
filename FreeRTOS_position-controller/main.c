@@ -63,7 +63,7 @@ float control_1_pos_ref;
 /*****************************   Functions   *******************************/
 
 int main(void)
-    {
+{
 
     uart0_init(9600, 8, 1, 0);
     init_gpio();
@@ -81,16 +81,17 @@ int main(void)
     //xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 8, &PC_PID1_handle);
     xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 8, &VC_PID1_handle);
     //xTaskCreate(PID_PC_task, "Position controller 2", 100, &PC_2_parameter, 8, &PC_PID2_handle);
-    xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 8, &VC_PID2_handle);
+    //xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 8, &VC_PID2_handle);
 
-    //send_data( 0x00CC, 8);
+//    xTaskCreate(SPI_test_task, "Stress test", 100, NULL, 1, &SPI_test_handle);
+
 
     xTaskCreate(UARTDriverTask, "Get from UART queue", 100, NULL, 1, &UART_driver_task_handle);
     xTaskCreate(UITask, "UI", 100, NULL, 1, &UI_task_handle);
-    xTaskCreate(SPI_task, "SPI module", 100, NULL, 1, &SPI_handle);
+    xTaskCreate(SPI_task, "SPI module", 100, NULL, 2, &SPI_handle);
 
-    control_1_pos_ref = 100;
-    control_2_pos_ref = 100;
+    control_1_pos_ref = 0;
+    control_2_pos_ref = 0;
     //control_2_pos_ref = 30;
     //control_1_vel_ref = 20.5;
 

@@ -35,6 +35,7 @@
 #define INCREMENT_MOTOR_COMMAND 2
 #define GO_TO_POSITION_COMMAND  3
 #define ABORT_COMMAND           4
+#define MAX_PWM_TILT            5
 
 
 /********************** External declaration of Variables ******************/
@@ -113,6 +114,7 @@ extern TaskHandle_t VC_PID2_handle;
 // SPI
 extern TaskHandle_t SPI_handle;
 extern TaskHandle_t adjust_values_handle;
+extern TaskHandle_t SPI_test_handle;
 
 // UART
 extern TaskHandle_t UI_task_handle;

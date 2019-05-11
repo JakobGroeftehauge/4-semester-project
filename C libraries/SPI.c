@@ -158,12 +158,15 @@ extern void SPI_task(void * pvParameters)
         float received_data_SPI = 0;
         int16_t dummyReceive;
         float temp_1_vel;
+        float temp_input;
 
         struct SPI_queue_element received_struct;
         for( ;; )
         {
+
             if( xQueueReceive( SPI_queue, &received_struct, portMAX_DELAY) == pdPASS )
             {
+                //GPIO_PORTA_DATA_R |= 0x04;
                 //Get id and data from SPI_queue
                 received_id = received_struct.id;
                 received_data_queue = received_struct.data;
@@ -177,33 +180,20 @@ extern void SPI_task(void * pvParameters)
                 case POS_1:
                     received_data_SPI = receive_data();
 
-                    //Convert to degrees and put in correct buffer
-                    control_1_pos = received_data_SPI / 3;
+                    //Convert to radians and put in correct buffer
+                    control_1_pos = received_data_SPI / 360 * 2*3.14;
 
                     // Signal Semaphore
                     xSemaphoreGive( POS_1_SEM );
                     break;
 
                 case VEL_1:
-                    received_data_SPI = receive_data();
 
-                    //Put in correct buffer
-                    global_test = received_data_SPI;
-                    if(global_test == 0)
-                        control_1_vel = global_test;
+                    temp_input = receive_data();
+                    if(temp_input == 0)
+                        control_1_vel = 0;
                     else
-                        control_1_vel = 1/global_test;
-
-//                    while( !uart0_tx_rdy() )
-//                    {
-//                        ;
-//                    }
-//                    uart0_putc( (int16_t) control_1_vel & 0xFF );
-//                    while( !uart0_tx_rdy() )
-//                    {
-//                        ;
-//                    }
-//                    uart0_putc( (int16_t)control_1_vel >> 8 );
+                        control_1_vel = (1745*2.0)/temp_input;
 
                     // Signal Semaphore
                     xSemaphoreGive( VEL_1_SEM );
@@ -212,18 +202,21 @@ extern void SPI_task(void * pvParameters)
                 case POS_2:
                     received_data_SPI = receive_data();
 
-                    //Convert to degrees and put in correct buffer
-                    control_2_pos = received_data_SPI / 3;
+                    //Convert to radians and put in correct buffer
+                    control_2_pos = received_data_SPI / 360 * 2*3.14;
 
                     // Signal Semaphore
                     xSemaphoreGive( POS_2_SEM );
                     break;
 
                 case VEL_2:
-                    received_data_SPI = receive_data();
 
-                    //Put in correct buffer
-                    control_2_vel = received_data_SPI;
+                    temp_input = receive_data();
+                    if(temp_input == 0)
+                        control_2_vel = 0;
+                    else
+                        control_2_vel = (1745*2.0)/temp_input;
+
 
                     // Signal Semaphore
                     xSemaphoreGive( VEL_2_SEM );
@@ -240,6 +233,7 @@ extern void SPI_task(void * pvParameters)
                     dummyReceive = receive_data();
                 }
             }
+            //GPIO_PORTA_DATA_R &= ~(0x04);
         }
 }
 

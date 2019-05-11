@@ -54,7 +54,7 @@ extern float control_2_vel_ref;
 extern float control_2_cur_ref;
 
 extern int16_t glob_protocol;
-extern int16_t global_test;
+//extern int16_t global_test;
 
 /*****************************     Structs     ****************************/
 typedef struct PID_parameter {
@@ -69,6 +69,7 @@ typedef struct PID_parameter {
     uint16_t            delayTime;
     SemaphoreHandle_t   *queue_semaphore;
     uint8_t             output_id;
+    uint8_t             test_led;
 };
 
 typedef volatile struct SPI_queue_element {

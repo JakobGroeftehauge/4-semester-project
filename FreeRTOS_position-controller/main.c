@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include "EMP_type.h"
 
 #include "FreeRTOS.h"
@@ -35,36 +36,31 @@
 #define MED_PRIO  2
 #define HIGH_PRIO 3
 
-#define GREEN_LED_TASK 2
-#define YELLOW_LED_TASK 3
-
-
 /*****************************   Constants   *******************************/
 
 
 /*****************************   Variables   *******************************/
-volatile INT16S pwm_var;
-volatile INT16S pos_var;
-
+//volatile INT16S pwm_var;
+//volatile INT16S pos_var;
+//
 struct PID_parameter PC_1_parameter;
 struct PID_parameter VC_1_parameter;
 struct PID_parameter PC_2_parameter;
 struct PID_parameter VC_2_parameter;
-
-volatile float control_signal_PC1;
-volatile float control_signal_PC2;
-
-volatile float feedback;
-volatile int16_t output_PC1;
-volatile int16_t output_PC2;
-float control_1_pos_ref;
+//
+//volatile float control_signal_PC1;
+//volatile float control_signal_PC2;
+//
+//volatile float feedback;
+//volatile int16_t output_PC1;
+//volatile int16_t output_PC2;
+//float control_1_pos_ref;
 
 
 /*****************************   Functions   *******************************/
 
 int main(void)
 {
-
     uart0_init(9600, 8, 1, 0);
     init_gpio();
     SPI_init();
@@ -90,11 +86,12 @@ int main(void)
     xTaskCreate(UITask, "UI", 100, NULL, 1, &UI_task_handle);
     xTaskCreate(SPI_task, "SPI module", 100, NULL, 2, &SPI_handle);
 
-    control_1_pos_ref = 0;
-    control_2_pos_ref = 0;
+    control_1_pos_ref = 2*3*3.14;
+    //control_2_pos_ref = 0;
     //control_2_pos_ref = 30;
     //control_1_vel_ref = 20.5;
 
+    //control_1_vel_ref = 7;
 
     // Start the scheduler.
     // --------------------

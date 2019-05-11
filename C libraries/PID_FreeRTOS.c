@@ -12,6 +12,8 @@
 *
 *****************************************************************************/
 #include "PID_FreeRTOS.h"
+
+#include <stdlib.h>
 #include "filter.h"
 #include "tmodel.h"
 #include "FPGA_comp.h"
@@ -39,6 +41,7 @@ extern void PID_PC_task(void* pvParameters)
     float temp_feedback = 0;
     float temp_reference = 0;
     int16_t temp_output = 0;
+    uint8_t test_led_temp = 0;
 
 
     data_request.id = controller_parameter.slave_id;
@@ -46,6 +49,8 @@ extern void PID_PC_task(void* pvParameters)
 
     for (;;)
     {
+
+        //GPIO_PORTA_DATA_R |= controller_parameter.test_led;
         xLastWakeTime = xTaskGetTickCount();
 
         if(xSemaphoreTake(*controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
@@ -76,6 +81,7 @@ extern void PID_PC_task(void* pvParameters)
             xSemaphoreGive(*controller_parameter.output_semaphore);
         }
 
+        //GPIO_PORTA_DATA_R &= ~(controller_parameter.test_led);
         vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS(controller_parameter.delayTime) );
     }
 
@@ -100,12 +106,13 @@ extern void PID_VC_task(void* pvParameters)
     xLastWakeTime = xTaskGetTickCount(); // Is automatically updated by vTaskDelayUntil()
     for (;;)
     {
-        GPIO_PORTA_DATA_R &= ~(0x04);
+        //GPIO_PORTA_DATA_R |= controller_parameter.test_led;
+
 
 
         if(xSemaphoreTake(*controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
         {
-            GPIO_PORTA_DATA_R &= ~(0x10);
+
             xQueueSend( SPI_queue, (void * ) &data_request, 0);
             xSemaphoreGive(*controller_parameter.queue_semaphore);
         }
@@ -118,7 +125,7 @@ extern void PID_VC_task(void* pvParameters)
                 temp_feedback = *controller_parameter.feedback_signal;
                 temp_reference = *controller_parameter.reference_signal;
                 xSemaphoreGive(*controller_parameter.reference_semaphore);
-                GPIO_PORTA_DATA_R |= 0x10;
+
             }
 
             result_PID = run_PID(temp_feedback, temp_reference, controller_parameter.id);
@@ -134,7 +141,7 @@ extern void PID_VC_task(void* pvParameters)
             xSemaphoreGive(*controller_parameter.queue_semaphore);
         }
 
-        GPIO_PORTA_DATA_R |= 0x04;
+        //GPIO_PORTA_DATA_R &= ~(controller_parameter.test_led);
 
         vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS(controller_parameter.delayTime) );
         //GPIO_PORTA_DATA_R ^= (0x04);
@@ -154,74 +161,96 @@ extern void init_PIDs()
 {
     //Setup of position controller 1:
 
-    PID_pool[PC_CONTROLLER_1_ID].Kp = 1;
+    PID_pool[PC_CONTROLLER_1_ID].Kp = 4;
     PID_pool[PC_CONTROLLER_1_ID].Kd = 0.01;
-    PID_pool[PC_CONTROLLER_1_ID].Ki = 5;
-    PID_pool[PC_CONTROLLER_1_ID].dt = 0.01;
+    PID_pool[PC_CONTROLLER_1_ID].Ki = 2;
+    PID_pool[PC_CONTROLLER_1_ID].dt = 0.005;
     PID_pool[PC_CONTROLLER_1_ID].integral = 0;
     PID_pool[PC_CONTROLLER_1_ID].previous_error = 0;
-    PID_pool[PC_CONTROLLER_1_ID].upper_sat = 12;
-    PID_pool[PC_CONTROLLER_1_ID].lower_sat = -12;
+    PID_pool[PC_CONTROLLER_1_ID].upper_sat = 3000;
+    PID_pool[PC_CONTROLLER_1_ID].lower_sat = -3000;
     PID_pool[PC_CONTROLLER_1_ID].filter_id = PC_CONTROLLER_1_ID;
+    PID_pool[PC_CONTROLLER_1_ID].filter_dterm_id = PC_CONTROLLER_DTERM_1_ID;
     PID_pool[PC_CONTROLLER_1_ID].pastError = 0;
     PID_pool[PC_CONTROLLER_1_ID].Ud = 0;
     PID_pool[PC_CONTROLLER_1_ID].sat_flag = 0;
-    float PC1_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249, 1, 1, 1, 1, 1, 1, 1};
-    init_filter(PC_CONTROLLER_1_ID, PC1_Filter_Coef, 2);
+    float PC1_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249};
+    float PC1_Filter_Coef_dTerm[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
+    init_filter(PC_CONTROLLER_1_ID, PC1_Filter_Coef, 3);
+    init_filter(PC_CONTROLLER_DTERM_1_ID, PC1_Filter_Coef_dTerm, 6);
+//    free(PC1_Filter_Coef);
+//    free(PC1_Filter_Coef_dTerm);
 
     //Setup of position controller 2:
+
 
     PID_pool[PC_CONTROLLER_2_ID].Kp = 1;
     PID_pool[PC_CONTROLLER_2_ID].Kd = 0.01;
     PID_pool[PC_CONTROLLER_2_ID].Ki = 5;
-    PID_pool[PC_CONTROLLER_2_ID].dt = 0.01;
+    PID_pool[PC_CONTROLLER_2_ID].dt = 0.005;
     PID_pool[PC_CONTROLLER_2_ID].integral = 0;
     PID_pool[PC_CONTROLLER_2_ID].previous_error = 0;
     PID_pool[PC_CONTROLLER_2_ID].upper_sat = 12;
     PID_pool[PC_CONTROLLER_2_ID].lower_sat = -12;
     PID_pool[PC_CONTROLLER_2_ID].filter_id = PC_CONTROLLER_2_ID;
+    PID_pool[PC_CONTROLLER_2_ID].filter_dterm_id = PC_CONTROLLER_DTERM_2_ID;
     PID_pool[PC_CONTROLLER_2_ID].pastError = 0;
     PID_pool[PC_CONTROLLER_2_ID].Ud = 0;
     PID_pool[PC_CONTROLLER_2_ID].sat_flag = 0;
-    float PC2_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249, 1, 1, 1, 1, 1, 1, 1};
-    init_filter(PC_CONTROLLER_2_ID, PC2_Filter_Coef, 2);
+    float PC2_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249};
+    float PC2_Filter_Coef_dTerm[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
+    init_filter(PC_CONTROLLER_2_ID, PC2_Filter_Coef, 3);
+    init_filter(PC_CONTROLLER_DTERM_2_ID, PC2_Filter_Coef_dTerm, 6);
+//    free(PC2_Filter_Coef);
 
-
+//    free(PC2_Filter_Coef_dTerm);
     
     //Setup of velocity controller 1:
 
-     PID_pool[VC_CONTROLLER_1_ID].Kp = 1;
-     PID_pool[VC_CONTROLLER_1_ID].Kd = 0.02;
-     PID_pool[VC_CONTROLLER_1_ID].Ki = 2;
+     PID_pool[VC_CONTROLLER_1_ID].Kp = 0.76282*2;
+     PID_pool[VC_CONTROLLER_1_ID].Kd = 0.0058;
+     PID_pool[VC_CONTROLLER_1_ID].Ki = 25.6063;
      PID_pool[VC_CONTROLLER_1_ID].dt = 0.001;
      PID_pool[VC_CONTROLLER_1_ID].integral = 0;
      PID_pool[VC_CONTROLLER_1_ID].previous_error = 0;
      PID_pool[VC_CONTROLLER_1_ID].upper_sat = 12;
      PID_pool[VC_CONTROLLER_1_ID].lower_sat = -12;
      PID_pool[VC_CONTROLLER_1_ID].filter_id = VC_CONTROLLER_1_ID;
+     PID_pool[VC_CONTROLLER_1_ID].filter_dterm_id = VC_CONTROLLER_DTERM_1_ID;
      PID_pool[VC_CONTROLLER_1_ID].pastError = 0;
      PID_pool[VC_CONTROLLER_1_ID].Ud = 0;
      PID_pool[VC_CONTROLLER_1_ID].sat_flag = 0;
-     float VC1_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249, 1, 1, 1, 1, 1, 1, 1};
-     init_filter(VC_CONTROLLER_1_ID, VC1_Filter_Coef, 2);
+     float VC1_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249};
 
+
+     float VC1_Filter_Coef_dTerm[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};//{0.0312,0.0937, 0.1562,0.2187,0.2187, 0.1562,0.0937,0.0312};//{0.125,  0.375, 0.375, 0.125};
+     init_filter(VC_CONTROLLER_1_ID, VC1_Filter_Coef, 3);
+     init_filter(VC_CONTROLLER_DTERM_1_ID, VC1_Filter_Coef_dTerm, 6);
+//     free(VC1_Filter_Coef);
+//     free(VC1_Filter_Coef_dTerm);
      //Setup of velocity controller 2:
 
-     PID_pool[VC_CONTROLLER_2_ID].Kp = 1;
-     PID_pool[VC_CONTROLLER_2_ID].Kd = 1;
-     PID_pool[VC_CONTROLLER_2_ID].Ki = 1;
+
+     PID_pool[VC_CONTROLLER_2_ID].Kp = 3;
+     PID_pool[VC_CONTROLLER_2_ID].Kd = 0.2;
+     PID_pool[VC_CONTROLLER_2_ID].Ki = 5;
      PID_pool[VC_CONTROLLER_2_ID].dt = 0.001;
      PID_pool[VC_CONTROLLER_2_ID].integral = 0;
      PID_pool[VC_CONTROLLER_2_ID].previous_error = 0;
      PID_pool[VC_CONTROLLER_2_ID].upper_sat = 12;
      PID_pool[VC_CONTROLLER_2_ID].lower_sat = -12;
-     PID_pool[VC_CONTROLLER_2_ID].filter_id = VC_CONTROLLER_1_ID;
+     PID_pool[VC_CONTROLLER_2_ID].filter_id = VC_CONTROLLER_2_ID;
+     PID_pool[VC_CONTROLLER_2_ID].filter_dterm_id = VC_CONTROLLER_DTERM_2_ID;
      PID_pool[VC_CONTROLLER_2_ID].pastError = 0;
      PID_pool[VC_CONTROLLER_2_ID].Ud = 0;
      PID_pool[VC_CONTROLLER_2_ID].sat_flag = 0;
-     float VC2_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249, 1, 1, 1, 1, 1, 1, 1};
-     init_filter(VC_CONTROLLER_2_ID, VC2_Filter_Coef, 2);
+     float VC2_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249};
+     float VC2_Filter_Coef_dTerm[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
+     init_filter(VC_CONTROLLER_2_ID, VC2_Filter_Coef, 3);
+     init_filter(VC_CONTROLLER_DTERM_2_ID, VC2_Filter_Coef_dTerm, 6);
 
+//     free(VC2_Filter_Coef);
+//     free(VC2_Filter_Coef_dTerm);
 
 }
 
@@ -245,8 +274,8 @@ extern float run_PID(float feedback, float setpoint, uint8_t id) // CHANGE TO PI
 
     // calculate the proportional and derivative terms
    float proportional_term  = PID_pool[id].Kp*error;
-   float derivative_term = PID_pool[id].Kd*2/T*(error - PID_pool[id].previous_error);// - PID_pool[id].Ud;
-
+   float derivative_term = PID_pool[id].Kd*2/T*(error - PID_pool[id].previous_error) - PID_pool[id].Ud;
+   derivative_term = run_filter(PID_pool[id].filter_dterm_id, derivative_term);
 
    // integral is only given a value if the controller is not in saturation
    if (PID_pool[id].sat_flag)

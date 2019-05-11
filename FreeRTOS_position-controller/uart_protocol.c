@@ -80,6 +80,7 @@ void UARTDriverTask (void * pvParameters)
                 //elementsInQueue = 100;
         }
 
+
         elementsInQueue = uxQueueMessagesWaiting( xUARTReceive_queue );
         vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS( 50 ) );
         //vTaskDelay(pdMS_TO_TICKS( 50 ));
@@ -101,6 +102,7 @@ void UITask( void * pvParameters)
     for (;;)
     {
         //xSemaphoreTake( UART_RECEIVE_SEM, portMAX_DELAY );
+        GPIO_PORTA_DATA_R |= 0x80;
 
         elementsInQueue = uxQueueMessagesWaiting( xUARTReceive_queue );
         // Get first byte from queue
@@ -133,12 +135,14 @@ void UITask( void * pvParameters)
              }
 
 
+
+
                 SPI_protocol_struct.id = PROTOCOL_SLAVE;
                 SPI_protocol_struct.data = 0x00AA;
                 xQueueSend( SPI_queue, (void *) &SPI_protocol_struct, 0);
 
                 SPI_protocol_struct.id = PROTOCOL_SLAVE;
-                SPI_protocol_struct.data = 0x00CC;
+                SPI_protocol_struct.data = 0x00CC; //0x00CC
                 xQueueSend( SPI_queue, (void *) &SPI_protocol_struct, 0);
 
                 break;
@@ -242,6 +246,7 @@ void UITask( void * pvParameters)
                 if (UARTMessagesWaiting >= 1)
                 {
                     UITaskCommandReady = UI_COMMAND_READY;
+
                     switch( state )
                     {
                     case OFF:
@@ -287,15 +292,21 @@ void UITask( void * pvParameters)
                         state = OFF;
                         break;
                     }
+
                 }
                 else
                 {
                     UITaskCommandReady = UI_WAITING_FOR_COMMAND;
                     vTaskDelay( pdMS_TO_TICKS( 200 ) );
                 }
+
+            }
+            break;
+
             default:
                 break;
         }
+        GPIO_PORTA_DATA_R &= ~(0x80);
     }
 }
 

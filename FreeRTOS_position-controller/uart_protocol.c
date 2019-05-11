@@ -38,6 +38,7 @@ volatile uint8_t     *receive_character         = 0;
 volatile UBaseType_t UARTMessagesWaiting        = 0;
 volatile uint16_t    temp_motor_position        = 0;
 volatile float       motor_position             = 0;
+volatile uint8_t     pwm_state                  = 0;
 
 
 /****************************    Semaphores    ***************************/
@@ -244,55 +245,76 @@ void UITask( void * pvParameters)
                 break;
 
             case (MAX_PWM_TILT):
-                if (UARTMessagesWaiting >= 1)
+            if (UARTMessagesWaiting >= 1)
+            {
+                UITaskCommandReady = UI_COMMAND_READY;
+                switch( state )
                 {
-                    switch( state )
+                case OFF:
+                    xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
+                    pwm_state = (byte_from_UART_queue - 48);
+                    switch( pwm_state )
                     {
-                    case OFF:
-                        xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
-                            if( (byte_from_UART_queue - 48) == 0 )
-                            {
-                                //Suspend all controller tasks
-                                //vTaskSuspend( PC_PID1_handle );
-                                vTaskSuspend( VC_PID1_handle );
-                                //vTaskSuspend( PC_PID2_handle );
-                                //vTaskSuspend( VC_PID2_handle );
+                    case 0:
+                        //Suspend all controller tasks
+                        //vTaskSuspend( PC_PID1_handle );
+                        vTaskSuspend( VC_PID1_handle );
+                        //vTaskSuspend( PC_PID2_handle );
+                        //vTaskSuspend( VC_PID2_handle );
 
-                                //Send max PWM
-                                send_data( -1023 ,PWM_1);
-                                state = ON;
-                            }
-                            else if( (byte_from_UART_queue - 48) == 1 )
-                            {
-                                //Suspend all controller tasks
-                                //vTaskSuspend( PC_PID1_handle );
-                                vTaskSuspend( VC_PID1_handle );
-                                //vTaskSuspend( PC_PID2_handle );
-                                //vTaskSuspend( VC_PID2_handle );
-
-                                //Send max PWM
-                                send_data( 1023 ,PWM_1);
-
-                                state = ON;
-                            }
+                        send_data( -1023 ,PWM_1);
+                        //state = ON;
                         break;
+                    case 1:
+                        //Suspend all controller tasks
+                        //vTaskSuspend( PC_PID1_handle );
+                        vTaskSuspend( VC_PID1_handle );
+                        //vTaskSuspend( PC_PID2_handle );
+                        //vTaskSuspend( VC_PID2_handle );
 
-                    case ON:
-                        //Resume all controller tasks
-                        vTaskResume( PC_PID1_handle );
-                        vTaskResume( VC_PID1_handle );
-                        vTaskResume( PC_PID2_handle );
-                        vTaskResume( VC_PID2_handle );
-
-                        state = OFF;
+                        send_data( 1023 ,PWM_1);
+                        //state = ON;
+                        break;
+                    case 2:
+                        control_1_vel_ref = 0;
+                        break;
+                    case 3:
+                        control_1_vel_ref = 1;
+                        break;
+                    case 4:
+                        control_1_vel_ref = 5;
+                        break;
+                    case 5:
+                        control_1_vel_ref = 10;
+                        break;
+                    case 6:
+                        control_1_vel_ref = 20;
                         break;
                     }
+                    break;
 
+                case ON:
+
+                    send_data( 0 ,PWM_1);
+                    vTaskDelay( pdMS_TO_TICKS(500) );
+
+                    //Resume all controller tasks
+                    //vTaskResume( PC_PID1_handle );
+                    vTaskResume( VC_PID1_handle );
+                    //vTaskResume( PC_PID2_handle );
+                    //vTaskResume( VC_PID2_handle );
+
+                    state = OFF;
+                    break;
                 }
-                break;
-
-            default:
-                break;
+            }
+            else
+            {
+                UITaskCommandReady = UI_WAITING_FOR_COMMAND;
+                vTaskDelay( pdMS_TO_TICKS( 200 ) );
+            }
+        default:
+            break;
         }
         GPIO_PORTA_DATA_R &= ~(0x80);
     }

@@ -227,10 +227,5 @@ extern void reset_all()
     uint8_t empty = 4;
     xTaskCreate(SPI_task, "SPI module", 100, &empty, 1, &SPI_handle);
 
-    while( !uart0_tx_rdy() )
-    {
-        ;
-    }
-    uart0_putc( 'p' );
 }
 

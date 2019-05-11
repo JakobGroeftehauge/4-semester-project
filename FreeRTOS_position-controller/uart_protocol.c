@@ -38,6 +38,7 @@ volatile uint8_t     *receive_character         = 0;
 volatile UBaseType_t UARTMessagesWaiting        = 0;
 volatile uint16_t    temp_motor_position        = 0;
 volatile float       motor_position             = 0;
+volatile uint8_t     pwm_state                  = 0;
 
 
 /****************************    Semaphores    ***************************/
@@ -246,37 +247,106 @@ void UITask( void * pvParameters)
                     {
                     case OFF:
                         xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
-                            if( (byte_from_UART_queue - 48) == 0 )
-                            {
-                                //Suspend all controller tasks
-                                //vTaskSuspend( PC_PID1_handle );
-                                vTaskSuspend( VC_PID1_handle );
-                                //vTaskSuspend( PC_PID2_handle );
-                                //vTaskSuspend( VC_PID2_handle );
+                        pwm_state = (byte_from_UART_queue - 48);
+                        switch( pwm_state )
+                        {
+                        case 0:
+                            //Suspend all controller tasks
+                            //vTaskSuspend( PC_PID1_handle );
+                            vTaskSuspend( VC_PID1_handle );
+                            //vTaskSuspend( PC_PID2_handle );
+                            //vTaskSuspend( VC_PID2_handle );
 
-                                //Send max PWM
-                                send_data( -1023 ,PWM_1);
-                                state = ON;
-                            }
-                            else if( (byte_from_UART_queue - 48) == 1 )
-                            {
-                                //Suspend all controller tasks
-                                //vTaskSuspend( PC_PID1_handle );
-                                vTaskSuspend( VC_PID1_handle );
-                                //vTaskSuspend( PC_PID2_handle );
-                                //vTaskSuspend( VC_PID2_handle );
+                            send_data( -1023 ,PWM_1);
+                            //state = ON;
+                            break;
+                        case 1:
+                            //Suspend all controller tasks
+                            //vTaskSuspend( PC_PID1_handle );
+                            vTaskSuspend( VC_PID1_handle );
+                            //vTaskSuspend( PC_PID2_handle );
+                            //vTaskSuspend( VC_PID2_handle );
 
-                                //Send max PWM
-                                send_data( 1023 ,PWM_1);
+                            send_data( 1023 ,PWM_1);
+                            //state = ON;
+                            break;
+                        case 2:
+                            //Suspend all controller tasks
+                            //vTaskSuspend( PC_PID1_handle );
+                            vTaskSuspend( VC_PID1_handle );
+                            //vTaskSuspend( PC_PID2_handle );
+                            //vTaskSuspend( VC_PID2_handle );
 
-                                state = ON;
-                            }
+                            send_data( 665 ,PWM_1); // 65% PWM
+                            //state = ON;
+                            break;
+                        case 3:
+                            //Suspend all controller tasks
+                            //vTaskSuspend( PC_PID1_handle );
+                            vTaskSuspend( VC_PID1_handle );
+                            //vTaskSuspend( PC_PID2_handle );
+                            //vTaskSuspend( VC_PID2_handle );
+
+                            send_data( 716 ,PWM_1); // 70% PWM
+                            //state = ON;
+                            break;
+                        case 4:
+                            //Suspend all controller tasks
+                            //vTaskSuspend( PC_PID1_handle );
+                            vTaskSuspend( VC_PID1_handle );
+                            //vTaskSuspend( PC_PID2_handle );
+                            //vTaskSuspend( VC_PID2_handle );
+
+                            send_data( 767 ,PWM_1); // 75% PWM
+                            //state = ON;
+                            break;
+                        case 5:
+                            //Suspend all controller tasks
+                            //vTaskSuspend( PC_PID1_handle );
+                            vTaskSuspend( VC_PID1_handle );
+                            //vTaskSuspend( PC_PID2_handle );
+                            //vTaskSuspend( VC_PID2_handle );
+
+                            send_data( 818 ,PWM_1); // 80% PWM
+                            //state = ON;
+                            break;
+                        case 6:
+                            //Suspend all controller tasks
+                            //vTaskSuspend( PC_PID1_handle );
+                            vTaskSuspend( VC_PID1_handle );
+                            //vTaskSuspend( PC_PID2_handle );
+                            //vTaskSuspend( VC_PID2_handle );
+
+                            send_data( 869 ,PWM_1); // 85% PWM
+                            //state = ON;
+                            break;
+                        case 7:
+                            //Suspend all controller tasks
+                            //vTaskSuspend( PC_PID1_handle );
+                            vTaskSuspend( VC_PID1_handle );
+                            //vTaskSuspend( PC_PID2_handle );
+                            //vTaskSuspend( VC_PID2_handle );
+
+                            send_data( 921 ,PWM_1); // 90% PWM
+                            //state = ON;
+                            break;
+                        case 8:
+                            //Suspend all controller tasks
+                            //vTaskSuspend( PC_PID1_handle );
+                            vTaskSuspend( VC_PID1_handle );
+                            //vTaskSuspend( PC_PID2_handle );
+                            //vTaskSuspend( VC_PID2_handle );
+
+                            send_data( 972 ,PWM_1); // 95% PWM
+                            //state = ON;
+                            break;
+                        }
                         break;
 
                     case ON:
 
                         send_data( 0 ,PWM_1);
-                        vTaskDelay( pdMS_TO_TICKS(1000) );
+                        vTaskDelay( pdMS_TO_TICKS(500) );
 
                         //Resume all controller tasks
                         //vTaskResume( PC_PID1_handle );

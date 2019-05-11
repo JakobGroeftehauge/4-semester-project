@@ -245,8 +245,6 @@ extern void init_PIDs()
      init_filter(VC_CONTROLLER_2_ID, VC2_Filter_Coef, 3);
      init_filter(VC_CONTROLLER_DTERM_2_ID, VC2_Filter_Coef_dTerm, 6);
 
-//     free(VC2_Filter_Coef);
-//     free(VC2_Filter_Coef_dTerm);
 
 }
 

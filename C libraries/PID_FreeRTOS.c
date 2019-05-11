@@ -50,7 +50,7 @@ extern void PID_PC_task(void* pvParameters)
     for (;;)
     {
 
-        GPIO_PORTA_DATA_R |= controller_parameter.test_led;
+        //GPIO_PORTA_DATA_R |= controller_parameter.test_led;
         xLastWakeTime = xTaskGetTickCount();
 
         if(xSemaphoreTake(*controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
@@ -81,7 +81,7 @@ extern void PID_PC_task(void* pvParameters)
             xSemaphoreGive(*controller_parameter.output_semaphore);
         }
 
-        GPIO_PORTA_DATA_R &= ~(controller_parameter.test_led);
+        //GPIO_PORTA_DATA_R &= ~(controller_parameter.test_led);
         vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS(controller_parameter.delayTime) );
     }
 
@@ -106,7 +106,7 @@ extern void PID_VC_task(void* pvParameters)
     xLastWakeTime = xTaskGetTickCount(); // Is automatically updated by vTaskDelayUntil()
     for (;;)
     {
-        GPIO_PORTA_DATA_R |= controller_parameter.test_led;
+        //GPIO_PORTA_DATA_R |= controller_parameter.test_led;
 
 
 
@@ -141,7 +141,7 @@ extern void PID_VC_task(void* pvParameters)
             xSemaphoreGive(*controller_parameter.queue_semaphore);
         }
 
-        GPIO_PORTA_DATA_R &= ~(controller_parameter.test_led);
+        //GPIO_PORTA_DATA_R &= ~(controller_parameter.test_led);
 
         vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS(controller_parameter.delayTime) );
         //GPIO_PORTA_DATA_R ^= (0x04);
@@ -161,14 +161,14 @@ extern void init_PIDs()
 {
     //Setup of position controller 1:
 
-    PID_pool[PC_CONTROLLER_1_ID].Kp = 1;
+    PID_pool[PC_CONTROLLER_1_ID].Kp = 4;
     PID_pool[PC_CONTROLLER_1_ID].Kd = 0.01;
-    PID_pool[PC_CONTROLLER_1_ID].Ki = 5;
+    PID_pool[PC_CONTROLLER_1_ID].Ki = 2;
     PID_pool[PC_CONTROLLER_1_ID].dt = 0.005;
     PID_pool[PC_CONTROLLER_1_ID].integral = 0;
     PID_pool[PC_CONTROLLER_1_ID].previous_error = 0;
-    PID_pool[PC_CONTROLLER_1_ID].upper_sat = 12;
-    PID_pool[PC_CONTROLLER_1_ID].lower_sat = -12;
+    PID_pool[PC_CONTROLLER_1_ID].upper_sat = 3000;
+    PID_pool[PC_CONTROLLER_1_ID].lower_sat = -3000;
     PID_pool[PC_CONTROLLER_1_ID].filter_id = PC_CONTROLLER_1_ID;
     PID_pool[PC_CONTROLLER_1_ID].filter_dterm_id = PC_CONTROLLER_DTERM_1_ID;
     PID_pool[PC_CONTROLLER_1_ID].pastError = 0;
@@ -183,24 +183,24 @@ extern void init_PIDs()
 
     //Setup of position controller 2:
 
-    PID_pool[PC_CONTROLLER_2_ID].Kp = 1;
-    PID_pool[PC_CONTROLLER_2_ID].Kd = 0.01;
-    PID_pool[PC_CONTROLLER_2_ID].Ki = 5;
-    PID_pool[PC_CONTROLLER_2_ID].dt = 0.005;
-    PID_pool[PC_CONTROLLER_2_ID].integral = 0;
-    PID_pool[PC_CONTROLLER_2_ID].previous_error = 0;
-    PID_pool[PC_CONTROLLER_2_ID].upper_sat = 12;
-    PID_pool[PC_CONTROLLER_2_ID].lower_sat = -12;
-    PID_pool[PC_CONTROLLER_2_ID].filter_id = PC_CONTROLLER_2_ID;
-    PID_pool[PC_CONTROLLER_2_ID].filter_dterm_id = PC_CONTROLLER_DTERM_2_ID;
-    PID_pool[PC_CONTROLLER_2_ID].pastError = 0;
-    PID_pool[PC_CONTROLLER_2_ID].Ud = 0;
-    PID_pool[PC_CONTROLLER_2_ID].sat_flag = 0;
-    float PC2_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
-    float PC2_Filter_Coef_dTerm[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
-    init_filter(PC_CONTROLLER_2_ID, PC2_Filter_Coef, 6);
-    init_filter(PC_CONTROLLER_DTERM_2_ID, PC2_Filter_Coef_dTerm, 6);
-//    free(PC2_Filter_Coef);
+//    PID_pool[PC_CONTROLLER_2_ID].Kp = 1;
+//    PID_pool[PC_CONTROLLER_2_ID].Kd = 0.01;
+//    PID_pool[PC_CONTROLLER_2_ID].Ki = 5;
+//    PID_pool[PC_CONTROLLER_2_ID].dt = 0.005;
+//    PID_pool[PC_CONTROLLER_2_ID].integral = 0;
+//    PID_pool[PC_CONTROLLER_2_ID].previous_error = 0;
+//    PID_pool[PC_CONTROLLER_2_ID].upper_sat = 7.23*3;
+//    PID_pool[PC_CONTROLLER_2_ID].lower_sat = -7.32*3;
+//    PID_pool[PC_CONTROLLER_2_ID].filter_id = PC_CONTROLLER_2_ID;
+//    PID_pool[PC_CONTROLLER_2_ID].filter_dterm_id = PC_CONTROLLER_DTERM_2_ID;
+//    PID_pool[PC_CONTROLLER_2_ID].pastError = 0;
+//    PID_pool[PC_CONTROLLER_2_ID].Ud = 0;
+//    PID_pool[PC_CONTROLLER_2_ID].sat_flag = 0;
+//    float PC2_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
+//    float PC2_Filter_Coef_dTerm[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
+//    init_filter(PC_CONTROLLER_2_ID, PC2_Filter_Coef, 6);
+//    init_filter(PC_CONTROLLER_DTERM_2_ID, PC2_Filter_Coef_dTerm, 6);
+////    free(PC2_Filter_Coef);
 //    free(PC2_Filter_Coef_dTerm);
     
     //Setup of velocity controller 1:
@@ -218,7 +218,7 @@ extern void init_PIDs()
      PID_pool[VC_CONTROLLER_1_ID].pastError = 0;
      PID_pool[VC_CONTROLLER_1_ID].Ud = 0;
      PID_pool[VC_CONTROLLER_1_ID].sat_flag = 0;
-     float VC1_Filter_Coef[MAX_NUMBER_OF_TABS] = {1, 0, 0, 0, 0};//{0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
+     float VC1_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
      float VC1_Filter_Coef_dTerm[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};//{0.0312,0.0937, 0.1562,0.2187,0.2187, 0.1562,0.0937,0.0312};//{0.125,  0.375, 0.375, 0.125};
      init_filter(VC_CONTROLLER_1_ID, VC1_Filter_Coef, 6);
      init_filter(VC_CONTROLLER_DTERM_1_ID, VC1_Filter_Coef_dTerm, 6);
@@ -226,23 +226,23 @@ extern void init_PIDs()
 //     free(VC1_Filter_Coef_dTerm);
      //Setup of velocity controller 2:
 
-     PID_pool[VC_CONTROLLER_2_ID].Kp = 3;
-     PID_pool[VC_CONTROLLER_2_ID].Kd = 0.2;
-     PID_pool[VC_CONTROLLER_2_ID].Ki = 5;
-     PID_pool[VC_CONTROLLER_2_ID].dt = 0.001;
-     PID_pool[VC_CONTROLLER_2_ID].integral = 0;
-     PID_pool[VC_CONTROLLER_2_ID].previous_error = 0;
-     PID_pool[VC_CONTROLLER_2_ID].upper_sat = 12;
-     PID_pool[VC_CONTROLLER_2_ID].lower_sat = -12;
-     PID_pool[VC_CONTROLLER_2_ID].filter_id = VC_CONTROLLER_2_ID;
-     PID_pool[VC_CONTROLLER_2_ID].filter_dterm_id = VC_CONTROLLER_DTERM_2_ID;
-     PID_pool[VC_CONTROLLER_2_ID].pastError = 0;
-     PID_pool[VC_CONTROLLER_2_ID].Ud = 0;
-     PID_pool[VC_CONTROLLER_2_ID].sat_flag = 0;
-     float VC2_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
-     float VC2_Filter_Coef_dTerm[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
-     init_filter(VC_CONTROLLER_2_ID, VC2_Filter_Coef, 6);
-     init_filter(VC_CONTROLLER_DTERM_2_ID, VC2_Filter_Coef_dTerm, 6);
+//     PID_pool[VC_CONTROLLER_2_ID].Kp = 3;
+//     PID_pool[VC_CONTROLLER_2_ID].Kd = 0.2;
+//     PID_pool[VC_CONTROLLER_2_ID].Ki = 5;
+//     PID_pool[VC_CONTROLLER_2_ID].dt = 0.001;
+//     PID_pool[VC_CONTROLLER_2_ID].integral = 0;
+//     PID_pool[VC_CONTROLLER_2_ID].previous_error = 0;
+//     PID_pool[VC_CONTROLLER_2_ID].upper_sat = 12;
+//     PID_pool[VC_CONTROLLER_2_ID].lower_sat = -12;
+//     PID_pool[VC_CONTROLLER_2_ID].filter_id = VC_CONTROLLER_2_ID;
+//     PID_pool[VC_CONTROLLER_2_ID].filter_dterm_id = VC_CONTROLLER_DTERM_2_ID;
+//     PID_pool[VC_CONTROLLER_2_ID].pastError = 0;
+//     PID_pool[VC_CONTROLLER_2_ID].Ud = 0;
+//     PID_pool[VC_CONTROLLER_2_ID].sat_flag = 0;
+//     float VC2_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
+//     float VC2_Filter_Coef_dTerm[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
+//     init_filter(VC_CONTROLLER_2_ID, VC2_Filter_Coef, 6);
+//     init_filter(VC_CONTROLLER_DTERM_2_ID, VC2_Filter_Coef_dTerm, 6);
 //     free(VC2_Filter_Coef);
 //     free(VC2_Filter_Coef_dTerm);
 

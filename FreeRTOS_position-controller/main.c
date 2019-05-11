@@ -36,29 +36,25 @@
 #define MED_PRIO  2
 #define HIGH_PRIO 3
 
-#define GREEN_LED_TASK 2
-#define YELLOW_LED_TASK 3
-
-
 /*****************************   Constants   *******************************/
 
 
 /*****************************   Variables   *******************************/
-volatile INT16S pwm_var;
-volatile INT16S pos_var;
-
+//volatile INT16S pwm_var;
+//volatile INT16S pos_var;
+//
 struct PID_parameter PC_1_parameter;
 struct PID_parameter VC_1_parameter;
 struct PID_parameter PC_2_parameter;
 struct PID_parameter VC_2_parameter;
-
-volatile float control_signal_PC1;
-volatile float control_signal_PC2;
-
-volatile float feedback;
-volatile int16_t output_PC1;
-volatile int16_t output_PC2;
-float control_1_pos_ref;
+//
+//volatile float control_signal_PC1;
+//volatile float control_signal_PC2;
+//
+//volatile float feedback;
+//volatile int16_t output_PC1;
+//volatile int16_t output_PC2;
+//float control_1_pos_ref;
 
 
 /*****************************   Functions   *******************************/
@@ -78,7 +74,7 @@ int main(void)
 
     // Create tasks
     // -------------------
-    //xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 3, &PC_PID1_handle);
+    xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 3, &PC_PID1_handle);
     xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 2, &VC_PID1_handle);
     //xTaskCreate(PID_PC_task, "Position controller 2", 100, &PC_2_parameter, 3, &PC_PID2_handle);
     //xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 2, &VC_PID2_handle);
@@ -89,12 +85,12 @@ int main(void)
     xTaskCreate(UITask, "UI", 100, NULL, 1, &UI_task_handle);
     xTaskCreate(SPI_task, "SPI module", 100, NULL, 1, &SPI_handle);
 
-    control_1_pos_ref = 100;
-    control_2_pos_ref = 0;
+    control_1_pos_ref = 2*3*3.14;
+    //control_2_pos_ref = 0;
     //control_2_pos_ref = 30;
     //control_1_vel_ref = 20.5;
 
-    control_1_vel_ref = 7;
+    //control_1_vel_ref = 7;
 
     // Start the scheduler.
     // --------------------

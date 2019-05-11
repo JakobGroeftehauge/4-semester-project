@@ -102,14 +102,14 @@ extern void init_parameters()
     PC_1_parameter.reference_semaphore =    &POS_1_REF_SEM;
     PC_1_parameter.feedback_signal =        &control_1_pos;
     PC_1_parameter.feedback_semaphore =     &POS_1_SEM;
-    PC_1_parameter.delayTime =              5;
+    PC_1_parameter.delayTime =              10;
     PC_1_parameter.queue_semaphore =        &QUEUE_SEM;
     PC_1_parameter.output_id =              0;
     PC_1_parameter.test_led =               0x10;
 
     VC_1_parameter.id =                     VC_CONTROLLER_1_ID;
     VC_1_parameter.slave_id =               VEL_1;
-    VC_1_parameter.place_to_store_output =  &control_1_vel_ref;
+    VC_1_parameter.place_to_store_output =  NULL; // NOT USED &control_1_vel_ref;
     VC_1_parameter.output_semaphore =       &VEL_1_REF_SEM;
     VC_1_parameter.reference_signal =       &control_1_vel_ref;
     VC_1_parameter.reference_semaphore =    &VEL_1_REF_SEM;

@@ -38,6 +38,7 @@ volatile uint8_t     *receive_character         = 0;
 volatile UBaseType_t UARTMessagesWaiting        = 0;
 volatile uint16_t    temp_motor_position        = 0;
 volatile float       motor_position             = 0;
+volatile float       motor_direction            = 0;
 
 
 /****************************    Semaphores    ***************************/
@@ -177,7 +178,7 @@ void UITask( void * pvParameters)
                 break;
 
             case (GO_TO_POSITION_COMMAND):
-                if (UARTMessagesWaiting >= 5)
+                if (UARTMessagesWaiting >= 6)
                 {
                     UITaskCommandReady = UI_COMMAND_READY;
                     xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
@@ -221,7 +222,13 @@ void UITask( void * pvParameters)
                         temp_motor_position = (byte_from_UART_queue - 48);
                         motor_position += temp_motor_position;
 
-                        control_2_pos_ref = motor_position/60 * 3.14;
+                        xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
+                        if ((byte_from_UART_queue - 48) == 0)
+                            motor_direction = 1;
+                        else
+                            motor_direction = -1;
+
+                        control_2_pos_ref = motor_position/60 * 3.14 * motor_direction;
                     }
                     else
                     {

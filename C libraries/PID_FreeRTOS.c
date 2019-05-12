@@ -227,10 +227,10 @@ extern void init_PIDs()
 
 
      //THIS IS THE SETTINGS FOR POS2 CONTROLLER
-     PID_pool[VC_CONTROLLER_2_ID].Kp = 4;
-     PID_pool[VC_CONTROLLER_2_ID].Kd = 0.5;
-     PID_pool[VC_CONTROLLER_2_ID].Ki = 18;
-     PID_pool[VC_CONTROLLER_2_ID].dt = 0.001;
+     PID_pool[VC_CONTROLLER_2_ID].Kp = 4.3;
+     PID_pool[VC_CONTROLLER_2_ID].Kd = 0.9;
+     PID_pool[VC_CONTROLLER_2_ID].Ki = 17;
+     PID_pool[VC_CONTROLLER_2_ID].dt = 0.005;
      PID_pool[VC_CONTROLLER_2_ID].integral = 0;
      PID_pool[VC_CONTROLLER_2_ID].previous_error = 0;
      PID_pool[VC_CONTROLLER_2_ID].upper_sat = 12;

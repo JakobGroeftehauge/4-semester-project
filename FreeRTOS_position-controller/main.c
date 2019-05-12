@@ -90,7 +90,7 @@ int main(void)
     //control_2_pos_ref = 30;
     //control_1_vel_ref = 20.5;
 
-    control_1_vel_ref = 20;
+    control_1_vel_ref = 0;
 
     // Start the scheduler.
     // --------------------

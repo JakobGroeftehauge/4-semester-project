@@ -144,7 +144,7 @@ void UITask( void * pvParameters)
                 xQueueSend( SPI_queue, (void *) &SPI_protocol_struct, 0);
 
                 SPI_protocol_struct.id = PROTOCOL_SLAVE;
-                SPI_protocol_struct.data = 0x00CC; //0x00CC
+                //SPI_protocol_struct.data = 0x00CC; //0x00CC
                 xQueueSend( SPI_queue, (void *) &SPI_protocol_struct, 0);
 
                 break;

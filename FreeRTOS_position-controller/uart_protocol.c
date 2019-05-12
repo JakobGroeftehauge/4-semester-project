@@ -143,7 +143,7 @@ void UITask( void * pvParameters)
                 xQueueSend( SPI_queue, (void *) &SPI_protocol_struct, 0);
 
                 SPI_protocol_struct.id = PROTOCOL_SLAVE;
-                SPI_protocol_struct.data = 0x00CC; //0x00CC
+                //SPI_protocol_struct.data = 0x00CC; //0x00CC
                 xQueueSend( SPI_queue, (void *) &SPI_protocol_struct, 0);
 
                 break;
@@ -201,7 +201,13 @@ void UITask( void * pvParameters)
                         temp_motor_position = (byte_from_UART_queue - 48);
                         motor_position += temp_motor_position;
 
-                        control_1_pos_ref = motor_position/60 * 3.14;
+                        xQueueReceive( xUARTReceive_queue, &byte_from_UART_queue , ( TickType_t ) 0 );
+                        if ((byte_from_UART_queue - 48) == 0)
+                            motor_direction = 1;
+                        else
+                            motor_direction = -1;
+
+                        control_1_pos_ref = motor_position/60 * 3.14 * motor_direction;
                     }
                     else if( (byte_from_UART_queue - 48) == 1 )
                     {

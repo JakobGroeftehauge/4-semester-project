@@ -103,7 +103,7 @@ extern void init_parameters()
     PC_1_parameter.reference_semaphore =    &POS_1_REF_SEM;
     PC_1_parameter.feedback_signal =        &control_1_pos;
     PC_1_parameter.feedback_semaphore =     &POS_1_SEM;
-    PC_1_parameter.delayTime =              10;
+    PC_1_parameter.delayTime =              5;
     PC_1_parameter.queue_semaphore =        &QUEUE_SEM;
     PC_1_parameter.output_id =              0;
     PC_1_parameter.test_led =               0x10;

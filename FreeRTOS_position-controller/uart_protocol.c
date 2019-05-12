@@ -202,7 +202,8 @@ void UITask( void * pvParameters)
                         temp_motor_position = (byte_from_UART_queue - 48);
                         motor_position += temp_motor_position;
 
-                        control_1_pos_ref = motor_position;
+
+                        control_1_pos_ref = motor_position/60 * 3.14;
                     }
                     else if( (byte_from_UART_queue - 48) == 1 )
                     {
@@ -223,7 +224,7 @@ void UITask( void * pvParameters)
                         temp_motor_position = (byte_from_UART_queue - 48);
                         motor_position += temp_motor_position;
 
-                        control_2_pos_ref = motor_position;
+                        control_2_pos_ref = motor_position/60 * 3.14;
                     }
                     else
                     {

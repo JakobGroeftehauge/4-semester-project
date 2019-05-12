@@ -206,9 +206,9 @@ extern void init_PIDs()
 //    free(PC2_Filter_Coef_dTerm);
     
     //THIS IS THE SETTINGS FOR POS1 CONTROLLER
-     PID_pool[VC_CONTROLLER_1_ID].Kp = 9;
-     PID_pool[VC_CONTROLLER_1_ID].Kd = 0.5;
-     PID_pool[VC_CONTROLLER_1_ID].Ki = 21;
+     PID_pool[VC_CONTROLLER_1_ID].Kp = 9.45;//9;
+     PID_pool[VC_CONTROLLER_1_ID].Kd = 0.9;//0.5;
+     PID_pool[VC_CONTROLLER_1_ID].Ki = 8.55; //21;
      PID_pool[VC_CONTROLLER_1_ID].dt = 0.005;
      PID_pool[VC_CONTROLLER_1_ID].integral = 0;
      PID_pool[VC_CONTROLLER_1_ID].previous_error = 0;
@@ -227,9 +227,9 @@ extern void init_PIDs()
 
 
      //THIS IS THE SETTINGS FOR POS2 CONTROLLER
-     PID_pool[VC_CONTROLLER_2_ID].Kp = 4.3;
-     PID_pool[VC_CONTROLLER_2_ID].Kd = 0.9;
-     PID_pool[VC_CONTROLLER_2_ID].Ki = 17;
+     PID_pool[VC_CONTROLLER_2_ID].Kp = 6.8; // 4.3; // 6.8 // 2
+     PID_pool[VC_CONTROLLER_2_ID].Kd = 2;//0.9;
+     PID_pool[VC_CONTROLLER_2_ID].Ki = 4.5; //17;
      PID_pool[VC_CONTROLLER_2_ID].dt = 0.005;
      PID_pool[VC_CONTROLLER_2_ID].integral = 0;
      PID_pool[VC_CONTROLLER_2_ID].previous_error = 0;

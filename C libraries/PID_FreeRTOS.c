@@ -207,9 +207,9 @@ extern void init_PIDs()
     
     //Setup of velocity controller 1:
 
-     PID_pool[VC_CONTROLLER_1_ID].Kp = 1;//0.5194; //0.76282*2;
-     PID_pool[VC_CONTROLLER_1_ID].Kd = 0.005;//0.003; //0.0058;
-     PID_pool[VC_CONTROLLER_1_ID].Ki = 20   ;//22.85; //25.6063;
+     PID_pool[VC_CONTROLLER_1_ID].Kp = 0.209;//0.155;//0.5194; //0.76282*2;
+     PID_pool[VC_CONTROLLER_1_ID].Kd = 0.0022;//0.0025;//0.005;//0.003; //0.0058;
+     PID_pool[VC_CONTROLLER_1_ID].Ki = 4.62;//2.3;//22.85; //25.6063;
      PID_pool[VC_CONTROLLER_1_ID].dt = 0.001;
      PID_pool[VC_CONTROLLER_1_ID].integral = 0;
      PID_pool[VC_CONTROLLER_1_ID].previous_error = 0;

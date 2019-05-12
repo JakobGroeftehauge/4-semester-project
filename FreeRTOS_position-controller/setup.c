@@ -103,7 +103,7 @@ extern void init_parameters()
     PC_1_parameter.reference_semaphore =    &POS_1_REF_SEM;
     PC_1_parameter.feedback_signal =        &control_1_pos;
     PC_1_parameter.feedback_semaphore =     &POS_1_SEM;
-    PC_1_parameter.delayTime =              10;
+    PC_1_parameter.delayTime =              5;
     PC_1_parameter.queue_semaphore =        &QUEUE_SEM;
     PC_1_parameter.output_id =              0;
     PC_1_parameter.test_led =               0x10;
@@ -214,8 +214,8 @@ extern void reset_all()
 
     xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 8, &PC_PID1_handle);
     xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 8, &VC_PID1_handle);
-    xTaskCreate(PID_PC_task, "Position controller 2", 100, &PC_2_parameter, 8, &PC_PID2_handle);
-    xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 8, &VC_PID2_handle);
+    //xTaskCreate(PID_PC_task, "Position controller 2", 100, &PC_2_parameter, 8, &PC_PID2_handle);
+    //xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 8, &VC_PID2_handle);
 
     uint8_t empty = 4;
     xTaskCreate(SPI_task, "SPI module", 100, &empty, 1, &SPI_handle);

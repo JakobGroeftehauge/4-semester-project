@@ -280,7 +280,7 @@ extern float run_PID(float feedback, float setpoint, uint8_t id) // CHANGE TO PI
    // integral is only given a value if the controller is not in saturation
    if (PID_pool[id].sat_flag)
    {
-       integral_term = 0;
+       integral_term = PID_pool[id].integral;
    }
    else
    {

@@ -288,7 +288,7 @@ void UITask( void * pvParameters)
                         control_1_vel_ref = 10;
                         break;
                     case 6:
-                        control_1_vel_ref = 20;
+                        control_1_vel_ref = 12;
                         break;
                     }
                     break;

@@ -48,6 +48,11 @@ typedef struct
   float lower_sat;
   float pastError;
   float Ud;
+  float error;
+  float output;
+  float integral_term;
+  float proportional_term;
+  float derivative_term;
   uint8_t filter_id;
   uint8_t filter_dterm_id;
   uint8_t sat_flag;

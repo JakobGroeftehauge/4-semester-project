@@ -174,6 +174,11 @@ extern void init_PIDs()
     PID_pool[PC_CONTROLLER_1_ID].pastError = 0;
     PID_pool[PC_CONTROLLER_1_ID].Ud = 0;
     PID_pool[PC_CONTROLLER_1_ID].sat_flag = 0;
+    PID_pool[PC_CONTROLLER_1_ID].error = 0;
+    PID_pool[PC_CONTROLLER_1_ID].output = 0;
+    PID_pool[PC_CONTROLLER_1_ID].integral_term = 0;
+    PID_pool[PC_CONTROLLER_1_ID].proportional_term = 0;
+    PID_pool[PC_CONTROLLER_1_ID].derivative_term = 0;
     float PC1_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249};
     float PC1_Filter_Coef_dTerm[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
     init_filter(PC_CONTROLLER_1_ID, PC1_Filter_Coef, 3);
@@ -197,6 +202,11 @@ extern void init_PIDs()
 //    PID_pool[PC_CONTROLLER_2_ID].pastError = 0;
 //    PID_pool[PC_CONTROLLER_2_ID].Ud = 0;
 //    PID_pool[PC_CONTROLLER_2_ID].sat_flag = 0;
+//    PID_pool[PC_CONTROLLER_2_ID].error = 0;
+//    PID_pool[PC_CONTROLLER_2_ID].output = 0;
+//    PID_pool[PC_CONTROLLER_2_ID].integral_term = 0;
+//    PID_pool[PC_CONTROLLER_2_ID].proportional_term = 0;
+//    PID_pool[PC_CONTROLLER_2_ID].derivative_term = 0;
 //    float PC2_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249};
 //    float PC2_Filter_Coef_dTerm[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
 //    init_filter(PC_CONTROLLER_2_ID, PC2_Filter_Coef, 3);
@@ -220,6 +230,11 @@ extern void init_PIDs()
      PID_pool[VC_CONTROLLER_1_ID].pastError = 0;
      PID_pool[VC_CONTROLLER_1_ID].Ud = 0;
      PID_pool[VC_CONTROLLER_1_ID].sat_flag = 0;
+     PID_pool[VC_CONTROLLER_1_ID].error = 0;
+     PID_pool[VC_CONTROLLER_1_ID].output = 0;
+     PID_pool[VC_CONTROLLER_1_ID].integral_term = 0;
+     PID_pool[VC_CONTROLLER_1_ID].proportional_term = 0;
+     PID_pool[VC_CONTROLLER_1_ID].derivative_term = 0;
      float VC1_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249};
 
 
@@ -244,6 +259,11 @@ extern void init_PIDs()
 //     PID_pool[VC_CONTROLLER_2_ID].pastError = 0;
 //     PID_pool[VC_CONTROLLER_2_ID].Ud = 0;
 //     PID_pool[VC_CONTROLLER_2_ID].sat_flag = 0;
+//     PID_pool[VC_CONTROLLER_2_ID].error = 0;
+//     PID_pool[VC_CONTROLLER_2_ID].output = 0;
+//     PID_pool[VC_CONTROLLER_2_ID].integral_term = 0;
+//     PID_pool[VC_CONTROLLER_2_ID].proportional_term = 0;
+//     PID_pool[VC_CONTROLLER_2_ID].derivative_term = 0;
 //     float VC2_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249};
 //     float VC2_Filter_Coef_dTerm[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
 //     init_filter(VC_CONTROLLER_2_ID, VC2_Filter_Coef, 3);
@@ -263,53 +283,40 @@ extern float run_PID(float feedback, float setpoint, uint8_t id) // CHANGE TO PI
 {
     // see powerpoint, Control engineering course: lesson 8, for implementation of discrete PID.
 
-   float error;
-   float output;
-   float T = PID_pool[id].dt;
-   float static integral_term;
+   PID_pool[id].error = setpoint - feedback;
 
-   error = setpoint - feedback;
+   PID_pool[id].error = run_filter(PID_pool[id].filter_id, PID_pool[id].error);
 
-   error = run_filter(PID_pool[id].filter_id, error);
+    // calculate the proportional term
+   PID_pool[id].proportional_term  = PID_pool[id].Kp*PID_pool[id].error;
 
-    // calculate the proportional and derivative terms
-   float proportional_term  = PID_pool[id].Kp*error;
-   float derivative_term = PID_pool[id].Kd*2/T*(error - PID_pool[id].previous_error) - PID_pool[id].Ud;
-   derivative_term = run_filter(PID_pool[id].filter_dterm_id, derivative_term);
+   //Calculate the derivative term
+   PID_pool[id].derivative_term = PID_pool[id].Kd*2/PID_pool[id].dt*(PID_pool[id].error - PID_pool[id].previous_error) - PID_pool[id].Ud;
 
-   // integral is only given a value if the controller is not in saturation
-   if (PID_pool[id].sat_flag)
+   // Filter the derivative term
+   PID_pool[id].derivative_term = run_filter(PID_pool[id].filter_dterm_id, PID_pool[id].derivative_term);
+
+   // Calculate integral term
+   PID_pool[id].integral_term = PID_pool[id].integral + PID_pool[id].Ki*PID_pool[id].dt/2*(PID_pool[id].error + PID_pool[id].previous_error);
+
+   //Calculate output
+   PID_pool[id].output = PID_pool[id].proportional_term +  PID_pool[id].derivative_term + PID_pool[id].integral_term;
+
+   // Conditional integral
+   if(PID_pool[id].output > PID_pool[id].upper_sat || PID_pool[id].output < PID_pool[id].lower_sat)
    {
-       integral_term = PID_pool[id].integral;
+       PID_pool[id].output = PID_pool[id].proportional_term +  PID_pool[id].derivative_term + PID_pool[id].integral;
    }
    else
    {
-       integral_term = PID_pool[id].integral + PID_pool[id].Ki*T/2*(error + PID_pool[id].previous_error);
+       PID_pool[id].integral = PID_pool[id].integral_term;
    }
 
 
-   output = proportional_term + integral_term + derivative_term;
+   PID_pool[id].Ud = PID_pool[id].derivative_term;
+   PID_pool[id].previous_error = PID_pool[id].error;
 
-   PID_pool[id].integral = integral_term;
-   PID_pool[id].Ud = derivative_term;
-   PID_pool[id].previous_error = error;
 
-    // check for saturation for next run through and set flag
-   if (output > PID_pool[id].upper_sat)
-   {
-       output = PID_pool[id].upper_sat;
-       PID_pool[id].sat_flag = 1;
-   }
-   else if (output < PID_pool[id].lower_sat)
-   {
-       output = PID_pool[id].lower_sat;
-       PID_pool[id].sat_flag = 1;
-   }
-   else
-   {
-       PID_pool[id].sat_flag = 0;
-   }
-
-   return output;
+   return PID_pool[id].output;
 
 }

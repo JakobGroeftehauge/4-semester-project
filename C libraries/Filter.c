@@ -49,14 +49,14 @@ float run_filter(uint8_t id, float data)
 *   Function : filter data
 ******************************************************************************/
 {
-    float result = 0;
-    float immediateResult; //Used as intermediate step in calculations
+    //float result = 0;
+    //float immediateResult; //Used as intermediate step in calculations
     update_buffer(id, data); //Puts data into buffer
 
     for(uint8_t i = 0; i < filter_pool[id].tabs; i++)
     {
-        immediateResult = filter_pool[id].coefList[i] * peek_buffer(id, i);//Calculates the n'th step of the FIR filter
-        result = result + immediateResult;
+        filter_pool[id].immediateResult = filter_pool[id].coefList[i] * peek_buffer(id, i);//Calculates the n'th step of the FIR filter
+        filter_pool[id].result = filter_pool[id].result + filter_pool[id].immediateResult;
     }
 
     return result;

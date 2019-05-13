@@ -40,6 +40,8 @@ typedef struct
     uint8_t id;
     float coefList[10];
     uint8_t tabs;
+    float result;
+    float immediateResult;
 } filter_descriptor;
 
 

@@ -30,6 +30,11 @@
 /*****************************   Variables   *******************************/
 PID_controller PID_pool[NOF_PIDS];
 
+float   test_variable = 0;
+float   test_setpoint = 0;
+float   test_1 = 0;
+float   test_2 = 0;
+float   test_error = 0;
 
 extern void PID_PC_task(void* pvParameters)
 {
@@ -70,6 +75,7 @@ extern void PID_PC_task(void* pvParameters)
             }
 
             result_PID = run_PID(temp_feedback, temp_reference, controller_parameter.id);
+            test_setpoint = result_PID;
 
         }
 
@@ -123,13 +129,13 @@ extern void PID_VC_task(void* pvParameters)
             {
 
                 temp_feedback = *controller_parameter.feedback_signal;
+                test_variable = temp_feedback;
                 temp_reference = *controller_parameter.reference_signal;
                 xSemaphoreGive(*controller_parameter.reference_semaphore);
 
             }
 
             result_PID = run_PID(temp_feedback, temp_reference, controller_parameter.id);
-
         }
 
             data_to_send.data = (result_PID / 12) * 1023 + 0.5;//voltage_to_duty_cycle(result_PID);
@@ -161,14 +167,14 @@ extern void init_PIDs()
 {
     //Setup of position controller 1:
 
-    PID_pool[PC_CONTROLLER_1_ID].Kp = 6.678;//4;
-    PID_pool[PC_CONTROLLER_1_ID].Kd = 1.06;//0.01;
-    PID_pool[PC_CONTROLLER_1_ID].Ki = 5.152;//2;
+    PID_pool[PC_CONTROLLER_1_ID].Kp = 2.8;//6.678;//4;
+    PID_pool[PC_CONTROLLER_1_ID].Kd = 0.4;//1.06;//0.01;
+    PID_pool[PC_CONTROLLER_1_ID].Ki = 1.984;//5.152;//2;
     PID_pool[PC_CONTROLLER_1_ID].dt = 0.005;
     PID_pool[PC_CONTROLLER_1_ID].integral = 0;
     PID_pool[PC_CONTROLLER_1_ID].previous_error = 0;
-    PID_pool[PC_CONTROLLER_1_ID].upper_sat = 3000;
-    PID_pool[PC_CONTROLLER_1_ID].lower_sat = -3000;
+    PID_pool[PC_CONTROLLER_1_ID].upper_sat = 20;
+    PID_pool[PC_CONTROLLER_1_ID].lower_sat = -20;
     PID_pool[PC_CONTROLLER_1_ID].filter_id = PC_CONTROLLER_1_ID;
     PID_pool[PC_CONTROLLER_1_ID].filter_dterm_id = PC_CONTROLLER_DTERM_1_ID;
     PID_pool[PC_CONTROLLER_1_ID].pastError = 0;
@@ -217,9 +223,9 @@ extern void init_PIDs()
     
     //Setup of velocity controller 1:
 
-     PID_pool[VC_CONTROLLER_1_ID].Kp = 0.209;//0.155;//0.5194; //0.76282*2;
-     PID_pool[VC_CONTROLLER_1_ID].Kd = 0.00022;//0.0025;//0.005;//0.003; //0.0058;
-     PID_pool[VC_CONTROLLER_1_ID].Ki = 4.62;//2.3;//22.85; //25.6063;
+     PID_pool[VC_CONTROLLER_1_ID].Kp = 0.49;//0.209;//0.155;//0.5194; //0.76282*2;
+     PID_pool[VC_CONTROLLER_1_ID].Kd = 0.01;//0.00022;//0.0025;//0.005;//0.003; //0.0058;
+     PID_pool[VC_CONTROLLER_1_ID].Ki = 3.6;//4.62;//2.3;//22.85; //25.6063;
      PID_pool[VC_CONTROLLER_1_ID].dt = 0.001;
      PID_pool[VC_CONTROLLER_1_ID].integral = 0;
      PID_pool[VC_CONTROLLER_1_ID].previous_error = 0;
@@ -305,7 +311,15 @@ extern float run_PID(float feedback, float setpoint, uint8_t id) // CHANGE TO PI
    // Conditional integral
    if(PID_pool[id].output > PID_pool[id].upper_sat || PID_pool[id].output < PID_pool[id].lower_sat)
    {
-       PID_pool[id].output = PID_pool[id].proportional_term +  PID_pool[id].derivative_term + PID_pool[id].integral;
+       //PID_pool[id].output = 0;
+       if(PID_pool[id].upper_sat < PID_pool[id].output)
+       {
+           PID_pool[id].output = PID_pool[id].upper_sat;
+       }
+       else if(PID_pool[id].lower_sat > PID_pool[id].output)
+       {
+           PID_pool[id].output = PID_pool[id].lower_sat;
+       }
    }
    else
    {

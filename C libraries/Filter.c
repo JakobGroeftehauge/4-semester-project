@@ -59,7 +59,7 @@ float run_filter(uint8_t id, float data)
         filter_pool[id].result = filter_pool[id].result + filter_pool[id].immediateResult;
     }
 
-    return result;
+    return filter_pool[id].result;
 }
 
 /****************************** End Of Module *******************************/

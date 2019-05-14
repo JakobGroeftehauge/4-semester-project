@@ -161,14 +161,14 @@ extern void init_PIDs()
 {
     //Setup of position controller 1:
 
-    PID_pool[PC_CONTROLLER_1_ID].Kp = 6.678;//4;
-    PID_pool[PC_CONTROLLER_1_ID].Kd = 1.06;//0.01;
-    PID_pool[PC_CONTROLLER_1_ID].Ki = 5.152;//2;
+    PID_pool[PC_CONTROLLER_1_ID].Kp = 7.548; //6.678;//4;
+    PID_pool[PC_CONTROLLER_1_ID].Kd = 1.02;//1.06;//0.01;
+    PID_pool[PC_CONTROLLER_1_ID].Ki = 7.589;//5.152;//2;
     PID_pool[PC_CONTROLLER_1_ID].dt = 0.005;
     PID_pool[PC_CONTROLLER_1_ID].integral = 0;
     PID_pool[PC_CONTROLLER_1_ID].previous_error = 0;
-    PID_pool[PC_CONTROLLER_1_ID].upper_sat = 3000;
-    PID_pool[PC_CONTROLLER_1_ID].lower_sat = -3000;
+    PID_pool[PC_CONTROLLER_1_ID].upper_sat = 100;
+    PID_pool[PC_CONTROLLER_1_ID].lower_sat = -100;
     PID_pool[PC_CONTROLLER_1_ID].filter_id = PC_CONTROLLER_1_ID;
     PID_pool[PC_CONTROLLER_1_ID].filter_dterm_id = PC_CONTROLLER_DTERM_1_ID;
     PID_pool[PC_CONTROLLER_1_ID].pastError = 0;
@@ -207,9 +207,9 @@ extern void init_PIDs()
     
     //Setup of velocity controller 1:
 
-     PID_pool[VC_CONTROLLER_1_ID].Kp = 0.209;//0.155;//0.5194; //0.76282*2;
-     PID_pool[VC_CONTROLLER_1_ID].Kd = 0.00022;//0.0025;//0.005;//0.003; //0.0058;
-     PID_pool[VC_CONTROLLER_1_ID].Ki = 4.62;//2.3;//22.85; //25.6063;
+     PID_pool[VC_CONTROLLER_1_ID].Kp = 1.42;//;//0.209;//0.155;//0.5194; //0.76282*2;
+     PID_pool[VC_CONTROLLER_1_ID].Kd = 0.065;//0.01;//0.00022;//0.0025;//0.005;//0.003; //0.0058;
+     PID_pool[VC_CONTROLLER_1_ID].Ki = 7.8;//4.62;//2.3;//22.85; //25.6063;
      PID_pool[VC_CONTROLLER_1_ID].dt = 0.001;
      PID_pool[VC_CONTROLLER_1_ID].integral = 0;
      PID_pool[VC_CONTROLLER_1_ID].previous_error = 0;
@@ -266,7 +266,7 @@ extern float run_PID(float feedback, float setpoint, uint8_t id) // CHANGE TO PI
    float error;
    float output;
    float T = PID_pool[id].dt;
-   float static integral_term;
+   float integral_term;
 
    error = setpoint - feedback;
 

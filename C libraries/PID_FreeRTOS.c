@@ -207,7 +207,7 @@ extern void init_PIDs()
     
     //THIS IS THE SETTINGS FOR POS1 CONTROLLER
      PID_pool[VC_CONTROLLER_1_ID].Kp = 9.45;//9;
-     PID_pool[VC_CONTROLLER_1_ID].Kd = 0.9;//0.5;
+     PID_pool[VC_CONTROLLER_1_ID].Kd = 0.9 ;//0.5;
      PID_pool[VC_CONTROLLER_1_ID].Ki = 8.55; //21;
      PID_pool[VC_CONTROLLER_1_ID].dt = 0.005;
      PID_pool[VC_CONTROLLER_1_ID].integral = 0;
@@ -227,9 +227,9 @@ extern void init_PIDs()
 
 
      //THIS IS THE SETTINGS FOR POS2 CONTROLLER
-     PID_pool[VC_CONTROLLER_2_ID].Kp = 6.8; // 4.3; // 6.8 // 2
-     PID_pool[VC_CONTROLLER_2_ID].Kd = 2;//0.9;
-     PID_pool[VC_CONTROLLER_2_ID].Ki = 4.5; //17;
+     PID_pool[VC_CONTROLLER_2_ID].Kp = 4.92; // 4.3; // 6.8 // 2
+     PID_pool[VC_CONTROLLER_2_ID].Kd = 1.2;//0.9;
+     PID_pool[VC_CONTROLLER_2_ID].Ki = 3.168; //17;
      PID_pool[VC_CONTROLLER_2_ID].dt = 0.005;
      PID_pool[VC_CONTROLLER_2_ID].integral = 0;
      PID_pool[VC_CONTROLLER_2_ID].previous_error = 0;
@@ -260,7 +260,7 @@ extern float run_PID(float feedback, float setpoint, uint8_t id) // CHANGE TO PI
    float error;
    float output;
    float T = PID_pool[id].dt;
-   float static integral_term;
+   float integral_term;
 
    error = setpoint - feedback;
 

@@ -258,7 +258,7 @@ void UITask( void * pvParameters)
                     case 0:
                         //Suspend all controller tasks
                         //vTaskSuspend( PC_PID1_handle );
-                        vTaskSuspend( VC_PID1_handle );
+                        //vTaskSuspend( VC_PID1_handle );
                         //vTaskSuspend( PC_PID2_handle );
                         //vTaskSuspend( VC_PID2_handle );
 
@@ -268,7 +268,7 @@ void UITask( void * pvParameters)
                     case 1:
                         //Suspend all controller tasks
                         //vTaskSuspend( PC_PID1_handle );
-                        vTaskSuspend( VC_PID1_handle );
+                        //vTaskSuspend( VC_PID1_handle );
                         //vTaskSuspend( PC_PID2_handle );
                         //vTaskSuspend( VC_PID2_handle );
 
@@ -276,7 +276,7 @@ void UITask( void * pvParameters)
                         //state = ON;
                         break;
                     case 2:
-                        control_1_vel_ref = 0;
+                        send_data( 0 ,PWM_1);
                         break;
                     case 3:
                         control_1_vel_ref = 1;

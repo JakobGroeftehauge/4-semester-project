@@ -74,16 +74,16 @@ int main(void)
 
     // Create tasks
     // -------------------
-    //xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 3, &PC_PID1_handle);
-    //xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 2, &VC_PID1_handle);
+    xTaskCreate(PID_PC_task, "Position controller 1", 100, &PC_1_parameter, 3, &PC_PID1_handle);
+    xTaskCreate(PID_VC_task, "Velocity controller 1", 100, &VC_1_parameter, 4, &VC_PID1_handle);
     xTaskCreate(PID_PC_task, "Position controller 2", 100, &PC_2_parameter, 3, &PC_PID2_handle);
-    xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 2, &VC_PID2_handle);
+    xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 5, &VC_PID2_handle);
 
     //send_data( 0x00CC, 8);
 
     xTaskCreate(UARTDriverTask, "Get from UART queue", 100, NULL, 1, &UART_driver_task_handle);
     xTaskCreate(UITask, "UI", 100, NULL, 1, &UI_task_handle);
-    xTaskCreate(SPI_task, "SPI module", 100, NULL, 1, &SPI_handle);
+    xTaskCreate(SPI_task, "SPI module", 100, NULL, 8, &SPI_handle);
 
     control_1_pos_ref = 0;//2*3*3.14;
     //control_2_pos_ref = 0;

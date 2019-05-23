@@ -106,7 +106,7 @@ extern void init_parameters()
     PC_1_parameter.delayTime =              5;
     PC_1_parameter.queue_semaphore =        &QUEUE_SEM;
     PC_1_parameter.output_id =              0;
-    PC_1_parameter.test_led =               0x10;
+    PC_1_parameter.test_led =               0x04;
 
     VC_1_parameter.id =                     VC_CONTROLLER_1_ID;
     VC_1_parameter.slave_id =               VEL_1;
@@ -159,7 +159,7 @@ extern void init_parameters()
     VC_2_parameter.delayTime =              1;
     VC_2_parameter.queue_semaphore =        &QUEUE_SEM;
     VC_2_parameter.output_id =              PWM_2;
-    VC_2_parameter.test_led =               0x40;
+    VC_2_parameter.test_led =               0x80;
 
 
 //    VC_2_parameter.id =                     VC_CONTROLLER_2_ID;

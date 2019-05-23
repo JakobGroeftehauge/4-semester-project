@@ -50,7 +50,7 @@ extern void PID_PC_task(void* pvParameters)
     for (;;)
     {
 
-        //GPIO_PORTA_DATA_R |= controller_parameter.test_led;
+        GPIO_PORTA_DATA_R |= controller_parameter.test_led;
         xLastWakeTime = xTaskGetTickCount();
 
         if(xSemaphoreTake(*controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
@@ -81,7 +81,7 @@ extern void PID_PC_task(void* pvParameters)
             xSemaphoreGive(*controller_parameter.output_semaphore);
         }
 
-        //GPIO_PORTA_DATA_R &= ~(controller_parameter.test_led);
+        GPIO_PORTA_DATA_R &= ~(controller_parameter.test_led);
         vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS(controller_parameter.delayTime) );
     }
 
@@ -106,7 +106,7 @@ extern void PID_VC_task(void* pvParameters)
     xLastWakeTime = xTaskGetTickCount(); // Is automatically updated by vTaskDelayUntil()
     for (;;)
     {
-        //GPIO_PORTA_DATA_R |= controller_parameter.test_led;
+        GPIO_PORTA_DATA_R |= controller_parameter.test_led;
 
 
 
@@ -141,7 +141,7 @@ extern void PID_VC_task(void* pvParameters)
             xSemaphoreGive(*controller_parameter.queue_semaphore);
         }
 
-        //GPIO_PORTA_DATA_R &= ~(controller_parameter.test_led);
+        GPIO_PORTA_DATA_R &= ~(controller_parameter.test_led);
 
         vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS(controller_parameter.delayTime) );
         //GPIO_PORTA_DATA_R ^= (0x04);

@@ -9,11 +9,10 @@ LDS_SRCS += \
 ../tm4c123gh6pm.lds 
 
 C_SRCS += \
-C:/Users/jmkaa/git/4-semester-project/C\ libraries/FPGA_comp.c \
-C:/Users/jmkaa/git/4-semester-project/C\ libraries/Filter.c \
-C:/Users/jmkaa/git/4-semester-project/C\ libraries/PID_FreeRTOS.c \
-C:/Users/jmkaa/git/4-semester-project/C\ libraries/SPI.c \
-C:/Users/jmkaa/git/4-semester-project/C\ libraries/circular_buffer.c \
+C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/Filter.c \
+C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/PID_FreeRTOS.c \
+C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/SPI.c \
+C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/circular_buffer.c \
 ../common.c \
 ../defines.c \
 ../gpio.c \
@@ -30,7 +29,6 @@ C:/Users/jmkaa/git/4-semester-project/C\ libraries/circular_buffer.c \
 ../uart_protocol.c 
 
 C_DEPS += \
-./FPGA_comp.d \
 ./Filter.d \
 ./PID_FreeRTOS.d \
 ./SPI.d \
@@ -51,7 +49,6 @@ C_DEPS += \
 ./uart_protocol.d 
 
 OBJS += \
-./FPGA_comp.o \
 ./Filter.o \
 ./PID_FreeRTOS.o \
 ./SPI.o \
@@ -72,7 +69,6 @@ OBJS += \
 ./uart_protocol.o 
 
 OBJS__QUOTED += \
-"FPGA_comp.o" \
 "Filter.o" \
 "PID_FreeRTOS.o" \
 "SPI.o" \
@@ -93,7 +89,6 @@ OBJS__QUOTED += \
 "uart_protocol.o" 
 
 C_DEPS__QUOTED += \
-"FPGA_comp.d" \
 "Filter.d" \
 "PID_FreeRTOS.d" \
 "SPI.d" \
@@ -114,11 +109,10 @@ C_DEPS__QUOTED += \
 "uart_protocol.d" 
 
 C_SRCS__QUOTED += \
-"C:/Users/jmkaa/git/4-semester-project/C libraries/FPGA_comp.c" \
-"C:/Users/jmkaa/git/4-semester-project/C libraries/Filter.c" \
-"C:/Users/jmkaa/git/4-semester-project/C libraries/PID_FreeRTOS.c" \
-"C:/Users/jmkaa/git/4-semester-project/C libraries/SPI.c" \
-"C:/Users/jmkaa/git/4-semester-project/C libraries/circular_buffer.c" \
+"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/Filter.c" \
+"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/PID_FreeRTOS.c" \
+"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/SPI.c" \
+"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/circular_buffer.c" \
 "../common.c" \
 "../defines.c" \
 "../gpio.c" \

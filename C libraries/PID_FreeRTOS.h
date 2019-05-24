@@ -41,7 +41,7 @@ typedef struct
   float Kp;
   float Ki;
   float Kd;
-  float integral;
+  float integral;   //Sum for integral
   float previous_error;
   float dt;         //stepsize for integral
   float upper_sat;

@@ -38,14 +38,15 @@ typedef struct
 {
     uint8_t buffer_id;	//must be the same as the id of the filter. One of the IDs' could be removed
     uint8_t id;
-    float coefList[10];
+    float coefList_A[2];
+    float coefList_B[2];
     uint8_t tabs;
 } filter_descriptor;
 
 
 /*************************  Function interfaces ****************************/
 
-extern void init_filter(uint8_t id, float coefArray[MAX_NUMBER_OF_TABS], uint8_t numTabs);
+extern void init_filter(uint8_t id, float coefArray_A[MAX_NUMBER_OF_TABS], float coefArray_B[MAX_NUMBER_OF_TABS], uint8_t numTabs);
 /*****************************************************************************
 *   Input    : filter id, Array with filter coefficient, number of tabs in the filter.
 *   Output   :

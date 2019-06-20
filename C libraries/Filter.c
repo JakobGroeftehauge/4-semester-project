@@ -24,7 +24,7 @@ filter_descriptor filter_pool[NOF_FILTERS]; //Pool of filters
 
 /*****************************   Functions   *******************************/
 
-extern void init_filter(uint8_t id, float coefArray[MAX_NUMBER_OF_TABS], uint8_t tabs)
+extern void init_filter(uint8_t id, float coefArray_A[MAX_NUMBER_OF_TABS], float coefArray_B[MAX_NUMBER_OF_TABS], uint8_t tabs)
 /*****************************************************************************
 *   Input    : filter id, Array with filter coefficient, number of tabs in the filter.
 *   Output   :
@@ -36,8 +36,12 @@ extern void init_filter(uint8_t id, float coefArray[MAX_NUMBER_OF_TABS], uint8_t
 
     for(uint8_t i = 0; i < MAX_NUMBER_OF_TABS; i++)
     {
-        filter_pool[id].coefList[i] = coefArray[i];
+        if( coefArray_A != 0 )
+            filter_pool[id].coefList_A[i] = coefArray_A[i]; //For a coefficients
+
+        filter_pool[id].coefList_B[i] = coefArray_B[i];  // For b coefficients
     }
+
 
     initialize_buffer(id); //initializes buffer to filter with same ID as filter
 }

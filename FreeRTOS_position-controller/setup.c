@@ -87,6 +87,7 @@ extern void init_queue()
                              sizeof( struct SPI_queue_element  ) ); //Number of bytes for each element
 }
 
+
 extern void init_parameters()
 /*****************************************************************************
 *   Input    : -

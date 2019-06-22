@@ -47,6 +47,8 @@
 									<listOptionValue builtIn="false" value="${PROJECT_LOC}/../C libraries"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Users\jmkaa\git\4-semester-project\FreeRTOSv10.2.0\FreeRTOS\Source\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Users\jmkaa\git\4-semester-project\TivaWare_C_Series-2.1.4.178&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\Mads\Documents\GitHub\4-semester-project\FreeRTOSv10.2.0\FreeRTOS\Source\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\ti\TivaWare_C_Series-2.1.4.178&quot;"/>
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.compilerID.OPT_LEVEL.892224384" name="Optimization Level" superClass="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.compilerID.OPT_LEVEL" value="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.compilerID.OPT_LEVEL.0" valueType="enumerated"/>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.compilerID.DEBUG.565630768" name="Generate debug information (-g)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.compilerID.DEBUG" value="true" valueType="boolean"/>
@@ -65,7 +67,7 @@
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.linkerID.OUTPUT_FILE.1278778167" name="Output file (-o)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.linkerID.OUTPUT_FILE" value="${ProjName}.out" valueType="string"/>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.linkerID.MAP_FILE.1759784329" name="Write a map file (-Map)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.linkerID.MAP_FILE" value="${ProjName}.map" valueType="string"/>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.linkerID.LIBRARY.1114583769" name="Libraries (-l, --library)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.linkerID.LIBRARY" valueType="libs">
-									<listOptionValue builtIn="false" value="C:\Users\jmkaa\git\4-semester-project\TivaWare_C_Series-2.1.4.178\driverlib\ccs\Debug\driverlib.lib"/>
+									<listOptionValue builtIn="false" value="C:\ti\TivaWare_C_Series-2.1.4.178\driverlib\ccs\Debug\driverlib.lib"/>
 								</option>
 								<inputType id="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.exeLinker.inputType__CMD_SRCS.163340370" name="Linker Command Files" superClass="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.exeLinker.inputType__CMD_SRCS"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.exeLinker.inputType__CMD2_SRCS.1527894495" name="Linker Command Files" superClass="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.exeLinker.inputType__CMD2_SRCS"/>
@@ -123,6 +125,8 @@
 									<listOptionValue builtIn="false" value="C:\Users\Mads\Documents\GitHub\4-semester-project\FreeRTOSv10.2.0\FreeRTOS\Source\include"/>
 									<listOptionValue builtIn="false" value="&quot;/C libraries&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\Users\jmkaa\git\4-semester-project\FreeRTOSv10.2.0\FreeRTOS\Source\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\Mads\Documents\GitHub\4-semester-project\FreeRTOSv10.2.0&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\ti\TivaWare_C_Series-2.1.4.178&quot;"/>
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.compilerID.OPT_LEVEL.release.55288075" name="Optimization Level" superClass="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.compilerID.OPT_LEVEL.release" value="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.compilerID.OPT_LEVEL.OPT_FOR_SPACE" valueType="enumerated"/>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.compilerID.SPECS.53627769" name="Override built-in specs with the contents of the specified file (-specs)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_GNU_7.0.compilerID.SPECS" value="&quot;nosys.specs&quot;" valueType="string"/>

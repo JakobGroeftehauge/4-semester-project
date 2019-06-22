@@ -9,11 +9,11 @@ LDS_SRCS += \
 ../tm4c123gh6pm.lds 
 
 C_SRCS += \
-C:/Users/jmkaa/git/4-semester-project/C\ libraries/FPGA_comp.c \
-C:/Users/jmkaa/git/4-semester-project/C\ libraries/Filter.c \
-C:/Users/jmkaa/git/4-semester-project/C\ libraries/PID_FreeRTOS.c \
-C:/Users/jmkaa/git/4-semester-project/C\ libraries/SPI.c \
-C:/Users/jmkaa/git/4-semester-project/C\ libraries/circular_buffer.c \
+C:/Users/Mads/Documents/GitHub/4-semester-project/C\ libraries/FPGA_comp.c \
+C:/Users/Mads/Documents/GitHub/4-semester-project/C\ libraries/Filter.c \
+C:/Users/Mads/Documents/GitHub/4-semester-project/C\ libraries/PID_FreeRTOS.c \
+C:/Users/Mads/Documents/GitHub/4-semester-project/C\ libraries/SPI.c \
+C:/Users/Mads/Documents/GitHub/4-semester-project/C\ libraries/circular_buffer.c \
 ../common.c \
 ../defines.c \
 ../gpio.c \
@@ -23,6 +23,7 @@ C:/Users/jmkaa/git/4-semester-project/C\ libraries/circular_buffer.c \
 ../port.c \
 ../queue.c \
 ../setup.c \
+../state_feedback.c \
 ../tasks.c \
 ../timers.c \
 ../tm4c123gh6pm_startup_ccs_gcc.c \
@@ -44,6 +45,7 @@ C_DEPS += \
 ./port.d \
 ./queue.d \
 ./setup.d \
+./state_feedback.d \
 ./tasks.d \
 ./timers.d \
 ./tm4c123gh6pm_startup_ccs_gcc.d \
@@ -65,6 +67,7 @@ OBJS += \
 ./port.o \
 ./queue.o \
 ./setup.o \
+./state_feedback.o \
 ./tasks.o \
 ./timers.o \
 ./tm4c123gh6pm_startup_ccs_gcc.o \
@@ -86,6 +89,7 @@ OBJS__QUOTED += \
 "port.o" \
 "queue.o" \
 "setup.o" \
+"state_feedback.o" \
 "tasks.o" \
 "timers.o" \
 "tm4c123gh6pm_startup_ccs_gcc.o" \
@@ -107,6 +111,7 @@ C_DEPS__QUOTED += \
 "port.d" \
 "queue.d" \
 "setup.d" \
+"state_feedback.d" \
 "tasks.d" \
 "timers.d" \
 "tm4c123gh6pm_startup_ccs_gcc.d" \
@@ -114,11 +119,11 @@ C_DEPS__QUOTED += \
 "uart_protocol.d" 
 
 C_SRCS__QUOTED += \
-"C:/Users/jmkaa/git/4-semester-project/C libraries/FPGA_comp.c" \
-"C:/Users/jmkaa/git/4-semester-project/C libraries/Filter.c" \
-"C:/Users/jmkaa/git/4-semester-project/C libraries/PID_FreeRTOS.c" \
-"C:/Users/jmkaa/git/4-semester-project/C libraries/SPI.c" \
-"C:/Users/jmkaa/git/4-semester-project/C libraries/circular_buffer.c" \
+"C:/Users/Mads/Documents/GitHub/4-semester-project/C libraries/FPGA_comp.c" \
+"C:/Users/Mads/Documents/GitHub/4-semester-project/C libraries/Filter.c" \
+"C:/Users/Mads/Documents/GitHub/4-semester-project/C libraries/PID_FreeRTOS.c" \
+"C:/Users/Mads/Documents/GitHub/4-semester-project/C libraries/SPI.c" \
+"C:/Users/Mads/Documents/GitHub/4-semester-project/C libraries/circular_buffer.c" \
 "../common.c" \
 "../defines.c" \
 "../gpio.c" \
@@ -128,6 +133,7 @@ C_SRCS__QUOTED += \
 "../port.c" \
 "../queue.c" \
 "../setup.c" \
+"../state_feedback.c" \
 "../tasks.c" \
 "../timers.c" \
 "../tm4c123gh6pm_startup_ccs_gcc.c" \

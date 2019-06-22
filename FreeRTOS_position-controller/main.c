@@ -79,7 +79,6 @@ int main(void)
     //xTaskCreate(PID_PC_task, "Position controller 2", 100, &PC_2_parameter, 8, &PC_PID2_handle);
     xTaskCreate(PID_VC_task, "Velocity controller 2", 100, &VC_2_parameter, 4, &VC_PID2_handle);
 
-//    xTaskCreate(SPI_test_task, "Stress test", 100, NULL, 1, &SPI_test_handle);
 
 
     xTaskCreate(UARTDriverTask, "Get from UART queue", 100, NULL, 1, &UART_driver_task_handle);

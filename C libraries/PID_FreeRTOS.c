@@ -220,9 +220,10 @@ extern void init_PIDs()
      PID_pool[VC_CONTROLLER_1_ID].Ud = 0;
      PID_pool[VC_CONTROLLER_1_ID].sat_flag = 0;
      float VC1_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249};
-     float VC1_Filter_Coef_dTerm[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};//{0.0312,0.0937, 0.1562,0.2187,0.2187, 0.1562,0.0937,0.0312};//{0.125,  0.375, 0.375, 0.125};
-     init_filter(VC_CONTROLLER_1_ID, VC1_Filter_Coef, 3);
-     init_filter(VC_CONTROLLER_DTERM_1_ID, VC1_Filter_Coef_dTerm, 6);
+     float VC1_Filter_Coef_dTerm_A[MAX_NUMBER_OF_TABS] = {1.0,-0.96906};
+     float VC1_Filter_Coef_dTerm_B[MAX_NUMBER_OF_TABS] = {1.0,1.0};
+     //init_filter(VC_CONTROLLER_2_ID, 0, VC2_Filter_Coef, 3);
+     init_filter(VC_CONTROLLER_DTERM_1_ID, VC1_Filter_Coef_dTerm_A, VC1_Filter_Coef_dTerm_B, 2);
 
 
 
@@ -241,9 +242,10 @@ extern void init_PIDs()
      PID_pool[VC_CONTROLLER_2_ID].Ud = 0;
      PID_pool[VC_CONTROLLER_2_ID].sat_flag = 0;
      float VC2_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249};
-     float VC2_Filter_Coef_dTerm[MAX_NUMBER_OF_TABS] = {0.0555,  0.1666, 0.2777,0.2777,0.166,0.055};
-     init_filter(VC_CONTROLLER_2_ID, VC2_Filter_Coef, 3);
-     init_filter(VC_CONTROLLER_DTERM_2_ID, VC2_Filter_Coef_dTerm, 6);
+     float VC2_Filter_Coef_dTerm_A[MAX_NUMBER_OF_TABS] = {1.0,-0.96906};
+     float VC2_Filter_Coef_dTerm_B[MAX_NUMBER_OF_TABS] = {1.0,1.0};
+     //init_filter(PC_CONTROLLER_2_ID, 0, PC2_Filter_Coef, 3);
+     init_filter(VC_CONTROLLER_DTERM_2_ID, VC2_Filter_Coef_dTerm_A, VC2_Filter_Coef_dTerm_B, 2);
 
 
 }
@@ -264,11 +266,13 @@ extern float run_PID(float feedback, float setpoint, uint8_t id) // CHANGE TO PI
 
    error = setpoint - feedback;
 
-   error = run_filter(PID_pool[id].filter_id, error);
+   // Do no uncomment, IIR filter
+   //error = run_filter(PID_pool[id].filter_id, error);
 
     // calculate the proportional and derivative terms
    float proportional_term  = PID_pool[id].Kp*error;
    float derivative_term = PID_pool[id].Kd*2/T*(error - PID_pool[id].previous_error) - PID_pool[id].Ud;
+   derivative_term = 1;
    derivative_term = run_filter(PID_pool[id].filter_dterm_id, derivative_term);
 
    // integral is only given a value if the controller is not in saturation

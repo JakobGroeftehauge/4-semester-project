@@ -22,7 +22,7 @@
 #include <stdint.h>
 
 /*****************************    Defines    *******************************/
-#define MAX_BUFFER_LENGTH   64 //Max size = 127 - change to required length when deploying
+#define MAX_BUFFER_LENGTH   10 //Max size = 127 - change to required length when deploying
 
 #define BUFFER_FILTER_1    0
 #define BUFFER_FILTER_2    1

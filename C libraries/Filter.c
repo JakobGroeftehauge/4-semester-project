@@ -34,7 +34,7 @@ extern void init_filter(uint8_t id, float coefArray_A[MAX_NUMBER_OF_TABS], float
     filter_pool[id].id = id; // Filter must have same ID, as the used circular_buffer.
     filter_pool[id].tabs = tabs;
 
-    for(uint8_t i = 0; i < MAX_NUMBER_OF_TABS; i++)
+    for(uint8_t i = 0; i < tabs; i++)
     {
         if( coefArray_A != 0 )
             filter_pool[id].coefList_A[i] = coefArray_A[i]; //For a coefficients
@@ -42,8 +42,9 @@ extern void init_filter(uint8_t id, float coefArray_A[MAX_NUMBER_OF_TABS], float
         filter_pool[id].coefList_B[i] = coefArray_B[i];  // For b coefficients
     }
 
-
-    initialize_buffer(id); //initializes buffer to filter with same ID as filter
+    //initializes buffer to filter with same ID as filter
+    initialize_buffer(id); //Buffer A
+    initialize_buffer(id+1); //Buffer B
 }
 
 float run_filter(uint8_t id, float data)
@@ -54,16 +55,64 @@ float run_filter(uint8_t id, float data)
 ******************************************************************************/
 {
     float result = 0;
-    float immediateResult; //Used as intermediate step in calculations
-    update_buffer(id, data); //Puts data into buffer
+    float total = 0;
+    float intermediateResult_A = 0; //Used as intermediate step in calculations
+    float intermediateResult_B = 0; //Used as intermediate step in calculations
+
+    uint8_t id_A = id;
+    uint8_t id_B = id+1;
+
+    update_buffer(id_B, data); //Puts newly sampled data into buffer and shifts data
 
     for(uint8_t i = 0; i < filter_pool[id].tabs; i++)
     {
-        immediateResult = filter_pool[id].coefList[i] * peek_buffer(id, i);//Calculates the n'th step of the FIR filter
-        result = result + immediateResult;
+        //Numerator (B coefficients)
+        intermediateResult_B = filter_pool[id].coefList_B[i] * peek_buffer(id_B, i+1);
+
+        total += intermediateResult_B;
     }
 
+    for(uint8_t i = 1; i < filter_pool[id].tabs; i++)
+    {
+        //Denominator (A coefficients)
+        intermediateResult_A = filter_pool[id].coefList_A[i] * peek_buffer(id_A, i+1);//Calculates the n'th step of the FIR filter
+        total += intermediateResult_A;
+    }
+
+    result =  total;
+
+    update_buffer(id_A, result); //Puts output data into buffer
+
     return result;
+
+
+
+    //    uint8_t j, k;
+    //    uint8_t N = filter_pool[id].tabs;
+    //    float y;
+    //    static float Reg[10];
+    //
+    //
+    //    // Shift register values
+    //    for(uint8_t k=N; k>0; k--)
+    //        Reg[k] = Reg[k-1];
+    //
+    //    // Denominator
+    //    Reg[0] = data;
+    //    for(k=1; k<=N; k++)
+    //    {
+    //        Reg[0] -= filter_pool[id].coefList_A[k] * Reg[k];
+    //    }
+    //
+    //    // Numerator
+    //    y = 0;
+    //    for(uint8_t k=0; k<=N; k++)
+    //    {
+    //        y += filter_pool[id].coefList_B[k] * Reg[k];
+    //    }
+    //
+    //    return y;
+
 }
 
 /****************************** End Of Module *******************************/

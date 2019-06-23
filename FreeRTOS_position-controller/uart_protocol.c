@@ -279,18 +279,24 @@ void UITask( void * pvParameters)
                         send_data( 0 ,PWM_1);
                         break;
                     case 3:
-                        control_1_vel_ref = 1;
+                        control_1_vel_ref = 0;
                         break;
                     case 4:
-                        control_1_vel_ref = 5;
+                        control_1_vel_ref = 2;
                         break;
                     case 5:
-                        control_1_vel_ref = 10;
+                        control_1_vel_ref = 3;
                         break;
                     case 6:
-                        control_1_vel_ref = 12;
+                        control_1_vel_ref = 5;
                         break;
                     case 7:
+                        control_1_vel_ref = 10;
+                        break;
+                    case 8:
+                        control_1_vel_ref = 12;
+                        break;
+                    case 9:
                         control_1_vel_ref = 20;
                         break;
                     }

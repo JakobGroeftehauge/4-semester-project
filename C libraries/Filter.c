@@ -79,7 +79,7 @@ float run_filter(uint8_t id, float data)
         total += intermediateResult_A;
     }
 
-    result =  total;
+    result =  total * 0.0304687;
 
     update_buffer(id_A, result); //Puts output data into buffer
 

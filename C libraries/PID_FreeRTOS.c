@@ -206,8 +206,8 @@ extern void init_PIDs()
 //    free(PC2_Filter_Coef_dTerm);
     
     //THIS IS THE SETTINGS FOR POS1 CONTROLLER
-     PID_pool[VC_CONTROLLER_1_ID].Kp = 10.5;//9;
-     PID_pool[VC_CONTROLLER_1_ID].Kd = 0.9 ;//0.5;
+     PID_pool[VC_CONTROLLER_1_ID].Kp = 17.45;//9;
+     PID_pool[VC_CONTROLLER_1_ID].Kd = 1.1;//0.5;
      PID_pool[VC_CONTROLLER_1_ID].Ki = 8.55; //21;
      PID_pool[VC_CONTROLLER_1_ID].dt = 0.005;
      PID_pool[VC_CONTROLLER_1_ID].integral = 0;
@@ -220,7 +220,7 @@ extern void init_PIDs()
      PID_pool[VC_CONTROLLER_1_ID].Ud = 0;
      PID_pool[VC_CONTROLLER_1_ID].sat_flag = 0;
      float VC1_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249};
-     float VC1_Filter_Coef_dTerm_A[MAX_NUMBER_OF_TABS] = {1.0,-0.96906};
+     float VC1_Filter_Coef_dTerm_A[MAX_NUMBER_OF_TABS] = {1.0,-0.939062505};
      float VC1_Filter_Coef_dTerm_B[MAX_NUMBER_OF_TABS] = {1.0,1.0};
      //init_filter(VC_CONTROLLER_2_ID, 0, VC2_Filter_Coef, 3);
      init_filter(VC_CONTROLLER_DTERM_1_ID, VC1_Filter_Coef_dTerm_A, VC1_Filter_Coef_dTerm_B, 2);
@@ -228,9 +228,9 @@ extern void init_PIDs()
 
 
      //THIS IS THE SETTINGS FOR POS2 CONTROLLER
-     PID_pool[VC_CONTROLLER_2_ID].Kp = 9.45; // 4.3; // 6.8 // 2
-     PID_pool[VC_CONTROLLER_2_ID].Kd = 1;//0.9;
-     PID_pool[VC_CONTROLLER_2_ID].Ki = 8.55; //17;
+     PID_pool[VC_CONTROLLER_2_ID].Kp = 17; // 4.3; // 6.8 // 2
+     PID_pool[VC_CONTROLLER_2_ID].Kd = 2;//0.9;
+     PID_pool[VC_CONTROLLER_2_ID].Ki = 4.5; //17;
      PID_pool[VC_CONTROLLER_2_ID].dt = 0.005;
      PID_pool[VC_CONTROLLER_2_ID].integral = 0;
      PID_pool[VC_CONTROLLER_2_ID].previous_error = 0;
@@ -242,7 +242,7 @@ extern void init_PIDs()
      PID_pool[VC_CONTROLLER_2_ID].Ud = 0;
      PID_pool[VC_CONTROLLER_2_ID].sat_flag = 0;
      float VC2_Filter_Coef[MAX_NUMBER_OF_TABS] = {0.0249, 0.9502, 0.0249};
-     float VC2_Filter_Coef_dTerm_A[MAX_NUMBER_OF_TABS] = {1.0,-0.96906};
+     float VC2_Filter_Coef_dTerm_A[MAX_NUMBER_OF_TABS] = {1.0,-0.939062505};
      float VC2_Filter_Coef_dTerm_B[MAX_NUMBER_OF_TABS] = {1.0,1.0};
      //init_filter(PC_CONTROLLER_2_ID, 0, PC2_Filter_Coef, 3);
      init_filter(VC_CONTROLLER_DTERM_2_ID, VC2_Filter_Coef_dTerm_A, VC2_Filter_Coef_dTerm_B, 2);

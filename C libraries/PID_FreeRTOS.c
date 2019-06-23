@@ -144,7 +144,7 @@ extern void PID_task(void *pvParameters)
         }
 
         global_test = result_PID_int16;
-        PWMPulseWidthSet(PWM1_BASE, PWM_OUT_3, 1300);
+        PWMPulseWidthSet(PWM1_BASE, PWM_OUT_3, result_PID_int16);
 
         vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS(1) );
     }

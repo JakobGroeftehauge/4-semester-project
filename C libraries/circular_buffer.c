@@ -16,7 +16,7 @@
 #include "circular_buffer.h"
 
 /*****************************    Defines    *******************************/
-#define NOF_BUFFERS     8  //change to required number when deploying
+#define NOF_BUFFERS     20  //change to required number when deploying
 
 typedef struct
 {

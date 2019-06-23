@@ -110,10 +110,11 @@ extern void PID_task(void *pvParameters)
 {
     TickType_t xLastWakeTime;
     float temp_feedback = 0;
-    float temp_reference = 100; //Set the reference here! -0.5*3.14
+    float temp_reference = -2*1.5*3.14; //Set the reference here! -0.5*3.14
     globalReference = temp_reference;
     int16_t result_PID_int16 = 0;
     float temp_result = 0;
+    QEI0_POS_R = 0;
 
     for (;;)
     {
@@ -350,9 +351,9 @@ extern void init_PIDs()
      //Setup of velocity controller 2:
 
 
-    PID_pool[VC_CONTROLLER_2_ID].Kp = 1.42; //0.76282*2;
-    PID_pool[VC_CONTROLLER_2_ID].Kd = 0.065; //0.0058;
-    PID_pool[VC_CONTROLLER_2_ID].Ki = 7.8; //25.6063;
+    PID_pool[VC_CONTROLLER_2_ID].Kp = 9.45; //0.76282*2;
+    PID_pool[VC_CONTROLLER_2_ID].Kd = 0.9; //0.0058;
+    PID_pool[VC_CONTROLLER_2_ID].Ki = 8.55; //25.6063;
     PID_pool[VC_CONTROLLER_2_ID].dt = 0.001;
     PID_pool[VC_CONTROLLER_2_ID].integral = 0;
     PID_pool[VC_CONTROLLER_2_ID].previous_error = 0;

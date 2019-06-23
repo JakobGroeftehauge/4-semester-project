@@ -90,7 +90,7 @@ void QEI_init()
        //NVIC_PRI3_R = (NVIC_PRI3_R&0xFFFF1FFF)|0xA000; //QEI 0 Interrupt priority set to 5
        //NVIC_EN0_R |= 0x2000;                          //Enable QEI 0 Interrupt
 
-       QEI0_CTL_R |= 0x38 | QEI_CTL_FILTEN;
+       QEI0_CTL_R |= 0x38 | QEI_CTL_FILTEN | (0x4 << 16); // | (0x1 << 16)
        //Velocity Capture on, Reset on index pulse, both edges of A and B signals are counted -> pulses/rev = 4096
        //QEI0_INTEN_R |= 0x08;             //Enable the Phase error interrupt
        QEI0_LOAD_R = 500000; //0x00001387;         //Velocity timer value 5000 - 1 (Speed is determined by counting the number of pulses in this amount of time.

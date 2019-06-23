@@ -9,11 +9,12 @@ LDS_SRCS += \
 ../tm4c123gh6pm.lds 
 
 C_SRCS += \
-C:/Users/jmkaa/git/4-semester-project/C\ libraries/FPGA_comp.c \
-C:/Users/jmkaa/git/4-semester-project/C\ libraries/Filter.c \
-C:/Users/jmkaa/git/4-semester-project/C\ libraries/PID_FreeRTOS.c \
-C:/Users/jmkaa/git/4-semester-project/C\ libraries/SPI.c \
-C:/Users/jmkaa/git/4-semester-project/C\ libraries/circular_buffer.c \
+C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C\ libraries/FPGA_comp.c \
+C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C\ libraries/Filter.c \
+C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C\ libraries/PID_FreeRTOS.c \
+../PWM_control.c \
+C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C\ libraries/SPI.c \
+C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C\ libraries/circular_buffer.c \
 ../common.c \
 ../defines.c \
 ../gpio.c \
@@ -33,6 +34,7 @@ C_DEPS += \
 ./FPGA_comp.d \
 ./Filter.d \
 ./PID_FreeRTOS.d \
+./PWM_control.d \
 ./SPI.d \
 ./circular_buffer.d \
 ./common.d \
@@ -54,6 +56,7 @@ OBJS += \
 ./FPGA_comp.o \
 ./Filter.o \
 ./PID_FreeRTOS.o \
+./PWM_control.o \
 ./SPI.o \
 ./circular_buffer.o \
 ./common.o \
@@ -75,6 +78,7 @@ OBJS__QUOTED += \
 "FPGA_comp.o" \
 "Filter.o" \
 "PID_FreeRTOS.o" \
+"PWM_control.o" \
 "SPI.o" \
 "circular_buffer.o" \
 "common.o" \
@@ -96,6 +100,7 @@ C_DEPS__QUOTED += \
 "FPGA_comp.d" \
 "Filter.d" \
 "PID_FreeRTOS.d" \
+"PWM_control.d" \
 "SPI.d" \
 "circular_buffer.d" \
 "common.d" \
@@ -114,11 +119,12 @@ C_DEPS__QUOTED += \
 "uart_protocol.d" 
 
 C_SRCS__QUOTED += \
-"C:/Users/jmkaa/git/4-semester-project/C libraries/FPGA_comp.c" \
-"C:/Users/jmkaa/git/4-semester-project/C libraries/Filter.c" \
-"C:/Users/jmkaa/git/4-semester-project/C libraries/PID_FreeRTOS.c" \
-"C:/Users/jmkaa/git/4-semester-project/C libraries/SPI.c" \
-"C:/Users/jmkaa/git/4-semester-project/C libraries/circular_buffer.c" \
+"C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C libraries/FPGA_comp.c" \
+"C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C libraries/Filter.c" \
+"C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C libraries/PID_FreeRTOS.c" \
+"../PWM_control.c" \
+"C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C libraries/SPI.c" \
+"C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C libraries/circular_buffer.c" \
 "../common.c" \
 "../defines.c" \
 "../gpio.c" \

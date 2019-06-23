@@ -65,6 +65,7 @@ extern void PID_VC_task(void *pvParameter );
 /*****************************************************************************
 *   Function : Task for the PID controller
 ******************************************************************************/
+extern void PID_task(void *pvParameters );
 
 extern void init_PIDs();
 /*****************************************************************************

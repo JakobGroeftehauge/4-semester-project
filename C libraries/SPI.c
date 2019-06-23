@@ -21,9 +21,23 @@
 #include "SPI.h"
 #include "EMP_type.h"
 #include <stdint.h>
+
+#include <stdbool.h>
+#include <stdlib.h>
 #include "tm4c123gh6pm.h"
 #include "defines.h"
 #include "uart0.h"
+
+//TivaWare includes
+#include "driverlib/pin_map.h"
+#include "inc/hw_gpio.h"
+#include "inc/hw_types.h"
+#include "inc/hw_memmap.h"
+#include "driverlib/sysctl.h"
+#include "driverlib/pin_map.h"
+#include "driverlib/gpio.h"
+#include "driverlib/pwm.h"
+
 /*****************************    Defines    *******************************/
 
 /*****************************   Constants   *******************************/
@@ -39,7 +53,7 @@ float control_2_pos;
 float control_2_vel;
 float control_2_cur;
 
-int16_t global_test;
+
 
 SemaphoreHandle_t POS_1_SEM;
 SemaphoreHandle_t VEL_1_SEM;
@@ -158,74 +172,104 @@ extern void SPI_task(void * pvParameters)
         for( ;; )
         {
 
+
             if( xQueueReceive( SPI_queue, &received_struct, portMAX_DELAY) == pdPASS )
             {
+
                 //GPIO_PORTA_DATA_R |= 0x04;
                 //Get id and data from SPI_queue
                 received_id = received_struct.id;
                 received_data_queue = received_struct.data;
+                //GPIO_PORTF_DATA_R = 0x04;
+
+                if (received_struct.data < 0.0)
+                {
+
+                    //To indicate position:
+                    //Set pin 1 high
+                    //Set pin 2 low
+                    GPIO_PORTC_DATA_R &= ~(1 << 6);
+                    GPIO_PORTC_DATA_R |= (1 << 5);
+
+
+                    received_struct.data *= -1;
+
+                }
+                else
+                {
+                    //GPIO_PORTF_DATA_R ^= 0x08;
+                    //To indicate position:
+                    //Set pin 1 low
+                    //Set pin 2 high
+                    GPIO_PORTC_DATA_R &= ~(1 << 5);
+                    GPIO_PORTC_DATA_R |= (1 << 6);
+
+                }
+                //global_test = received_struct.data;
+                PWMPulseWidthSet(PWM1_BASE, PWM_OUT_3, received_struct.data);
+
 
                 // Send data to slave
-                send_data( received_data_queue, received_id );
-
-                // Receive data from slave and put into correct buffer
-                switch( received_id )
-                {
-                case POS_1:
-                    received_data_SPI = receive_data();
-
-                    //Convert to radians and put in correct buffer
-                    control_1_pos = received_data_SPI / 360 * 2*3.14;
-
-                    // Signal Semaphore
-                    xSemaphoreGive( POS_1_SEM );
-                    break;
-
-                case VEL_1:
-
-                    temp_input = receive_data();
-                    if(temp_input == 0)
-                        control_1_vel = 0;
-                    else
-                        control_1_vel = (1745*2.0)/temp_input;
-
-                    // Signal Semaphore
-                    xSemaphoreGive( VEL_1_SEM );
-                    break;
-
-                case POS_2:
-                    received_data_SPI = receive_data();
-
-                    //Convert to radians and put in correct buffer
-                    control_2_pos = received_data_SPI / 360 * 2*3.14;
-
-                    // Signal Semaphore
-                    xSemaphoreGive( POS_2_SEM );
-                    break;
-
-                case VEL_2:
-
-                    temp_input = receive_data();
-                    if(temp_input == 0)
-                        control_2_vel = 0;
-                    else
-                        control_2_vel = (1745*2.0)/temp_input;
-
-
-                    // Signal Semaphore
-                    xSemaphoreGive( VEL_2_SEM );
-                    break;
-
-                case PROTOCOL_SLAVE:
-                    received_data_SPI = receive_data();
-                    //Semaphore
-                        //Put in correct buffer
-                    break;
-
-                // Do dummy receive to empty SPI buffer
-                default:
-                    dummyReceive = receive_data();
-                }
+//                send_data( received_data_queue, received_id );
+//
+//                // Receive data from slave and put into correct buffer
+//                switch( received_id )
+//                {
+//                case POS_1:
+//                    received_data_SPI = receive_data();
+//
+//                    //Convert to radians and put in correct buffer
+//                    control_1_pos = received_data_SPI / 360 * 2*3.14;
+//
+//                    // Signal Semaphore
+//                    xSemaphoreGive( POS_1_SEM );
+//                    break;
+//
+//                case VEL_1:
+//
+//                    temp_input = receive_data();
+//                    if(temp_input == 0)
+//                        control_1_vel = 0;
+//                    else
+//                        control_1_vel = (1745*2.0)/temp_input;
+//
+//                    // Signal Semaphore
+//                    xSemaphoreGive( VEL_1_SEM );
+//                    break;
+//
+//                case POS_2:
+//                    received_data_SPI = receive_data();
+//
+//                    //Convert to radians and put in correct buffer
+//                    control_2_pos = received_data_SPI / 360 * 2*3.14;
+//
+//                    // Signal Semaphore
+//                    xSemaphoreGive( POS_2_SEM );
+//                    break;
+//
+//                case VEL_2:
+//
+//                    temp_input = receive_data();
+//                    if(temp_input == 0)
+//                        control_2_vel = 0;
+//                    else
+//                        control_2_vel = (1745*2.0)/temp_input;
+//
+//
+//                    // Signal Semaphore
+//                    xSemaphoreGive( VEL_2_SEM );
+//                    break;
+//
+//                case PROTOCOL_SLAVE:
+//                    received_data_SPI = receive_data();
+//                    //Semaphore
+//                        //Put in correct buffer
+//                    break;
+//
+//                // Do dummy receive to empty SPI buffer
+//                default:
+//                    dummyReceive = receive_data();
+//                }
             }
             //GPIO_PORTA_DATA_R &= ~(0x04);
         }

@@ -14,6 +14,8 @@
 #include "PID_FreeRTOS.h"
 
 #include <stdlib.h>
+#include <stdbool.h>
+#include <stdint.h>
 #include "filter.h"
 #include "tmodel.h"
 #include "FPGA_comp.h"
@@ -22,6 +24,15 @@
 #include "defines.h"
 #include "setup.h"
 
+//TivaWare includes
+#include "driverlib/pin_map.h"
+#include "inc/hw_gpio.h"
+#include "inc/hw_types.h"
+#include "inc/hw_memmap.h"
+#include "driverlib/sysctl.h"
+#include "driverlib/pin_map.h"
+#include "driverlib/gpio.h"
+#include "driverlib/pwm.h"
 
 
 /*****************************    Defines    *******************************/
@@ -29,6 +40,12 @@
 
 /*****************************   Variables   *******************************/
 PID_controller PID_pool[NOF_PIDS];
+int16_t fromQEI;
+int16_t global_test;
+float globalError;
+float globalError2;
+float testPIDoutput;
+float globalFeedback;
 
 
 extern void PID_PC_task(void* pvParameters)
@@ -75,11 +92,12 @@ extern void PID_PC_task(void* pvParameters)
 
         //temp_output = voltage_to_duty_cycle(result_PID);
 
-        if(xSemaphoreTake(*controller_parameter.output_semaphore, portMAX_DELAY)==pdTRUE)
-        {
-            *controller_parameter.place_to_store_output = result_PID;
-            xSemaphoreGive(*controller_parameter.output_semaphore);
-        }
+//        if(xSemaphoreTake(*controller_parameter.output_semaphore, portMAX_DELAY)==pdTRUE)
+//        {
+//            *controller_parameter.place_to_store_output = result_PID;
+//            xSemaphoreGive(*controller_parameter.output_semaphore);
+//        }
+
 
         GPIO_PORTA_DATA_R &= ~(controller_parameter.test_led);
         vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS(controller_parameter.delayTime) );
@@ -87,6 +105,51 @@ extern void PID_PC_task(void* pvParameters)
 
 }
 
+extern void PID_task(void *pvParameters)
+{
+    TickType_t xLastWakeTime;
+    float temp_feedback = 0;
+    float temp_reference = -0.5*3.14; //Set the reference here!
+    int16_t result_PID_int16 = 0;
+    float temp_result = 0;
+
+    for (;;)
+    {
+        fromQEI = QEI0_POS_R;
+        temp_feedback = ((float)fromQEI) / 360 * 2 * 3.14;
+        globalFeedback = temp_feedback;
+
+        temp_result = run_PID(temp_feedback, temp_reference, 3);
+        testPIDoutput = temp_result;
+
+        result_PID_int16 = (temp_result / 12) * 1599 + 0.5;//voltage_to_duty_cycle(result_PID);
+
+        if (result_PID_int16 < 0.0)
+        {
+            //To indicate position:
+            //Set pin 1 high
+            //Set pin 2 low
+            GPIO_PORTC_DATA_R &= ~(1 << 6);
+            GPIO_PORTC_DATA_R |= (1 << 5);
+            result_PID_int16 *= -1;
+        }
+        else
+        {
+            //GPIO_PORTF_DATA_R ^= 0x08;
+            //To indicate position:
+            //Set pin 1 low
+            //Set pin 2 high
+            GPIO_PORTC_DATA_R &= ~(1 << 5);
+            GPIO_PORTC_DATA_R |= (1 << 6);
+        }
+
+        global_test = result_PID_int16;
+        PWMPulseWidthSet(PWM1_BASE, PWM_OUT_3, 1300);
+
+        vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS(1) );
+    }
+
+}
 
 extern void PID_VC_task(void* pvParameters)
 {
@@ -96,54 +159,108 @@ extern void PID_VC_task(void* pvParameters)
     struct SPI_queue_element data_to_send;
     TickType_t xLastWakeTime;
     float result_PID = 0;
+    int16_t result_PID_int16 = 0;
     float temp_feedback = 0;
     float temp_reference = 0;
 
-    data_request.id = controller_parameter.slave_id;
-    data_request.data = 0xFFFF;
-    data_to_send.id = controller_parameter.output_id;
+//    data_request.id = controller_parameter.slave_id;
+//    data_request.data = 0xFFFF;
+//    data_to_send.id = controller_parameter.output_id;
 
     xLastWakeTime = xTaskGetTickCount(); // Is automatically updated by vTaskDelayUntil()
     for (;;)
     {
-        GPIO_PORTA_DATA_R |= controller_parameter.test_led;
+        //GPIO_PORTA_DATA_R |= controller_parameter.test_led;
 
 
 
-        if(xSemaphoreTake(*controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
+//        if(xSemaphoreTake(*controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
+//        {
+//
+//            xQueueSend( SPI_queue, (void * ) &data_request, 0);
+//            xSemaphoreGive(*controller_parameter.queue_semaphore);
+//        }
+
+//        if(xSemaphoreTake(*controller_parameter.feedback_semaphore, portMAX_DELAY) == pdTRUE)
+//        {
+//            if(xSemaphoreTake(*controller_parameter.reference_semaphore, portMAX_DELAY) == pdTRUE)
+//            {
+//
+//                temp_feedback = *controller_parameter.feedback_signal;
+//                temp_reference = *controller_parameter.reference_signal;
+//                xSemaphoreGive(*controller_parameter.reference_semaphore);
+//
+//            }
+//
+//            result_PID = run_PID(temp_feedback, temp_reference, controller_parameter.id);
+//
+//        }
+        if(xSemaphoreTake(*controller_parameter.reference_semaphore, portMAX_DELAY) == pdTRUE)
         {
 
-            xQueueSend( SPI_queue, (void * ) &data_request, 0);
-            xSemaphoreGive(*controller_parameter.queue_semaphore);
+
+
+            temp_reference = *controller_parameter.reference_signal;
+            xSemaphoreGive(*controller_parameter.reference_semaphore);
+
         }
 
-        if(xSemaphoreTake(*controller_parameter.feedback_semaphore, portMAX_DELAY) == pdTRUE)
+
+        result_PID = run_PID(temp_feedback, temp_reference, controller_parameter.id);
+        testPIDoutput = result_PID;
+
+        result_PID_int16 = (result_PID / 12) * 1599 + 0.5;//voltage_to_duty_cycle(result_PID);
+
+        if (result_PID_int16 < 0.0)
         {
-            if(xSemaphoreTake(*controller_parameter.reference_semaphore, portMAX_DELAY) == pdTRUE)
-            {
-
-                temp_feedback = *controller_parameter.feedback_signal;
-                temp_reference = *controller_parameter.reference_signal;
-                xSemaphoreGive(*controller_parameter.reference_semaphore);
-
-            }
-
-            result_PID = run_PID(temp_feedback, temp_reference, controller_parameter.id);
+            //To indicate position:
+            //Set pin 1 high
+            //Set pin 2 low
+            GPIO_PORTC_DATA_R &= ~(1 << 6);
+            GPIO_PORTC_DATA_R |= (1 << 5);
+            result_PID_int16 *= -1;
 
         }
-
-            data_to_send.data = (result_PID / 12) * 1023 + 0.5;//voltage_to_duty_cycle(result_PID);
-
-
-        if(xSemaphoreTake(*controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
+        else
         {
-            xQueueSendToFront( SPI_queue, (void * ) &data_to_send, 0);
-            xSemaphoreGive(*controller_parameter.queue_semaphore);
+            //GPIO_PORTF_DATA_R ^= 0x08;
+            //To indicate position:
+            //Set pin 1 low
+            //Set pin 2 high
+            GPIO_PORTC_DATA_R &= ~(1 << 5);
+            GPIO_PORTC_DATA_R |= (1 << 6);
+
         }
 
-        GPIO_PORTA_DATA_R &= ~(controller_parameter.test_led);
+            GPIO_PORTC_DATA_R |= (1 << 6);
+            GPIO_PORTC_DATA_R &= ~(1 << 5);
+            PWMPulseWidthSet(PWM1_BASE, PWM_OUT_3,1300);
 
-        vTaskDelayUntil (&xLastWakeTime, pdMS_TO_TICKS(controller_parameter.delayTime) );
+//            delayMS(4000);
+//
+//            GPIO_PORTC_DATA_R &= ~(1 << 6);
+//            GPIO_PORTC_DATA_R |= (1 << 5);
+
+//            delayMS(4000);
+//
+//            GPIO_PORTC_DATA_R &= ~(1 << 5);
+//            GPIO_PORTC_DATA_R |= (1 << 6);
+
+
+        global_test = result_PID_int16;
+        PWMPulseWidthSet(PWM1_BASE, PWM_OUT_3, 1000);
+
+
+//        if(xSemaphoreTake(*controller_parameter.queue_semaphore, portMAX_DELAY)==pdTRUE)
+//        {
+//            xQueueSendToFront( SPI_queue, (void * ) &data_to_send, 0);
+//            xSemaphoreGive(*controller_parameter.queue_semaphore);
+//            GPIO_PORTF_DATA_R = 0x08;
+//        }
+
+        //GPIO_PORTA_DATA_R &= ~(controller_parameter.test_led);
+
+
         //GPIO_PORTA_DATA_R ^= (0x04);
         //GPIO_PORTA_DATA_R |= 0x04;
         //vTaskDelay(pdMS_TO_TICKS(10));
@@ -185,7 +302,7 @@ extern void init_PIDs()
 
 
     PID_pool[PC_CONTROLLER_2_ID].Kp = 8.784;
-    PID_pool[PC_CONTROLLER_2_ID].Kd = 1.22;
+    PID_pool[PC_CONTROLLER_2_ID].Kd = 0;
     PID_pool[PC_CONTROLLER_2_ID].Ki = 7.64;
     PID_pool[PC_CONTROLLER_2_ID].dt = 0.005;
     PID_pool[PC_CONTROLLER_2_ID].integral = 0;
@@ -231,9 +348,9 @@ extern void init_PIDs()
      //Setup of velocity controller 2:
 
 
-     PID_pool[VC_CONTROLLER_2_ID].Kp = 0.5194;
-     PID_pool[VC_CONTROLLER_2_ID].Kd = 0.003;
-     PID_pool[VC_CONTROLLER_2_ID].Ki = 22.86;
+     PID_pool[VC_CONTROLLER_2_ID].Kp = 9.45;
+     PID_pool[VC_CONTROLLER_2_ID].Kd = 0.9; //0.9
+     PID_pool[VC_CONTROLLER_2_ID].Ki = 8.55; //8.55
      PID_pool[VC_CONTROLLER_2_ID].dt = 0.001;
      PID_pool[VC_CONTROLLER_2_ID].integral = 0;
      PID_pool[VC_CONTROLLER_2_ID].previous_error = 0;
@@ -269,8 +386,10 @@ extern float run_PID(float feedback, float setpoint, uint8_t id) // CHANGE TO PI
    float integral_term;
 
    error = setpoint - feedback;
+   globalError = error;
 
    error = run_filter(PID_pool[id].filter_id, error);
+   globalError2 = error;
 
     // calculate the proportional and derivative terms
    float proportional_term  = PID_pool[id].Kp*error;

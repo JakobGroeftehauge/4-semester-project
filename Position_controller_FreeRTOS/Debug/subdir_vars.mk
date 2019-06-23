@@ -9,10 +9,10 @@ LDS_SRCS += \
 ../tm4c123gh6pm.lds 
 
 C_SRCS += \
-C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/FPGA_comp.c \
-C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/Filter.c \
-C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/PID_MA.c \
-C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-semester-project/C\ libraries/circular_buffer.c \
+C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C\ libraries/FPGA_comp.c \
+C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C\ libraries/Filter.c \
+C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C\ libraries/PID_MA.c \
+C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C\ libraries/circular_buffer.c \
 ../common.c \
 ../gpio.c \
 ../heap_2.c \
@@ -20,6 +20,7 @@ C:/Users/Jakob/Google\ Drive/01\ SDU/04\ 4.\ Semester/05\ 4.\ semesterprojekt/4-
 ../main.c \
 ../port.c \
 ../queue.c \
+../semaphore_def.c \
 ../tasks.c \
 ../timers.c \
 ../tm4c123gh6pm_startup_ccs_gcc.c 
@@ -36,6 +37,7 @@ C_DEPS += \
 ./main.d \
 ./port.d \
 ./queue.d \
+./semaphore_def.d \
 ./tasks.d \
 ./timers.d \
 ./tm4c123gh6pm_startup_ccs_gcc.d 
@@ -52,6 +54,7 @@ OBJS += \
 ./main.o \
 ./port.o \
 ./queue.o \
+./semaphore_def.o \
 ./tasks.o \
 ./timers.o \
 ./tm4c123gh6pm_startup_ccs_gcc.o 
@@ -68,6 +71,7 @@ OBJS__QUOTED += \
 "main.o" \
 "port.o" \
 "queue.o" \
+"semaphore_def.o" \
 "tasks.o" \
 "timers.o" \
 "tm4c123gh6pm_startup_ccs_gcc.o" 
@@ -84,15 +88,16 @@ C_DEPS__QUOTED += \
 "main.d" \
 "port.d" \
 "queue.d" \
+"semaphore_def.d" \
 "tasks.d" \
 "timers.d" \
 "tm4c123gh6pm_startup_ccs_gcc.d" 
 
 C_SRCS__QUOTED += \
-"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/FPGA_comp.c" \
-"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/Filter.c" \
-"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/PID_MA.c" \
-"C:/Users/Jakob/Google Drive/01 SDU/04 4. Semester/05 4. semesterprojekt/4-semester-project/C libraries/circular_buffer.c" \
+"C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C libraries/FPGA_comp.c" \
+"C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C libraries/Filter.c" \
+"C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C libraries/PID_MA.c" \
+"C:/Users/chris/Documents/4_sem_code_git_before_exam/4-semester-project/C libraries/circular_buffer.c" \
 "../common.c" \
 "../gpio.c" \
 "../heap_2.c" \
@@ -100,6 +105,7 @@ C_SRCS__QUOTED += \
 "../main.c" \
 "../port.c" \
 "../queue.c" \
+"../semaphore_def.c" \
 "../tasks.c" \
 "../timers.c" \
 "../tm4c123gh6pm_startup_ccs_gcc.c" 

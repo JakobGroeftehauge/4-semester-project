@@ -348,7 +348,7 @@ extern void init_PIDs()
      //Setup of velocity controller 2:
 
 
-     PID_pool[VC_CONTROLLER_2_ID].Kp = 9.45;
+     PID_pool[VC_CONTROLLER_2_ID].Kp = 1.42;
      PID_pool[VC_CONTROLLER_2_ID].Kd = 0.9; //0.9
      PID_pool[VC_CONTROLLER_2_ID].Ki = 8.55; //8.55
      PID_pool[VC_CONTROLLER_2_ID].dt = 0.001;
